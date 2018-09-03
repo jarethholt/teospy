@@ -13,7 +13,7 @@ All functions derived from these modules include the optional boolean keyword `u
 
 The basic contents of the modules are as follows:
 
-* `sal1` provides a function that calculates each of the coefficients $g_i$ in the salinity expansion.
+* `sal1` provides a function that calculates each of the coefficients gi in the salinity expansion.
 * `sal2` provides thermodynamic properties of seawater that depend only on the salinity, such as dilution and osmotic coefficients.
 
 
@@ -24,32 +24,13 @@ The basic contents of the modules are as follows:
     :members: sal_g_term
 
 
+`sal2`
+------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.. automodule:: sal2
+    :members: sal_g, actcoeff, activityw, actpotential, chemcoeff, dilution,
+        liqpot, osmcoeff, salpot, saltenthalpy, saltentropy, saltvolume,
+        mixenthalpy, mixentropy, mixvolume, eq_liqpot, eq_enthalpy,
+        eq_entropy
 
 

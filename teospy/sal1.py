@@ -177,7 +177,7 @@ def poly_gtp(term,drvt,drvp,temp,pres,useext=False):
 
 
 ## Public functions
-def sal_g_term(term,drvt,drvp,temp,pres,chkbnd=True,stacklevel=2,useext=False):
+def sal_g_term(term,drvt,drvp,temp,pres,chkbnd=False,useext=False):
     """Calculate a salt Gibbs free energy term.
     
     Calculate a term in the Gibbs free energy of salt in seawater. The
@@ -193,10 +193,9 @@ def sal_g_term(term,drvt,drvp,temp,pres,chkbnd=True,stacklevel=2,useext=False):
     :arg int drvp: Number of pressure derivatives to take.
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
-    :arg bool chkbnd: If True (default) then warnings are raised when
-        the given values are valid but outside the recommended bounds.
-    :arg int stacklevel: Controls how many levels deep to raise the
-        warning from (default 2).
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
     :arg bool useext: If False (default) then the polynomial is
         calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
     :returns: Gibbs free energy in units of
@@ -226,7 +225,7 @@ def sal_g_term(term,drvt,drvp,temp,pres,chkbnd=True,stacklevel=2,useext=False):
         errmsg = ('The value of term {0} is not between 1 and '
             '{1}').format(term,NSALTERMS)
         raise ValueError(errmsg)
-    constants0.chksalbnds(0.,temp,pres,chkbnd=chkbnd,stacklevel=stacklevel)
+    constants0.chksalbnds(0.,temp,pres,chkbnd=chkbnd,stacklevel=2)
     gi = poly_gtp(term,drvt,drvp,temp,pres,useext=useext)
     return gi
 

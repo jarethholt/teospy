@@ -21,6 +21,13 @@ The basic contents of the modules are as follows:
     :members: dry_f, air_baw, air_caaw, air_caww
 
 
+`air2`
+------
+
+.. automodule:: air2
+    :members: air_f, cp, cv, enthalpy, entropy, expansion, gibbsenergy, internalenergy, kappas, kappat, lapserate, pressure, soundspeed, vappot, eq_entropy, eq_pressure, eq_vappot
+
+
 
 
 

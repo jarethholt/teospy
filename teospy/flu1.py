@@ -12,9 +12,9 @@ IAPWS 1995, table 6.
 
 :Examples:
 
->>> flu1.flu_f(0,0,300.,1000.)
+>>> flu_f(0,0,300.,1000.)
 -5351.74115204
->>> flu1.flu_f(0,2,300.,1000.)
+>>> flu_f(0,2,300.,1000.)
 2.24824656167
 
 :Functions:
@@ -822,7 +822,7 @@ def _phir_dd(tau,dta):
 
 
 ### Public function
-def flu_f(drvt,drvd,temp,dflu,chkbnd=True,stacklevel=2):
+def flu_f(drvt,drvd,temp,dflu,chkbnd=False):
     """Calculate fluid water Helmholtz free energy.
     
     Calculate the specific Helmholtz free energy of fluid water or its
@@ -833,10 +833,9 @@ def flu_f(drvt,drvd,temp,dflu,chkbnd=True,stacklevel=2):
     :arg int drvd: Number of density derivatives.
     :arg float temp: Temperature in K.
     :arg float dflu: Fluid water density in kg/m3.
-    :arg bool chkbnd: If True (default) then warnings are raised when
-        the given values are valid but outside the recommended bounds.
-    :arg int stacklevel: Controls how many levels deep to raise the
-        warning from (default 2).
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
     :returns: Helmholtz free energy in units of
         (J/kg) / K^drvt / (kg/m3)^drvd.
     :raises ValueError: If either temp or dflu are nonpositive.
@@ -859,7 +858,7 @@ def flu_f(drvt,drvd,temp,dflu,chkbnd=True,stacklevel=2):
     >>> flu_f(0,2,300.,1000.)
     2.24824656167
     """
-    constants0.chkflubnds(temp,dflu,chkbnd=chkbnd)
+    constants0.chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
     tau = _TCP / temp
     dta = dflu / _DCP
     rt = _RWAT * temp

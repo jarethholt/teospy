@@ -300,7 +300,7 @@ def _ice_d3gdp3(temp,pres):
 
 
 ## Public functions
-def ice_g(drvt,drvp,temp,pres,chkbnd=True,stacklevel=2):
+def ice_g(drvt,drvp,temp,pres,chkbnd=False):
     """Calculate ice Gibbs free energy.
     
     Calculate the specific Gibbs free energy of ice or its derivatives
@@ -311,10 +311,9 @@ def ice_g(drvt,drvp,temp,pres,chkbnd=True,stacklevel=2):
     :arg int drvp: Number of pressure derivatives.
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
-    :arg bool chkbnd: If True (default) then warnings are raised when
-        the given values are valid but outside the recommended bounds.
-    :arg int stacklevel: Controls how many levels deep to raise the
-        warning from (default 2).
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
     :returns: Gibbs free energy, in units of
         (J/kg) / K^drvt / Pa^drvp.
     :raises ValueError: If temp or pres are nonpositive.
@@ -337,7 +336,7 @@ def ice_g(drvt,drvp,temp,pres,chkbnd=True,stacklevel=2):
     >>> ice_g(0,2,270.,1e5)
     -1.27811223643e-13
     """
-    constants0.chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=stacklevel)
+    constants0.chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
     
     # Run through various derivative cases
     if (drvt,drvp) == (0,0):
@@ -363,7 +362,6 @@ def ice_g(drvt,drvp,temp,pres,chkbnd=True,stacklevel=2):
     else:
         errmsg = 'Derivatives {0} not recognized'.format((drvt,drvp))
         raise ValueError(errmsg)
-    
     return g
 
 

@@ -168,7 +168,6 @@ def _alpha_res(drvt,drvd,tau,dta):
     if (drvt < 0 or drvd < 0 or drvt+drvd > 2):
         errmsg = 'Derivative {0} not recognized'.format((drvt,drvd))
         raise ValueError(errmsg)
-        return None
     alpha = 0.0
     
     # First part: dual power series
@@ -210,7 +209,7 @@ def _alpha_res(drvt,drvd,tau,dta):
 
 
 ### Public functions
-def dry_f(drvt,drvd,temp,ddry,chkbnd=True,stacklevel=2):
+def dry_f(drvt,drvd,temp,ddry,chkbnd=False):
     """Calculate dry air Helmholtz free energy.
     
     Calculate the specific Helmholtz free energy of dry air or its
@@ -221,10 +220,9 @@ def dry_f(drvt,drvd,temp,ddry,chkbnd=True,stacklevel=2):
     :arg int drvd: Number of density derivatives.
     :arg float temp: Temperature in K.
     :arg float ddry: Dry air density in kg/m3.
-    :arg bool chkbnd: If True (default) then warnings are raised when
-        the given values are valid but outside the recommended bounds.
-    :arg int stacklevel: Controls how many levels deep to raise the
-        warning from (default 2).
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
     :returns: Helmholtz free energy in units of
         (J/kg) / K^drvt / (kg/m3)^drvd.
     :raises ValueError: If either temp or ddry are nonpositive.
@@ -249,7 +247,7 @@ def dry_f(drvt,drvd,temp,ddry,chkbnd=True,stacklevel=2):
     >>> dry_f(0,2,300.,1e-3)
     -86114738036.1
     """
-    constants0.chkdrybnds(temp,ddry,chkbnd=chkbnd)
+    constants0.chkdrybnds(temp,ddry,chkbnd=chkbnd,stacklevel=2)
     tau = _TRED_DRY / temp
     dta = ddry / _DRED_DRY
     
@@ -281,7 +279,6 @@ def dry_f(drvt,drvd,temp,ddry,chkbnd=True,stacklevel=2):
     else:
         errmsg = 'Derivatives {0} not recognized'.format((drvt,drvd))
         raise ValueError(errmsg)
-        return None
     return f
 
 def air_baw(drvt,temp):
@@ -315,7 +312,6 @@ def air_baw(drvt,temp):
         else:
             errmsg = 'Derivative {0} not recognized'.format(drvt)
             raise ValueError(errmsg)
-            return None
     # Convert from cm3/mol to m3/mol
     baw *= 1e-6
     return baw
@@ -351,7 +347,6 @@ def air_caaw(drvt,temp):
         else:
             errmsg = 'Derivative {0} not recognized'.format(drvt)
             raise ValueError(errmsg)
-            return None
     # Convert from cm6/mol2 to m6/mol2
     caaw *= 1e-12
     return caaw
@@ -383,7 +378,6 @@ def air_caww(drvt,temp):
     if not (drvt in (0,1,2)):
         errmsg = 'Derivative {0} not recognized'.format(drvt)
         raise ValueError(errmsg)
-        return None
     
     # Calculate leading exponential term
     earg = 0.0

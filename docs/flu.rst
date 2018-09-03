@@ -21,6 +21,13 @@ The basic contents of the modules are as follows:
     :members: flu_f
 
 
+`flu2`
+------
+
+.. automodule:: flu2
+    :members: cp, cv, enthalpy, entropy, expansion, gibbsenergy, internalenergy, kappas, kappat, lapserate, pressure, soundspeed, eq_chempot, eq_enthalpy, eq_entropy, eq_pressure
+
+
 
 
 
