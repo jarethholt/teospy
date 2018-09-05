@@ -2,7 +2,8 @@
 
 This module provides thermodynamic properties of ice derived from the
 Gibbs free energy, with primary variables of temperature and pressure.
-This module can also be called as a function,
+
+This module can also be called as a function::
 
     python ice_2.py
 
@@ -39,7 +40,8 @@ IAPWS 2006, table 6.
 
 __all__ = ['chempot','cp','density','enthalpy','entropy','expansion',
     'helmholtzenergy','internalenergy','kappas','kappat','lapserate',
-    'pcoefficient','specificvolume']
+    'pcoefficient','specificvolume',
+    'chkiapws06table6']
 
 import constants0
 import ice1
@@ -396,118 +398,82 @@ def specificvolume(temp,pres,chkbnd=False):
     return v
 
 
-'''
-### Functions to check values
-def chk_iapws06_table6(printresult=True,tol=_CHKTOL):
+
+## Functions to check values
+def chkiapws06table6(printresult=True,chktol=_CHKTOL):
     """Check accuracy against IAPWS 2006 table 6.
     
-    Evaluate the functions in this module and compare to reference values of
-    thermodynamic properties (e.g. heat capacity, lapse rate) in IAPWS 2006,
-    table 6.
+    Evaluate the functions in this module and compare to reference
+    values of thermodynamic properties (e.g. heat capacity, lapse rate)
+    in IAPWS 2006, table 6.
     
-    Args:
-        printresult (boolean, optional): If True (default) and any results are
-            outside of the given tolerance, then the function name, reference
-            value, resulting value, and relative error are printed.
-        tol (float, optional): Tolerance to use when choosing to print results;
-            default 1e-8.
-    
-    Returns:
-        chkders (list): Dictionaries containing the comparisons for derivatives
-            of the Gibbs free energy. Each dictionary contains the values of the
-            derivatives 'ders'; the physical variables 'args'; the reference
-            values 'refs'; and the results from this module 'results'.
-        chkfuns (list): Dictionaries containing the comparisons for
-            thermodynamic properties. Each dictionary contains the names of the
-            functions 'names'; the physical variables 'args'; the reference
-            values 'refs'; and the results from this module 'results'.
+    :arg bool printresult: If True (default) and any results are outside
+        of the given tolerance, then the function name, reference value,
+        result value, and relative error are printed.
+    :key float chktol: Tolerance to use when choosing to print results
+        (default _CHKTOL).
+    :returns: :class:`~tester.Tester` instances containing the
+        functions, arguments, reference values, results, and relative
+        errors from the tests. The first instance involves derivatives
+        of ice_g whereas the second tests the other thermodynamic
+        functions.
+    :rtype: (Tester,Tester)
     """
+    from tester import Tester
+    fargs0 = (273.16,611.657)
+    fargs1 = (273.152519,101325.)
+    fargs2 = (100.,1e8)
+    propfargs = [fargs0,fargs1,fargs2]
+    ders = [(0,0), (1,0), (0,1), (2,0), (1,1), (0,2)]
     
-    from values_common import runcheck
+    # Tester instance for derivatives of ice_g
+    derfuns = _ice_g
+    derfnames = 'ice_g'
+    # Derivatives change before arguments do here
+    derfargs = [(der+fargs) for fargs in propfargs for der in ders]
+    derargfmt = '({0:1g},{1:1g},{2:7.3f},{3:7g})'
+    derrefs = [0.611784135,0.122069433940e+4,0.109085812737e-2,
+        -0.767602985875e+1,0.174387964700e-6,-0.128495941571e-12,
+        0.10134274069e+3,0.122076932550e+4,0.109084388214e-2,-0.767598233365e+1,
+        0.174362219972e-6,-0.128485364928e-12,-0.222296513088e+6,
+        0.261195122589e+4,0.106193389260e-2,-0.866333195517e+1,
+        0.274505162488e-7,-0.941807981761e-13]
+    dertest = Tester(derfuns,derfargs,derrefs,derfnames,derargfmt)
     
-    FUNS = (ice_enthalpy,ice_helmholtz_energy,ice_internal_energy,
-        ice_entropy,ice_cp,ice_density,ice_expansion,ice_p_coefficient,
-        ice_kappa_t,ice_kappa_s)
-    NAMES = ('enthalpy','helmholtz_energy','internal_energy','entropy',
-        'cp','density','expansion','p_coefficient','kappa_t','kappa_s')
-    DERS = ((0,0),(1,0),(0,1),(2,0),(1,1),(0,2))
+    # Tester instance for other ice properties
+    propfuns = [enthalpy,helmholtzenergy,internalenergy,entropy,cp,density,
+        expansion,pcoefficient,kappat,kappas]
+    propfnames = ['enthalpy','helmholtzenergy','internalenergy','entropy','cp',
+        'density','expansion','pcoefficient','kappat','kappas']
+    propargfmt = '({0:7.3f},{1:7g})'
+    proprefs = [
+        [-0.333444253966e+6,-0.333354873637e+6,-0.483491635676e+6],
+        [-0.55446875e-1,-0.918701567e+1,-0.328489902347e+6],
+        [-0.333444921197e+6,-0.333465403393e+6,-0.589685024936e+6],
+        [-0.122069433940e+4,-0.122076932550e+4,-0.261195122589e+4],
+        [0.209678431622e+4,0.209671391024e+4,0.866333195517e+3],
+        [0.916709492200e+3,0.916721463419e+3,0.941678203297e+3],
+        [0.159863102566e-3,0.159841589458e-3,0.258495528207e-4],
+        [0.135714764659e+7,0.135705899321e+7,0.291466166994e+6],
+        [0.117793449348e-9,0.117785291765e-9,0.886880048115e-10],
+        [0.114161597779e-9,0.114154442556e-9,0.886060982687e-10]
+    ]
+    proptest = Tester(propfuns,propfargs,proprefs,propfnames,propargfmt)
     
-    # Create dictionaries with the reference data
-    checkDer1 = {'modname': 'ice1',
-        'type': 'der',
-        'args': (273.16,611.657),
-        'funs': _ice_g,
-        'names': '_ice_g',
-        'ders': DERS,
-        'refs': (0.611784135,0.122069433940e+4,0.109085812737e-2,
-            -0.767602985875e+1,0.174387964700e-6,-0.128495941571e-12)}
-    
-    checkDer2 = {'modname': 'ice1',
-        'type': 'der',
-        'args': (273.152519,101325.),
-        'funs': _ice_g,
-        'names': '_ice_g',
-        'ders': DERS,
-        'refs': (0.10134274069e+3,0.122076932550e+4,0.109084388214e-2,
-            -0.767598233365e+1,0.174362219972e-6,-0.128485364928e-12)}
-    
-    checkDer3 = {'modname': 'ice1',
-        'type': 'der',
-        'args': (100.,100e6),
-        'funs': _ice_g,
-        'names': '_ice_g',
-        'ders': DERS,
-        'refs': (-0.222296513088e+6,0.261195122589e+4,0.106193389260e-2,
-            -0.866333195517e+1,0.274505162488e-7,-0.941807981761e-13)}
-    
-    checkName1 = {'modname': 'ice_2',
-        'type': 'fun',
-        'args': (273.16,611.657),
-        'funs': FUNS,
-        'names': NAMES,
-        'refs': (-0.333444253966e+6,-0.55446875e-1,-0.333444921197e+6,
-            -0.122069433940e+4,0.209678431622e+4,0.916709492200e+3,
-            0.159863102566e-3,0.135714764659e+7,0.117793449348e-9,
-            0.114161597779e-9)}
-    
-    checkName2 = {'modname': 'ice_2',
-        'type': 'fun',
-        'args': (273.152519,101325.),
-        'funs': FUNS,
-        'names': NAMES,
-        'refs': (-0.333354873637e+6,-0.918701567e+1,-0.333465403393e+6,
-            -0.122076932550e+4,0.209671391024e+4,0.916721463419e+3,
-            0.159841589458e-3,0.135705899321e+7,0.117785291765e-9,
-            0.114154442556e-9)}
-    
-    checkName3 = {'modname': 'ice_2',
-        'type': 'fun',
-        'args': (100.,100e6),
-        'funs': FUNS,
-        'names': NAMES,
-        'refs': (-0.483491635676e+6,-0.328489902347e+6,
-            -0.589685024936e+6,-0.261195122589e+4,0.866333195517e+3,
-            0.941678203297e+3,0.258495528207e-4,0.291466166994e+6,
-            0.886880048115e-10,0.886060982687e-10)}
-    
-    # Check each dictionary
-    runcheck(checkDer1,printresult=printresult,tol=tol)
-    runcheck(checkDer2,printresult=printresult,tol=tol)
-    runcheck(checkDer3,printresult=printresult,tol=tol)
-    
-    runcheck(checkName1,printresult=printresult,tol=tol)
-    runcheck(checkName2,printresult=printresult,tol=tol)
-    runcheck(checkName3,printresult=printresult,tol=tol)
-    
-    # Return the dictionaries
-    chkders = [checkDer1, checkDer2, checkDer3]
-    chkfuns = [checkName1, checkName2, checkName3]
-    return chkders, chkfuns
+    # Run Tester instances and print results
+    dertest.run()
+    proptest.run()
+    if printresult:
+        msg = 'Ice Gibbs energy'
+        print(msg)
+        dertest.printresults(chktol=chktol)
+        msg = 'Ice thermodynamic properties'
+        print(msg)
+        proptest.printresults(chktol=chktol)
+    return dertest, proptest
 
 
-
-### Main function: Check tables
+## Main function: Check tables
 if __name__ == '__main__':
-    chkders, chkfuns = chk_iapws06_table6();
-'''
+    dertest, proptest = chkiapws06table6();
 

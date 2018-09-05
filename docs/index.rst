@@ -16,6 +16,7 @@ Welcome to teospy's documentation!
    flu
    ice
    sal
+   tester
 
 
 

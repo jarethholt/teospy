@@ -3,7 +3,7 @@
 This module implements the Helmholtz free energy of fluid water (liquid
 or vapour) and its derivatives with respect to temperature and density.
 
-It can also be called as a function::
+This module can also be called as a function::
 
     python flu1.py
 
@@ -20,11 +20,11 @@ IAPWS 1995, table 6.
 :Functions:
 
 * flu_f: Fluid water Helmholtz free energy with derivatives.
-* chk_iapws95_table6: Compare module results to reference values.
+* chkiapws95table6: Compare module results to reference values.
 
 """
 
-__all__ = ['flu_f']
+__all__ = ['flu_f','chkiapws95table6']
 
 import math
 import constants0
@@ -887,54 +887,59 @@ def flu_f(drvt,drvd,temp,dflu,chkbnd=False):
         raise ValueError(errmsg)
     return f
 
-'''
-def chk_iapws95_table6(printresult=True,tol=_CHKTOL):
+def chkiapws95table6(printresult=True,chktol=_CHKTOL):
     """Check accuracy against IAPWS 1995 table 6.
     
     Evaluate the functions in this module and compare to reference
     values from IAPWS 1995, table 6. These values include separate
-    contributions from ideal gas and residual components of the
+    contributions from the ideal gas and residual components of the
     Helmholtz potential.
     
     :arg bool printresult: If True (default) and any results are outside
         of the given tolerance, then the function name, reference value,
         result value, and relative error are printed.
-    :key float tol: Tolerance to use when choosing to pring results
+    :key float tol: Tolerance to use when choosing to print results
         (default _CHKTOL).
-    :return: Dictionaries of results for the ideal gas and residual
-        functions. These dictionaries contain the function names, the
-        variable values used, the reference values, and the results from
-        this module.
-    :rtype: (dict, dict)
+    :returns: Tester instances containing the functions, arguments,
+        reference values, results, and relative errors from the tests.
+        The first instance is for the ideal gas functions and the second
+        for residual functions.
+    :rtype: (Tester,Tester)
     """
-    from teospy.values_common import runcheck
-    TCHK, DCHK = 500.0, 838.025
-    TAUCHK, DENCHK = _TCP/TCHK, DCHK/_DCP
+    from tester import Tester
+    TCHK = 500.
+    DCHK = 838.025
+    TAUCHK = _TCP/TCHK
+    DTACHK = DCHK/_DCP
+    fargs = (TAUCHK,DTACHK)
+    argfmt = '({0:6.4f},{1:6.4f})'
     
-    # Initialize dictionaries with reference values
-    chkideal = {'modname': 'flu1',
-        'type': 'fun',
-        'args': (TAUCHK,DENCHK),
-        'funs': (_phi0,_phi0_d,_phi0_dd,_phi0_t,_phi0_td,_phi0_tt),
-        'names': ('_phi0','_phi0_d','_phi0_dd','_phi0_t','_phi0_td','_phi0_tt'),
-        'refs': (0.20479773347960e1,0.38423674711375,-0.147637877832556,
-            0.90461110617524e1,0.0,-0.193249185013052e1)}
-    chkresid = {'modname': 'flu1',
-        'type': 'fun',
-        'args': (TAUCHK,DENCHK),
-        'funs': (_phir,_phir_d,_phir_dd,_phir_t,_phir_td,_phir_tt),
-        'names': ('_phir','_phir_d','_phir_dd','_phir_t','_phir_td','_phir_tt'),
-        'refs': (-0.34269320568156e1,-0.36436665036388,0.85606370097461,
-            -0.58140343523842e1,-0.11217691467031e1,-0.223440736884336e1)}
+    # Initialize Tester instances
+    idealfuns = [_phi0,_phi0_d,_phi0_dd,_phi0_t,_phi0_td,_phi0_tt]
+    idealfnames = ['phi0','phi0_d','phi0_dd','phi0_t','phi0_td','phi0_tt']
+    idealrefs = [0.20479773347960e1,0.38423674711375,-0.147637877832556,
+        0.90461110617524e1,0.,-0.193249185013052e1]
+    idealtest = Tester(idealfuns,fargs,idealrefs,idealfnames,argfmt)
+    residfuns = [_phir,_phir_d,_phir_dd,_phir_t,_phir_td,_phir_tt]
+    residfnames = ['phir','phir_d','phir_dd','phir_t','phir_td','phir_tt']
+    residrefs = [-0.34269320568156e1,-0.36436665036388,0.85606370097461,
+        -0.58140343523842e1,-0.11217691467031e1,-0.223440736884336e1]
+    residtest = Tester(residfuns,fargs,residrefs,residfnames,argfmt)
     
-    # Compare results to reference values
-    runcheck(chkideal,printresult=printresult,tol=tol,header='flu1 ideal')
-    runcheck(chkresid,printresult=printresult,tol=tol,header='flu1 residual')
-    return (chkideal, chkresid)
+    # Run tester instances and print results
+    idealtest.run()
+    residtest.run()
+    if printresult:
+        msg = 'Fluid water ideal gas component'
+        print(msg)
+        idealtest.printresults(chktol=chktol)
+        msg = 'Fluid water residual component'
+        print(msg)
+        residtest.printresults(chktol=chktol)
+    return idealtest, residtest
 
 
 ## Main function: Check tables
 if __name__ == '__main__':
-    chkideal, chkresid = chk_iapws95_table6()
-'''
+    idealtest, residtest = chkiapws95table6()
 

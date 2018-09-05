@@ -15,9 +15,9 @@ import constants0
 
 # Single constants
 _TTP = constants0.TTP
-_PTP = constants0.PTP
+_PTPE = constants0.PTPE
 _PATM = constants0.PATM
-_PI0 = _PATM/_PTP
+_PI0 = _PATM/_PTPE
 
 # Constants used in empirical equations
 _GCOEFFS = (
@@ -45,8 +45,8 @@ def _ice_g0(temp,pres):
     """
     # Reduced variables
     tn = temp/_TTP
-    pn = pres/_PTP
-    _PI0 = _PATM/_PTP
+    pn = pres/_PTPE
+    _PI0 = _PATM/_PTPE
     g = 0.
     
     # Power series and entropy components
@@ -77,8 +77,8 @@ def _ice_dgdt(temp,pres):
     """
     # Reduced variables
     tn = temp/_TTP
-    pn = pres/_PTP
-    _PI0 = _PATM/_PTP
+    pn = pres/_PTPE
+    _PI0 = _PATM/_PTPE
     g_t = 0.
     
     # Power series and entropy components
@@ -105,19 +105,19 @@ def _ice_dgdp(temp,pres):
     """
     # Reduced variables
     tn = temp/_TTP
-    pn = pres/_PTP
-    _PI0 = _PATM/_PTP
+    pn = pres/_PTPE
+    _PI0 = _PATM/_PTPE
     g_p = 0.
     
     # Power series and entropy components
     for (l,n) in enumerate(_GCOEFFS[0]):
-        if l > 0: g_p += n * l*(pn-_PI0)**(l-1) / _PTP
+        if l > 0: g_p += n * l*(pn-_PI0)**(l-1) / _PTPE
     
     # Residual terms including complex numbers
     s = complex(0.0,0.0)
     for (k,rk) in enumerate(_GCOEFFS[2]):
         if k > 0:
-            s += rk * k*(pn-_PI0)**(k-1) / _PTP
+            s += rk * k*(pn-_PI0)**(k-1) / _PTPE
     tk = _GCOEFFS[3][1]
     term = (tk-tn)*cmath.log(tk-tn) + (tk+tn)*cmath.log(tk+tn)
     term -= 2*tk*cmath.log(tk) + tn**2/tk
@@ -136,8 +136,8 @@ def _ice_d2gdt2(temp,pres):
     """
     # Reduced variables
     tn = temp/_TTP
-    pn = pres/_PTP
-    _PI0 = _PATM/_PTP
+    pn = pres/_PTPE
+    _PI0 = _PATM/_PTPE
     g_tt = 0.
     
     # Residual terms including complex numbers
@@ -161,14 +161,14 @@ def _ice_d2gdtdp(temp,pres):
     """
     # Reduced variables
     tn = temp/_TTP
-    pn = pres/_PTP
-    _PI0 = _PATM/_PTP
+    pn = pres/_PTPE
+    _PI0 = _PATM/_PTPE
     
     # Residual terms including complex numbers
     s = complex(0.0,0.0)
     for (k,rk) in enumerate(_GCOEFFS[2]):
         if k > 0:
-            s += rk * k*(pn-_PI0)**(k-1) / _PTP
+            s += rk * k*(pn-_PI0)**(k-1) / _PTPE
     tk = _GCOEFFS[3][1]
     term = -cmath.log(tk-tn) + cmath.log(tk+tn) - 2*tn/tk
     g_tp = (s*term).real
@@ -185,17 +185,17 @@ def _ice_d2gdp2(temp,pres):
     """
     # Reduced variables
     tn = temp/_TTP
-    pn = pres/_PTP
-    _PI0 = _PATM/_PTP
+    pn = pres/_PTPE
+    _PI0 = _PATM/_PTPE
     g_pp = 0.
     
     # Power series and entropy components
     for (l,n) in enumerate(_GCOEFFS[0]):
         if l > 1:
-            g_pp += n * l*(l-1) * (pn-_PI0)**(l-2) / _PTP**2
+            g_pp += n * l*(l-1) * (pn-_PI0)**(l-2) / _PTPE**2
     
     # Residual terms including complex numbers
-    s = _GCOEFFS[2][2] * 2. / _PTP**2
+    s = _GCOEFFS[2][2] * 2. / _PTPE**2
     tk = _GCOEFFS[3][1]
     term = (tk-tn)*cmath.log(tk-tn) + (tk+tn)*cmath.log(tk+tn)
     term -= 2*tk*cmath.log(tk) + tn**2/tk
@@ -214,8 +214,8 @@ def _ice_d3gdt3(temp,pres):
     """
     # Reduced variables
     tn = temp/_TTP
-    pn = pres/_PTP
-    _PI0 = _PATM/_PTP
+    pn = pres/_PTPE
+    _PI0 = _PATM/_PTPE
     g_ttt = 0.
     
     # Residual terms including complex numbers
@@ -239,14 +239,14 @@ def _ice_d3gdt2dp(temp,pres):
     """
     # Reduced variables
     tn = temp/_TTP
-    pn = pres/_PTP
-    _PI0 = _PATM/_PTP
+    pn = pres/_PTPE
+    _PI0 = _PATM/_PTPE
     
     # Residual terms including complex numbers
     s = complex(0.0,0.0)
     for (k,rk) in enumerate(_GCOEFFS[2]):
         if k > 0:
-            s += rk * k*(pn-_PI0)**(k-1) / _PTP
+            s += rk * k*(pn-_PI0)**(k-1) / _PTPE
     tk = _GCOEFFS[3][1]
     term = 1./(tk-tn) + 1./(tk+tn) - 2./tk
     g_ttp = (s*term).real / _TTP
@@ -264,11 +264,11 @@ def _ice_d3gdtdp2(temp,pres):
     """
     # Reduced variables
     tn = temp/_TTP
-    pn = pres/_PTP
-    _PI0 = _PATM/_PTP
+    pn = pres/_PTPE
+    _PI0 = _PATM/_PTPE
     
     # Residual terms including complex numbers
-    s = _GCOEFFS[2][2] * 2.0/_PTP**2
+    s = _GCOEFFS[2][2] * 2.0/_PTPE**2
     tk = _GCOEFFS[3][1]
     term = -cmath.log(tk-tn) + cmath.log(tk+tn) - 2.0*tn/tk
     g_tpp = (s*term).real
@@ -287,15 +287,15 @@ def _ice_d3gdp3(temp,pres):
     
     # Reduced variables
     tn = temp/_TTP
-    pn = pres/_PTP
-    _PI0 = _PATM/_PTP
+    pn = pres/_PTPE
+    _PI0 = _PATM/_PTPE
     g_ppp = 0.
     
     # Power series terms
     for (l,n) in enumerate(_GCOEFFS[0]):
         if l > 2:
             g_ppp += n * l*(l-1)*(l-2) * (pn-_PI0)**(l-3)
-    g_ppp /= _PTP**3
+    g_ppp /= _PTPE**3
     return g_ppp
 
 
