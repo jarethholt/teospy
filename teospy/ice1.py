@@ -10,7 +10,7 @@ This module implements the Gibbs free energy of ice and its derivatives with res
 
 __all__ = ['ice_g']
 
-import cmath
+import numpy
 import constants0
 
 # Single constants
@@ -60,8 +60,8 @@ def _ice_g0(temp,pres):
     for (k,rk) in enumerate(_GCOEFFS[2]):
         sr[1] += rk * (pn-_PI0)**k
     for (tk,s) in zip(_GCOEFFS[3],sr):
-        term = (tk-tn)*cmath.log(tk-tn) + (tk+tn)*cmath.log(tk+tn)
-        term -= 2*tk*cmath.log(tk) + tn**2 / tk
+        term = (tk-tn)*numpy.log(tk-tn) + (tk+tn)*numpy.log(tk+tn)
+        term -= 2*tk*numpy.log(tk) + tn**2 / tk
         g += _TTP * (s*term).real
     return g
 
@@ -89,7 +89,7 @@ def _ice_dgdt(temp,pres):
     for (k,rk) in enumerate(_GCOEFFS[2]):
         sr[1] += rk * (pn-_PI0)**k
     for (tk,s) in zip(_GCOEFFS[3],sr):
-        term = -cmath.log(tk-tn) + cmath.log(tk+tn) - 2*tn/tk
+        term = -numpy.log(tk-tn) + numpy.log(tk+tn) - 2*tn/tk
         g_t += (s*term).real
     return g_t
 
@@ -119,8 +119,8 @@ def _ice_dgdp(temp,pres):
         if k > 0:
             s += rk * k*(pn-_PI0)**(k-1) / _PTPE
     tk = _GCOEFFS[3][1]
-    term = (tk-tn)*cmath.log(tk-tn) + (tk+tn)*cmath.log(tk+tn)
-    term -= 2*tk*cmath.log(tk) + tn**2/tk
+    term = (tk-tn)*numpy.log(tk-tn) + (tk+tn)*numpy.log(tk+tn)
+    term -= 2*tk*numpy.log(tk) + tn**2/tk
     g_p += _TTP * (s*term).real
     return g_p
 
@@ -170,7 +170,7 @@ def _ice_d2gdtdp(temp,pres):
         if k > 0:
             s += rk * k*(pn-_PI0)**(k-1) / _PTPE
     tk = _GCOEFFS[3][1]
-    term = -cmath.log(tk-tn) + cmath.log(tk+tn) - 2*tn/tk
+    term = -numpy.log(tk-tn) + numpy.log(tk+tn) - 2*tn/tk
     g_tp = (s*term).real
     return g_tp
 
@@ -197,8 +197,8 @@ def _ice_d2gdp2(temp,pres):
     # Residual terms including complex numbers
     s = _GCOEFFS[2][2] * 2. / _PTPE**2
     tk = _GCOEFFS[3][1]
-    term = (tk-tn)*cmath.log(tk-tn) + (tk+tn)*cmath.log(tk+tn)
-    term -= 2*tk*cmath.log(tk) + tn**2/tk
+    term = (tk-tn)*numpy.log(tk-tn) + (tk+tn)*numpy.log(tk+tn)
+    term -= 2*tk*numpy.log(tk) + tn**2/tk
     g_pp += _TTP * (s*term).real
     return g_pp
 
@@ -270,7 +270,7 @@ def _ice_d3gdtdp2(temp,pres):
     # Residual terms including complex numbers
     s = _GCOEFFS[2][2] * 2.0/_PTPE**2
     tk = _GCOEFFS[3][1]
-    term = -cmath.log(tk-tn) + cmath.log(tk+tn) - 2.0*tn/tk
+    term = -numpy.log(tk-tn) + numpy.log(tk+tn) - 2.0*tn/tk
     g_tpp = (s*term).real
     return g_tpp
 
@@ -336,7 +336,7 @@ def ice_g(drvt,drvp,temp,pres,chkbnd=False):
     >>> ice_g(0,2,270.,1e5)
     -1.27811223643e-13
     """
-    constants0.chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    constants0.chkicebnds(temp,pres,chkbnd=chkbnd)
     
     # Run through various derivative cases
     if (drvt,drvp) == (0,0):

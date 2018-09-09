@@ -73,7 +73,7 @@ def chempot(temp,pres,chkbnd=False):
     >>> chempot(270.,1e5)
     -3786.74963128
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     g = _ice_g(0,0,temp,pres)
     return g
 
@@ -98,7 +98,7 @@ def cp(temp,pres,chkbnd=False):
     >>> cp(270.,1e5)
     2073.47946211
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     g_tt = _ice_g(2,0,temp,pres)
     cp = -temp*g_tt
     return cp
@@ -123,7 +123,7 @@ def density(temp,pres,chkbnd=False):
     >>> density(270.,1e5)
     917.181167192
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     g_p = _ice_g(0,1,temp,pres)
     dice = g_p**(-1)
     return dice
@@ -149,7 +149,7 @@ def enthalpy(temp,pres,chkbnd=False):
     >>> enthalpy(270.,1e5)
     -339929.555499
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     g = _ice_g(0,0,temp,pres)
     g_t = _ice_g(1,0,temp,pres)
     h = g - temp*g_t
@@ -175,7 +175,7 @@ def entropy(temp,pres,chkbnd=False):
     >>> entropy(270.,1e5)
     -1244.97335506
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     g_t = _ice_g(1,0,temp,pres)
     s = -g_t
     return s
@@ -201,7 +201,7 @@ def expansion(temp,pres,chkbnd=False):
     >>> expansion(270.,1e5)
     1.58309329594e-04
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     g_p = _ice_g(0,1,temp,pres)
     g_tp = _ice_g(1,1,temp,pres)
     alpha = g_tp / g_p
@@ -228,7 +228,7 @@ def helmholtzenergy(temp,pres,chkbnd=False):
     >>> helmholtzenergy(270.,1e5)
     -3895.77934490
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     g = _ice_g(0,0,temp,pres)
     g_p = _ice_g(0,1,temp,pres)
     f = g - pres*g_p
@@ -255,7 +255,7 @@ def internalenergy(temp,pres,chkbnd=False):
     >>> internalenergy(270.,1e5)
     -340038.585212
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     g = _ice_g(0,0,temp,pres)
     g_t = _ice_g(1,0,temp,pres)
     g_p = _ice_g(0,1,temp,pres)
@@ -283,7 +283,7 @@ def kappas(temp,pres,chkbnd=False):
     >>> kappas(270.,1e5)
     1.13667916416e-10
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     g_p = _ice_g(0,1,temp,pres)
     g_tt = _ice_g(2,0,temp,pres)
     g_tp = _ice_g(1,1,temp,pres)
@@ -312,7 +312,7 @@ def kappat(temp,pres,chkbnd=False):
     >>> kappat(270.,1e5)
     1.17226047281e-10
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     g_p = _ice_g(0,1,temp,pres)
     g_pp = _ice_g(0,2,temp,pres)
     kappa = -g_pp / g_p
@@ -339,7 +339,7 @@ def lapserate(temp,pres,chkbnd=False):
     >>> lapserate(270.,1e5)
     2.24758128545e-08
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     g_tt = _ice_g(2,0,temp,pres)
     g_tp = _ice_g(1,1,temp,pres)
     gamma = -g_tp / g_tt
@@ -367,7 +367,7 @@ def pcoefficient(temp,pres,chkbnd=False):
     >>> pcoefficient(270.,1e5)
     1350462.06254
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     g_tp = _ice_g(1,1,temp,pres)
     g_pp = _ice_g(0,2,temp,pres)
     pcoef = -g_tp / g_pp
@@ -393,7 +393,7 @@ def specificvolume(temp,pres,chkbnd=False):
     >>> specificvolume(270.,1e5)
     1.09029713624e-03
     """
-    _chkicebnds(temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chkicebnds(temp,pres,chkbnd=chkbnd)
     v = _ice_g(0,1,temp,pres)
     return v
 
@@ -410,7 +410,7 @@ def chkiapws06table6(printresult=True,chktol=_CHKTOL):
     :arg bool printresult: If True (default) and any results are outside
         of the given tolerance, then the function name, reference value,
         result value, and relative error are printed.
-    :key float chktol: Tolerance to use when choosing to print results
+    :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
     :returns: :class:`~tester.Tester` instances containing the
         functions, arguments, reference values, results, and relative

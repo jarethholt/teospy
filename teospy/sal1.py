@@ -225,7 +225,7 @@ def sal_g_term(term,drvt,drvp,temp,pres,chkbnd=False,useext=False):
         errmsg = ('The value of term {0} is not between 1 and '
             '{1}').format(term,NSALTERMS)
         raise ValueError(errmsg)
-    constants0.chksalbnds(0.,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    constants0.chksalbnds(0.,temp,pres,chkbnd=chkbnd)
     gi = poly_gtp(term,drvt,drvp,temp,pres,useext=useext)
     return gi
 

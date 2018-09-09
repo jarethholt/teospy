@@ -59,9 +59,9 @@ def _fmttol(tols,n,stacklevel=2):
     and Nones.
     
     :arg tols: Given tolerances to format.
-    :type tols: float or None or list[float or None]
+    :type tols: float or None or iterable(float or None)
     :arg int n: Length of the output array needed.
-    :key int stacklevel: Controls how many levels deep to raise warnings
+    :arg int stacklevel: Controls how many levels deep to raise warnings
         from (default 2).
     :returns: Standardized tolerances of the right shape.
     :rtype: numpy.array(float)
@@ -124,39 +124,39 @@ def newton(fun,x0,fargs=None,fkwargs=None,maxiter=MAXITER,rxtol=RXTOL,
         Jacobians of the two quantities with respect to x.
     :type fun: function
     :arg x0: Initial guess for the values of the primary variables.
-    :type x0: float or tuple(float)
-    :key fargs: Values of the secondary variables, which will be held
+    :type x0: float or iterable(float)
+    :arg fargs: Values of the secondary variables, which will be held
         constant while solving. If no secondary variables are present,
         use None (default).
-    :type fargs: None or float or tuple(None or float)
-    :key fkwargs: Additional keyword arguments to pass to fun. Use None
+    :type fargs: None or float or tuple(float)
+    :arg fkwargs: Additional keyword arguments to pass to fun. Use None
         (default) for no keyword arguments.
     :type fkwargs: None or dict
-    :key int maxiter: Maximum number of iterations to allow before
+    :arg int maxiter: Maximum number of iterations to allow before
         stopping (default MAXITER).
-    :key rxtol: Relative tolerance between successive values of x for
+    :arg rxtol: Relative tolerance between successive values of x for
         halting the iteration (default RXTOL).
-    :type rxtol: None or float or tuple(None or float)
-    :key axtol: Absolute tolerance between successive values of x for
+    :type rxtol: None or float or iterable(float or None)
+    :arg axtol: Absolute tolerance between successive values of x for
         halting the iteration (default None). These values have implied
         units and thus should be different for each component.
-    :type axtol: None or float or tuple(None or float)
-    :key rytol: Relative tolerance to use when comparing (lhs,rhs) for
+    :type axtol: None or float or iterable(float or None)
+    :arg rytol: Relative tolerance to use when comparing (lhs,rhs) for
         halting the iteration (default RYTOL).
-    :type rytol: None or float or tuple(None or float)
-    :key aytol: Absolute tolerance to use when comparing (lhs,rhs) for
+    :type rytol: None or float or iterable(float or None)
+    :arg aytol: Absolute tolerance to use when comparing (lhs,rhs) for
         halting the iteration (default None). These values have implied
         units and thus should be different for each component.
-    :type aytol: None or float or tuple(None or float)
-    :key float gamma: Regularization parameter (default 0.). If the
+    :type aytol: None or float or iterable(float or None)
+    :arg float gamma: Regularization parameter (default 0.). If the
         iteration oscillates without converging, try setting this to a
         positive value less than 1.
-    :key int stacklevel: Controls how many levels deep to raise warnings
+    :arg int stacklevel: Controls how many levels deep to raise warnings
         from (default 2).
     :returns: Final estimate of the primary variables x. A float is
-        returned for single-variable functions and a list for multi-
+        returned for single-variable functions and an array for multi-
         variable functions.
-    :rtype: float or list[float]
+    :rtype: float or array(float)
     :raises RuntimeWarning: If maxiter is non-positive. In this case, no
         iteration is done and the initial value x0 is returned.
     :raises RuntimeWarning: If any of (rxtol,axtol,rytol,aytol) are
@@ -291,8 +291,10 @@ def newton(fun,x0,fargs=None,fkwargs=None,maxiter=MAXITER,rxtol=RXTOL,
     # Reformat the result to match the input type
     if isinstance(x0,float):
         x1 = float(x1)
-    else:
+    elif isinstance(x0,list):
         x1 = x1.tolist()
+    elif isinstance(x0,tuple):
+        x1 = tuple(x1.tolist())
     return x1
 
 

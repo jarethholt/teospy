@@ -26,7 +26,7 @@ IAPWS 1995, table 6.
 
 __all__ = ['flu_f','chkiapws95table6']
 
-import math
+import numpy
 import constants0
 
 # Constants
@@ -100,17 +100,17 @@ def _phi0(tau,dta):
     :returns: Helmholtz potential, unitless.
     """
     n0, n1, n2 = _IDEALCOEFFS[0]
-    phi = math.log(dta) + n0 + n1*tau + n2*math.log(tau)
+    phi = numpy.log(dta) + n0 + n1*tau + n2*numpy.log(tau)
     for (g,n) in _IDEALCOEFFS[1]:
-        eterm = math.exp(-g*tau)
-        phi += n * math.log(1 - eterm)
+        eterm = numpy.exp(-g*tau)
+        phi += n * numpy.log(1 - eterm)
     
     # Extension to low temperatures
     if tau > _TCP/_TLOW:
         COEFF, A0, A1, A2, A3, A4 = _LOWCOEFFS
         TAULOW = _TCP/_TLOW
         phi += COEFF * (A0 / tau
-            + A1 * (tau+TAULOW)*math.log(tau/TAULOW)/TAULOW**2
+            + A1 * (tau+TAULOW)*numpy.log(tau/TAULOW)/TAULOW**2
             + A2 * tau/TAULOW**2
             + A3 * tau**2/TAULOW**3
             + A4 / TAULOW)
@@ -130,7 +130,7 @@ def _phi0_t(tau,dta):
     n0, n1, n2 = _IDEALCOEFFS[0]
     phi = n1 + n2/tau
     for (g,n) in _IDEALCOEFFS[1]:
-        eterm = math.exp(-g*tau)
+        eterm = numpy.exp(-g*tau)
         phi += n * g * eterm/(1-eterm)
     
     # Extension to low temperatures
@@ -138,7 +138,7 @@ def _phi0_t(tau,dta):
         COEFF, A0, A1, A2, A3, A4 = _LOWCOEFFS
         TAULOW = _TCP/_TLOW
         phi += COEFF * (-A0 / tau**2
-            + A1 * (math.log(tau/TAULOW) + 1 + TAULOW/tau)/TAULOW**2
+            + A1 * (numpy.log(tau/TAULOW) + 1 + TAULOW/tau)/TAULOW**2
             + A2 / TAULOW**2
             + A3 * 2*tau/TAULOW**3)
     return phi
@@ -170,7 +170,7 @@ def _phi0_tt(tau,dta):
     n0, n1, n2 = _IDEALCOEFFS[0]
     phi = -n2 / tau**2
     for (g,n) in _IDEALCOEFFS[1]:
-        eterm = math.exp(-g*tau)
+        eterm = numpy.exp(-g*tau)
         denom = 1. - eterm
         phi += n * -g**2 * eterm / denom**2
     
@@ -522,7 +522,7 @@ def _psi(i,tau,dta):
     :returns: Psi value.
     """
     ai, bi, bb, cc, dd, aa, bet, n = _RESIDCOEFFS[3][i]
-    ps = math.exp(-cc*(dta-1)**2 - dd*(tau-1)**2)
+    ps = numpy.exp(-cc*(dta-1)**2 - dd*(tau-1)**2)
     return ps
 
 def _psi_t(i,tau,dta):
@@ -626,10 +626,10 @@ def _phir(tau,dta):
     for (d,t,n) in _RESIDCOEFFS[0]:
         phi += n * dta**d * tau**t
     for (c,d,t,n) in _RESIDCOEFFS[1]:
-        eterm = math.exp(-dta**c)
+        eterm = numpy.exp(-dta**c)
         phi += n * dta**d * eterm * tau**t
     for (d,t,alf,eps,bet,gam,n) in _RESIDCOEFFS[2]:
-        eterm = math.exp(-alf * (dta-eps)**2 - bet*(tau-gam)**2)
+        eterm = numpy.exp(-alf * (dta-eps)**2 - bet*(tau-gam)**2)
         phi += n * dta**d * tau**t * eterm
     for (i,gam) in enumerate(_RESIDCOEFFS[3]):
         ai, bi, bb, cc, dd, aa, bet, n = gam
@@ -652,10 +652,10 @@ def _phir_t(tau,dta):
     for (d,t,n) in _RESIDCOEFFS[0]:
         phi += n * dta**d * t*tau**(t-1)
     for (c,d,t,n) in _RESIDCOEFFS[1]:
-        term = dta**d * math.exp(-dta**c) * t * tau**(t-1)
+        term = dta**d * numpy.exp(-dta**c) * t * tau**(t-1)
         phi += n * term
     for (d,t,alf,eps,bet,gam,n) in _RESIDCOEFFS[2]:
-        eterm = math.exp(-alf * (dta-eps)**2 - bet*(tau-gam)**2)
+        eterm = numpy.exp(-alf * (dta-eps)**2 - bet*(tau-gam)**2)
         eder = -2*bet*(tau-gam)
         term = dta**d * tau**(t-1) * eterm * (t + tau * eder)
         phi += n * term
@@ -684,11 +684,11 @@ def _phir_d(tau,dta):
         phi += n * d*dta**(d-1) * tau**t
     for (c,d,t,n) in _RESIDCOEFFS[1]:
         dtac = dta**c
-        eterm = math.exp(-dtac)
+        eterm = numpy.exp(-dtac)
         term = tau**t * dta**(d-1) * eterm * (d - c*dtac)
         phi += n * term
     for (d,t,alf,eps,bet,gam,n) in _RESIDCOEFFS[2]:
-        eterm = math.exp(-alf * (dta-eps)**2 - bet*(tau-gam)**2)
+        eterm = numpy.exp(-alf * (dta-eps)**2 - bet*(tau-gam)**2)
         eder = -2 * alf * (dta-eps)
         term = tau**t * dta**(d-1) * eterm * (d + dta * eder)
         phi += n * term
@@ -718,9 +718,9 @@ def _phir_tt(tau,dta):
     for (d,t,n) in _RESIDCOEFFS[0]:
         phi += n * dta**d * t*(t-1)*tau**(t-2)
     for (c,d,t,n) in _RESIDCOEFFS[1]:
-        phi += n * math.exp(-dta**c) * dta**d * t*(t-1)*tau**(t-2)
+        phi += n * numpy.exp(-dta**c) * dta**d * t*(t-1)*tau**(t-2)
     for (d,t,alf,eps,bet,gam,n) in _RESIDCOEFFS[2]:
-        eterm = math.exp(-alf * (dta-eps)**2 - bet*(tau-gam)**2)
+        eterm = numpy.exp(-alf * (dta-eps)**2 - bet*(tau-gam)**2)
         eder1 = -2*bet*(tau-gam)
         eder2 = -2*bet
         term = dta**d * tau**(t-2) * eterm * (t*(t-1) + 2*t*tau*eder1
@@ -753,11 +753,11 @@ def _phir_td(tau,dta):
         phi += n * d*dta**(d-1) * t*tau**(t-1)
     for (c,d,t,n) in _RESIDCOEFFS[1]:
         dtac = dta**c
-        eterm = math.exp(-dtac)
+        eterm = numpy.exp(-dtac)
         term = t*tau**(t-1) * dta**(d-1) * eterm * (d - c*dtac)
         phi += n * term
     for (d,t,alf,eps,bet,gam,n) in _RESIDCOEFFS[2]:
-        eterm = math.exp(-alf * (dta-eps)**2 - bet*(tau-gam)**2)
+        eterm = numpy.exp(-alf * (dta-eps)**2 - bet*(tau-gam)**2)
         edert = -2*bet*(tau-gam)
         ederd = -2*alf*(dta-eps)
         term = tau**(t-1) * dta**(d-1) * eterm
@@ -794,12 +794,12 @@ def _phir_dd(tau,dta):
         phi += n * d*(d-1)*dta**(d-2) * tau**t
     for (c,d,t,n) in _RESIDCOEFFS[1]:
         dtac = dta**c
-        eterm = math.exp(-dtac)
+        eterm = numpy.exp(-dtac)
         term = tau**t * dta**(d-2) * eterm * ((d-1-c*dtac)*(d-c*dtac)
             - c**2*dtac)
         phi += n * term
     for (d,t,alf,eps,bet,gam,n) in _RESIDCOEFFS[2]:
-        eterm = math.exp(-alf*(dta-eps)**2 - bet*(tau-gam)**2)
+        eterm = numpy.exp(-alf*(dta-eps)**2 - bet*(tau-gam)**2)
         eder1 = -2*alf*(dta-eps)
         eder2 = -2*alf
         term = tau**t * dta**(d-2) * eterm * (d*(d-1) + 2*d*dta*eder1
@@ -858,7 +858,7 @@ def flu_f(drvt,drvd,temp,dflu,chkbnd=False):
     >>> flu_f(0,2,300.,1000.)
     2.24824656167
     """
-    constants0.chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    constants0.chkflubnds(temp,dflu,chkbnd=chkbnd)
     tau = _TCP / temp
     dta = dflu / _DCP
     rt = _RWAT * temp
@@ -898,7 +898,7 @@ def chkiapws95table6(printresult=True,chktol=_CHKTOL):
     :arg bool printresult: If True (default) and any results are outside
         of the given tolerance, then the function name, reference value,
         result value, and relative error are printed.
-    :key float tol: Tolerance to use when choosing to print results
+    :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
     :returns: Tester instances containing the functions, arguments,
         reference values, results, and relative errors from the tests.

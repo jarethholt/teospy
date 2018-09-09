@@ -24,7 +24,7 @@ This module implements the Helmholtz free energy of dry air and its derivatives 
 
 __all__ = ['dry_f','air_baw','air_caaw','air_caww']
 
-import math
+import numpy
 import constants0
 
 # Single constants
@@ -100,9 +100,9 @@ def _alpha_ideal(tau):
         alpha += n * tau**(k-3)
     k, n = _C_DRYF0[2]
     alpha += n * tau**k
-    alpha += _C_DRYF0[3] * math.log(tau)
+    alpha += _C_DRYF0[3] * numpy.log(tau)
     for (a1,a2,b,c,n) in _C_DRYF0[4]:
-        alpha += n * math.log(a1/a2 + b*math.exp(c*tau))
+        alpha += n * numpy.log(a1/a2 + b*numpy.exp(c*tau))
     return alpha
 
 def _alpha_ideal_t(tau):
@@ -124,7 +124,7 @@ def _alpha_ideal_t(tau):
     alpha += n * k*tau**(k-1)
     alpha += _C_DRYF0[3] / tau
     for (a1,a2,b,c,n) in _C_DRYF0[4]:
-        eterm = math.exp(c*tau)
+        eterm = numpy.exp(c*tau)
         alpha += n * b*c*eterm / (a1/a2 + b*eterm)
     return alpha
 
@@ -145,7 +145,7 @@ def _alpha_ideal_tt(tau):
     alpha += n * k*(k-1)*tau**(k-2)
     alpha += -_C_DRYF0[3] / tau**2
     for (a1,a2,b,c,n) in _C_DRYF0[4]:
-        eterm = math.exp(c*tau)
+        eterm = numpy.exp(c*tau)
         denom = a1/a2 + b*eterm
         alpha += n * a1/a2 * b * c**2 * eterm / denom**2
     return alpha
@@ -197,7 +197,7 @@ def _alpha_res(drvt,drvd,tau,dta):
             a_tau = k*(k-1) * tau**(k-2)
         
         dtal = dta**l
-        eterm = math.exp(-dtal)
+        eterm = numpy.exp(-dtal)
         if drvd == 0:
             a_dta = dta**j * eterm
         elif drvd == 1:
@@ -247,13 +247,13 @@ def dry_f(drvt,drvd,temp,ddry,chkbnd=False):
     >>> dry_f(0,2,300.,1e-3)
     -86114738036.1
     """
-    constants0.chkdrybnds(temp,ddry,chkbnd=chkbnd,stacklevel=2)
+    constants0.chkdrybnds(temp,ddry,chkbnd=chkbnd)
     tau = _TRED_DRY / temp
     dta = ddry / _DRED_DRY
     
     # Run through each derivative case
     if (drvt,drvd) == (0,0):
-        alpha = math.log(dta) + _alpha_ideal(tau)
+        alpha = numpy.log(dta) + _alpha_ideal(tau)
         alpha += _alpha_res(0,0,tau,dta)
         f = _RDRY * temp * alpha
     elif (drvt,drvd) == (0,1):
@@ -263,7 +263,7 @@ def dry_f(drvt,drvd,temp,ddry,chkbnd=False):
         alpha_dd = -1./dta**2 + _alpha_res(0,2,tau,dta)
         f = _RDRY * temp * alpha_dd / _DRED_DRY**2
     elif (drvt,drvd) == (1,0):
-        alpha = math.log(dta) + _alpha_ideal(tau)
+        alpha = numpy.log(dta) + _alpha_ideal(tau)
         alpha += _alpha_res(0,0,tau,dta)
         alpha_t = _alpha_ideal_t(tau)
         alpha_t += _alpha_res(1,0,tau,dta)
@@ -383,7 +383,7 @@ def air_caww(drvt,temp):
     earg = 0.0
     for (k,n) in enumerate(_C_AWW):
         earg += n * tau**(-k)
-    caww = -1e-6 * math.exp(earg)
+    caww = -1e-6 * numpy.exp(earg)
     
     # Multiply by derivatives of the exponent
     if drvt == 0:

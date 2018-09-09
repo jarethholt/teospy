@@ -76,7 +76,7 @@ def cp(temp,dflu,chkbnd=False):
     >>> cp(300.,1000.)
     4159.37519963
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f_d = _flu_f(0,1,temp,dflu)
     f_tt = _flu_f(2,0,temp,dflu)
     f_td = _flu_f(1,1,temp,dflu)
@@ -107,7 +107,7 @@ def cv(temp,dflu,chkbnd=False):
     >>> cv(300.,1000.)
     4105.20614776
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f_tt = _flu_f(2,0,temp,dflu)
     cv = -temp * f_tt
     return cv
@@ -133,7 +133,7 @@ def enthalpy(temp,dflu,chkbnd=False):
     >>> enthalpy(300.,1000.)
     119752.511434
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f = _flu_f(0,0,temp,dflu)
     f_t = _flu_f(1,0,temp,dflu)
     f_d = _flu_f(0,1,temp,dflu)
@@ -161,7 +161,7 @@ def entropy(temp,dflu,chkbnd=False):
     >>> entropy(300.,1000.)
     390.904170767
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f_t = _flu_f(1,0,temp,dflu)
     s = -f_t
     return s
@@ -187,7 +187,7 @@ def expansion(temp,dflu,chkbnd=False):
     >>> expansion(300.,1000.)
     2.82413312531e-04
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f_d = _flu_f(0,1,temp,dflu)
     f_td = _flu_f(1,1,temp,dflu)
     f_dd = _flu_f(0,2,temp,dflu)
@@ -215,7 +215,7 @@ def gibbsenergy(temp,dflu,chkbnd=False):
     >>> gibbsenergy(300.,1000.)
     2481.26020392
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f = _flu_f(0,0,temp,dflu)
     f_d = _flu_f(0,1,temp,dflu)
     g = f + dflu*f_d
@@ -242,7 +242,7 @@ def internalenergy(temp,dflu,chkbnd=False):
     >>> internalenergy(300.,1000.)
     111919.510078
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f = _flu_f(0,0,temp,dflu)
     f_t = _flu_f(1,0,temp,dflu)
     u = f - temp*f_t
@@ -269,7 +269,7 @@ def kappas(temp,dflu,chkbnd=False):
     >>> kappas(300.,1000.)
     4.35960581171e-10
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f_d = _flu_f(0,1,temp,dflu)
     f_tt = _flu_f(2,0,temp,dflu)
     f_td = _flu_f(1,1,temp,dflu)
@@ -299,7 +299,7 @@ def kappat(temp,dflu,chkbnd=False):
     >>> kappat(300.,1000.)
     4.41713172024e-10
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f_d = _flu_f(0,1,temp,dflu)
     f_dd = _flu_f(0,2,temp,dflu)
     denom = dflu**2 * (2*f_d + dflu*f_dd)
@@ -327,7 +327,7 @@ def lapserate(temp,dflu,chkbnd=False):
     >>> lapsrate(300.,1000.)
     2.03694039833e-08
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f_d = _flu_f(0,1,temp,dflu)
     f_tt = _flu_f(2,0,temp,dflu)
     f_td = _flu_f(1,1,temp,dflu)
@@ -357,7 +357,7 @@ def pressure(temp,dflu,chkbnd=False):
     >>> pressure(300.,1000.)
     7833001.35597
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f_d = _flu_f(0,1,temp,dflu)
     p = dflu**2 * f_d
     return p
@@ -383,7 +383,7 @@ def soundspeed(temp,dflu,chkbnd=False):
     >>> soundspeed(300.,1000.)
     1514.52479780
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f_d = _flu_f(0,1,temp,dflu)
     f_tt = _flu_f(2,0,temp,dflu)
     f_td = _flu_f(1,1,temp,dflu)
@@ -415,7 +415,7 @@ def eq_chempot(drvt,drvd,temp,dflu,chkbnd=False):
     :raises ValueError: If either of (drvt,drvd) are <0 or if
         drvt+drvd>1.
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     
     # Run through derivative cases
     if (drvt,drvd) == (0,0):
@@ -456,7 +456,7 @@ def eq_enthalpy(drvt,drvd,temp,dflu,chkbnd=False):
     :raises ValueError: If either of (drvt,drvd) are <0 or if
         drvt+drvd>1.
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     
     # Run through derivative cases
     if (drvt,drvd) == (0,0):
@@ -499,7 +499,7 @@ def eq_entropy(drvt,drvd,temp,dflu,chkbnd=False):
     :raises ValueError: If either of (drvt,drvd) are <0 or if
         drvt+drvd>1.
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     entr = -_flu_f(drvt+1,drvd,temp,dflu)
     return entr
 
@@ -524,7 +524,7 @@ def eq_pressure(drvt,drvd,temp,dflu,chkbnd=False):
     :raises ValueError: If either of (drvt,drvd) are <0 or if
         drvt+drvd>1.
     """
-    _chkflubnds(temp,dflu,chkbnd=chkbnd,stacklevel=2)
+    _chkflubnds(temp,dflu,chkbnd=chkbnd)
     
     # Run through derivative cases
     if (drvt,drvd) == (0,0):
@@ -554,7 +554,7 @@ def chkiapws95table7(printresult=True,chktol=_CHKTOL):
     :arg bool printresult: If True (default) and any results are outside
         of the given tolerance, then the function name, reference value,
         result value, and relative error are printed.
-    :key float chktol: Tolerance to use when choosing to print results
+    :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
     :returns: :class:`~tester.Tester` instance containing the functions,
         arguments, reference values, results, and relative errors from

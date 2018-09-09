@@ -25,7 +25,28 @@ The basic contents of the modules are as follows:
 ------
 
 .. automodule:: air2
-    :members: air_f, cp, cv, enthalpy, entropy, expansion, gibbsenergy, internalenergy, kappas, kappat, lapserate, pressure, soundspeed, vappot, eq_entropy, eq_pressure, eq_vappot
+    :members: air_f, cp, cv, enthalpy, entropy, expansion, gibbsenergy, internalenergy, kappas, kappat, lapserate, pressure, soundspeed, vappot, eq_entropy, eq_pressure, eq_vappot, chkiapws10table, chkiapws10table13, chkiapws10table14, chkiapws10table15
+
+
+`air3a`
+-------
+
+.. automodule:: air3a
+    :members: air_g
+
+
+`air3b`
+-------
+
+.. automodule:: air3b
+    :members: compressibility, compressibility_lemmon, contraction, cp, cv, density, enthalpy, entropy, expansion, gibbsenergy, internalenergy, kappas, kappat, lapserate, soundspeed, vappot, chklemmon2000
+
+
+`air3c`
+-------
+
+.. automodule:: air3c
+    :members: air_h, pottemp, potdensity, potenthalpy
 
 
 

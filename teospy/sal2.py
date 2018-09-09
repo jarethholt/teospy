@@ -46,7 +46,7 @@ __all__ = ['sal_g',
     'mixenthalpy','mixentropy','mixvolume',
     'eq_liqpot','eq_enthalpy','eq_entropy']
 
-import math
+import numpy
 import constants0
 import sal1
 
@@ -97,7 +97,7 @@ def sal_g(drvs,drvt,drvp,salt,temp,pres,chkbnd=False,useext=False):
     >>> sal_g(0,2,0,0.035,300.,1e6)
     0.597842170749
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     if min(drvs,drvt,drvp) < 0:
         errmsg = 'Derivatives {0} not recognized'.format((drvs,drvt,drvp))
         raise ValueError(errmsg)
@@ -123,9 +123,9 @@ def sal_g(drvs,drvt,drvp,salt,temp,pres,chkbnd=False,useext=False):
     g = 0.0
     if gis[0] != 0:
         if drvs == 0:
-            g += gis[0] * salt * math.log(salt)
+            g += gis[0] * salt * numpy.log(salt)
         elif drvs == 1:
-            g += gis[0] * (1 + math.log(salt))
+            g += gis[0] * (1 + numpy.log(salt))
         else:
             g += gis[0] * (-1.)**(drvs) / salt**(drvs-1)
     iStart = max(2*drvs-1,1)
@@ -171,7 +171,7 @@ def actcoeff(salt,temp,pres,chkbnd=False,useext=False):
     >>> actcoeff(0.035,300.,1e6)
     -0.527003008913
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     # Treat boundary cases separately
     if salt == 1:
         errmsg = 'Activity coefficient is undefined for a salinity of 1'
@@ -184,7 +184,7 @@ def actcoeff(salt,temp,pres,chkbnd=False,useext=False):
     g_s = sal_g(1,0,0,salt,temp,pres,useext=useext)
     g1 = _sal_g_term(1,0,0,temp,pres,useext=useext)
     g2 = _sal_g_term(2,0,0,temp,pres,useext=useext)
-    lng = (g + (1-salt)*g_s - g1-g2)/g1 + math.log(salt**(-1)-1)
+    lng = (g + (1-salt)*g_s - g1-g2)/g1 + numpy.log(salt**(-1)-1)
     return lng
 
 def activityw(salt,temp,pres,chkbnd=False,useext=False):
@@ -212,7 +212,7 @@ def activityw(salt,temp,pres,chkbnd=False,useext=False):
     >>> activityw(0.035,300.,1e6)
     0.981388410188
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     # Treat boundary cases separately
     if salt == 0:
         awat = 1.
@@ -226,11 +226,11 @@ def activityw(salt,temp,pres,chkbnd=False,useext=False):
             iTerm = ind + 3
             earg += gi/g1 * (.5*iTerm-1) * salt**(.5*iTerm)
         earg *= -_MWAT/_MSAL
-        awat = math.exp(earg)
+        awat = numpy.exp(earg)
         return awat
     
     phi = osmcoeff(salt,temp,pres,useext=useext)
-    awat = math.exp(-phi * salt/(1-salt) * _MWAT/_MSAL)
+    awat = numpy.exp(-phi * salt/(1-salt) * _MWAT/_MSAL)
     return awat
 
 def actpotential(salt,temp,pres,chkbnd=False,useext=False):
@@ -258,7 +258,7 @@ def actpotential(salt,temp,pres,chkbnd=False,useext=False):
     >>> actpotential(0.035,300.,1e6)
     -0.429940465498
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     # Treat boundary cases separately
     if salt == 1:
         errmsg = 'Activity potential is undefined for a salinity of 1'
@@ -270,7 +270,7 @@ def actpotential(salt,temp,pres,chkbnd=False,useext=False):
     g = sal_g(0,0,0,salt,temp,pres,useext=useext)
     g1 = _sal_g_term(1,0,0,temp,pres,useext=useext)
     g2 = _sal_g_term(2,0,0,temp,pres,useext=useext)
-    psi = (g/salt - g2)/g1 + math.log(salt**(-1)-1)
+    psi = (g/salt - g2)/g1 + numpy.log(salt**(-1)-1)
     return psi
 
 def chemcoeff(salt,temp,pres,chkbnd=False,useext=False):
@@ -298,7 +298,7 @@ def chemcoeff(salt,temp,pres,chkbnd=False,useext=False):
     >>> chemcoeff(0.035,300.,1e6)
     2754.04566958
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     d = dilution(salt,temp,pres,useext=useext)
     chem = salt * d
     return chem
@@ -328,7 +328,7 @@ def dilution(salt,temp,pres,chkbnd=False,useext=False):
     >>> dilution(0.035,300.,1e6)
     78687.0191309
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     # Treat boundary case separately
     if salt == 0:
         dil = _sal_g_term(1,0,0,temp,pres,useext=useext)
@@ -362,7 +362,7 @@ def liqpot(salt,temp,pres,chkbnd=False,useext=False):
     >>> liqpot(0.035,300.,1e6)
     -2601.18871107
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     g = sal_g(0,0,0,salt,temp,pres,useext=useext)
     g_s = sal_g(1,0,0,salt,temp,pres,useext=useext)
     gliq = g - salt*g_s
@@ -393,7 +393,7 @@ def osmcoeff(salt,temp,pres,chkbnd=False,useext=False):
     >>> osmcoeff(0.035,300.,1e6)
     0.902937456585
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     # Treat boundary case separately
     if salt == 0:
         phi = 1.
@@ -432,7 +432,7 @@ def salpot(salt,temp,pres,chkbnd=False,useext=False):
     >>> salpot(0.035,300.,1e6)
     77949.2100395
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     gsal = sal_g(1,0,0,salt,temp,pres,useext=useext)
     return gsal
 
@@ -461,7 +461,7 @@ def saltenthalpy(salt,temp,pres,chkbnd=False,useext=False):
     >>> saltenthalpy(0.035,300.,1e6)
     -156107.959196
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     # Treat boundary case separately
     if salt == 0:
         errmsg = 'Salt enthalpy is undefined for a salinity of 0'
@@ -497,7 +497,7 @@ def saltentropy(salt,temp,pres,chkbnd=False,useext=False):
     >>> saltentropy(0.035,300.,1e6)
     -532.458305922
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     # Treat boundary case separately
     if salt == 0:
         errmsg = 'Salt entropy is undefined for a salinity of 0'
@@ -532,7 +532,7 @@ def saltvolume(salt,temp,pres,chkbnd=False,useext=False):
     >>> saltvolume(0.035,300.,1e6)
     -7.30285943768e-04
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     # Treat boundary case separately
     if salt == 0:
         g1_p = _sal_g_term(1,0,1,temp,pres,useext=useext)
@@ -575,8 +575,8 @@ def mixenthalpy(salt1,salt2,wgt1,temp,pres,chkbnd=False,useext=False):
     >>> mixenthalpy(0.01,0.035,0.6,300.,1e6)
     16.1539911284
     """
-    _chksalbnds(salt1,temp,pres,chkbnd=chkbnd,stacklevel=2)
-    _chksalbnds(salt2,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt1,temp,pres,chkbnd=chkbnd)
+    _chksalbnds(salt2,temp,pres,chkbnd=chkbnd)
     if wgt1 < 0 or wgt1 > 1:
         errmsg = 'Mass fraction {0} is not between 0 and 1'.format(wgt1)
         raise ValueError(errmsg)
@@ -618,8 +618,8 @@ def mixentropy(salt1,salt2,wgt1,temp,pres,chkbnd=False,useext=False):
     >>> mixentropy(0.01,0.035,0.6,300.,1e6)
     0.966829422617
     """
-    _chksalbnds(salt1,temp,pres,chkbnd=chkbnd,stacklevel=2)
-    _chksalbnds(salt2,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt1,temp,pres,chkbnd=chkbnd)
+    _chksalbnds(salt2,temp,pres,chkbnd=chkbnd)
     if wgt1 < 0 or wgt1 > 1:
         errmsg = 'Mass fraction {0} is not between 0 and 1'.format(wgt1)
         raise ValueError(errmsg)
@@ -661,8 +661,8 @@ def mixvolume(salt1,salt2,wgt1,temp,pres,chkbnd=False,useext=False):
     >>> mixvolume(0.01,0.035,0.6,300.,1e6)
     -5.94174956892e-08
     """
-    _chksalbnds(salt1,temp,pres,chkbnd=chkbnd,stacklevel=2)
-    _chksalbnds(salt2,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt1,temp,pres,chkbnd=chkbnd)
+    _chksalbnds(salt2,temp,pres,chkbnd=chkbnd)
     if wgt1 < 0 or wgt1 > 1:
         errmsg = 'Mass fraction {0} is not between 0 and 1'.format(wgt1)
         raise ValueError(errmsg)
@@ -704,7 +704,7 @@ def eq_liqpot(drvs,drvt,drvp,salt,temp,pres,chkbnd=False,useext=False):
     :raises ValueError: If any of (drvs,drvt,drvp) are negative, or if
         drvs>1.
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     if drvs == 0:
         gs = sal_g(0,drvt,drvp,salt,temp,pres,useext=useext)
         gs_s = sal_g(1,drvt,drvp,salt,temp,pres,useext=useext)
@@ -745,7 +745,7 @@ def eq_enthalpy(drvs,drvt,drvp,salt,temp,pres,chkbnd=False,useext=False):
     :raises ValueError: If any of (drvs,drvt,drvp) are negative, or if
         drvt is nonzero and one of (drvs,drvp) is nonzero.
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     # Temperature derivative is special
     if (drvs,drvt,drvp) == (0,1,0):
         g_tt = sal_g(0,2,0,salt,temp,pres,useext=useext)
@@ -787,7 +787,7 @@ def eq_entropy(drvs,drvt,drvp,salt,temp,pres,chkbnd=False,useext=False):
         recommended bounds and chkbnd is True.
     :raises ValueError: If any of (drvs,drvt,drvp) are negative.
     """
-    _chksalbnds(salt,temp,pres,chkbnd=chkbnd,stacklevel=2)
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     entr = -sal_g(drvs,drvt+1,drvp,salt,temp,pres,useext=useext)
     return entr
 

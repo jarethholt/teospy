@@ -128,7 +128,7 @@ def _air_f_mix(drva,drvt,drvd,airf,temp,dhum,chkbnd=False):
     >>> air_f_mix(0,0,2,0.9,300.,1.)
     -0.795663887493
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     if not (all((drv>=0)*(drv<=2) for drv in (drva,drvt,drvd))
             and (drva+drvt+drvd)<=2):
         errmsg = 'Derivatives {0} not recognized'.format((drva,drvt,drvd))
@@ -229,7 +229,7 @@ def air_f(drva,drvt,drvd,airf,temp,dhum,chkbnd=False):
     >>> air_f(0,0,2,0.9,300.,1.)
     -91421.4440689
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     if not (all((drv>=0)*(drv<=2) for drv in (drva,drvt,drvd))
             and (drva+drvt+drvd)<=2):
         errmsg = 'Derivatives {0} not recognized'.format((drva,drvt,drvd))
@@ -304,7 +304,7 @@ def cp(airf,temp,dhum,chkbnd=False):
     >>> cp(0.9,300.,1.)
     1210.74031058
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f_d = air_f(0,0,1,airf,temp,dhum)
     f_tt = air_f(0,2,0,airf,temp,dhum)
     f_td = air_f(0,1,1,airf,temp,dhum)
@@ -337,7 +337,7 @@ def cv(airf,temp,dhum,chkbnd=False):
     >>> air_f_cv(0.9,300.,1.)
     889.446654163
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f_tt = air_f(0,2,0,airf,temp,dhum)
     cv = -temp * f_tt
     return cv
@@ -365,7 +365,7 @@ def enthalpy(airf,temp,dhum,chkbnd=False):
     >>> enthalpy(0.9,300.,1.)
     278208.408750
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f = air_f(0,0,0,airf,temp,dhum)
     f_t = air_f(0,1,0,airf,temp,dhum)
     f_d = air_f(0,0,1,airf,temp,dhum)
@@ -395,7 +395,7 @@ def entropy(airf,temp,dhum,chkbnd=False):
     >>> entropy(0.9,300.,1.)
     940.175394023
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f_t = air_f(0,1,0,airf,temp,dhum)
     s = -f_t
     return s
@@ -423,7 +423,7 @@ def expansion(airf,temp,dhum,chkbnd=False):
     >>> expansion(0.9,300.,1.)
     3.43193033077e-03
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f_d = air_f(0,0,1,airf,temp,dhum)
     f_td = air_f(0,1,1,airf,temp,dhum)
     f_dd = air_f(0,0,2,airf,temp,dhum)
@@ -454,7 +454,7 @@ def gibbsenergy(airf,temp,dhum,chkbnd=False):
     >>> gibbsenergy(0.9,300.,1.)
     -3844.20945693
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f = air_f(0,0,0,airf,temp,dhum)
     f_d = air_f(0,0,1,airf,temp,dhum)
     g = f + dhum*f_d
@@ -483,7 +483,7 @@ def internalenergy(airf,temp,dhum,chkbnd=False):
     >>> internalenergy(0.9,300.,1.)
     187033.023884
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f = air_f(0,0,0,airf,temp,dhum)
     f_t = air_f(0,1,0,airf,temp,dhum)
     u = f - temp*f_t
@@ -512,7 +512,7 @@ def kappas(airf,temp,dhum,chkbnd=False):
     >>> kappas(0.9,300.,1.)
     8.07913626816e-06
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f_d = air_f(0,0,1,airf,temp,dhum)
     f_tt = air_f(0,2,0,airf,temp,dhum)
     f_td = air_f(0,1,1,airf,temp,dhum)
@@ -544,7 +544,7 @@ def kappat(airf,temp,dhum,chkbnd=False):
     >>> kappat(0.9,300.,1.)
     1.09975521396e-05
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f_d = air_f(0,0,1,airf,temp,dhum)
     f_dd = air_f(0,0,2,airf,temp,dhum)
     denom = dhum**2 * (2*f_d + dhum*f_dd)
@@ -575,7 +575,7 @@ def lapserate(airf,temp,dhum,chkbnd=False):
     >>> lapserate(0.9,300.,1.)
     8.50371537341e-04
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f_d = air_f(0,0,1,airf,temp,dhum)
     f_tt = air_f(0,2,0,airf,temp,dhum)
     f_td = air_f(0,1,1,airf,temp,dhum)
@@ -607,7 +607,7 @@ def pressure(airf,temp,dhum,chkbnd=False):
     >>> pressure(0.9,300.,1.)
     91175.3848662
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f_d = air_f(0,0,1,airf,temp,dhum,chkbnd=chkbnd)
     p = dhum**2 * f_d
     return p
@@ -635,7 +635,7 @@ def soundspeed(airf,temp,dhum,chkbnd=False):
     >>> soundspeed(0.9,300.,1.)
     351.817577078
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f_d = air_f(0,0,1,airf,temp,dhum)
     f_tt = air_f(0,2,0,airf,temp,dhum)
     f_td = air_f(0,1,1,airf,temp,dhum)
@@ -662,7 +662,7 @@ def vappot(airf,temp,dhum,chkbnd=False):
     :raises RuntimeWarning: If temp or dhum are outside the recommended
         bounds and chkbnd is True.
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f = air_f(0,0,0,airf,temp,dhum)
     f_a = air_f(1,0,0,airf,temp,dhum)
     f_d = air_f(0,0,1,airf,temp,dhum)
@@ -696,7 +696,7 @@ def eq_entropy(drva,drvt,drvd,airf,temp,dhum,chkbnd=False):
     :raises ValueError: If any of (drva,drvt,drvd) are <0 or if
         drva+drvt+drvd>1.
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     entr = -air_f(drva,drvt+1,drvd,airf,temp,dhum)
     return entr
 
@@ -724,7 +724,7 @@ def eq_pressure(drva,drvt,drvd,airf,temp,dhum,chkbnd=False):
     :raises ValueError: If any of (drva,drvt,drvd) are <0 or if
         drva+drvt+drvd>1.
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f_d = air_f(0,0,1,airf,temp,dhum)
     
     # Run through derivative cases
@@ -769,7 +769,7 @@ def eq_vappot(drva,drvt,drvd,airf,temp,dhum,chkbnd=False):
     :raises ValueError: If any of (drva,drvt,drvd) are <0 or if
         drva+drvt+drvd>1.
     """
-    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd,stacklevel=2)
+    _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     f = air_f(0,0,0,airf,temp,dhum)
     f_a = air_f(1,0,0,airf,temp,dhum)
     f_d = air_f(0,0,1,airf,temp,dhum)
@@ -808,7 +808,7 @@ def chkiapws10table(number,printresult=True,chktol=_CHKTOL):
     :arg bool printresult: If True (default) and any results are outside
         of the given tolerance, then the function name, reference value,
         result value, and relative error are printed.
-    :key float chktol: Tolerance to use when choosing to print results
+    :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
     :returns: :class:`~tester.Tester` instances containing the
         functions, arguments, reference values, results, and relative
@@ -840,7 +840,7 @@ def chkiapws10table13(printresult=True,chktol=_CHKTOL):
     :arg bool printresult: If True (default) and any results are outside
         of the given tolerance, then the function name, reference value,
         result value, and relative error are printed.
-    :key float chktol: Tolerance to use when choosing to print results
+    :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
     :returns: :class:`~tester.Tester` instances containing the
         functions, arguments, reference values, results, and relative
@@ -911,7 +911,7 @@ def chkiapws10table14(printresult=True,chktol=_CHKTOL):
     :arg bool printresult: If True (default) and any results are outside
         of the given tolerance, then the function name, reference value,
         result value, and relative error are printed.
-    :key float chktol: Tolerance to use when choosing to print results
+    :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
     :returns: :class:`~tester.Tester` instances containing the
         functions, arguments, reference values, results, and relative
@@ -973,7 +973,7 @@ def chkiapws10table15(printresult=True,chktol=_CHKTOL):
     :arg bool printresult: If True (default) and any results are outside
         of the given tolerance, then the function name, reference value,
         result value, and relative error are printed.
-    :key float chktol: Tolerance to use when choosing to print results
+    :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
     :returns: :class:`~tester.Tester` instances containing the
         functions, arguments, reference values, results, and relative

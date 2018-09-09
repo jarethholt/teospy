@@ -24,6 +24,6 @@ all other thermodynamic properties.
 .. automodule:: ice2
     :members: chempot, cp, density, enthalpy, entropy, expansion,
         helmholtzenergy, internalenergy, kappas, kappat, lapserate,
-        pcoefficient, specificvolume
+        pcoefficient, specificvolume, chkiapws06table6
 
 

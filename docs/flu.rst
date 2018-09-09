@@ -18,14 +18,14 @@ The basic contents of the modules are as follows:
 ------
 
 .. automodule:: flu1
-    :members: flu_f
+    :members: flu_f, chkiapws95table6
 
 
 `flu2`
 ------
 
 .. automodule:: flu2
-    :members: cp, cv, enthalpy, entropy, expansion, gibbsenergy, internalenergy, kappas, kappat, lapserate, pressure, soundspeed, eq_chempot, eq_enthalpy, eq_entropy, eq_pressure
+    :members: cp, cv, enthalpy, entropy, expansion, gibbsenergy, internalenergy, kappas, kappat, lapserate, pressure, soundspeed, eq_chempot, eq_enthalpy, eq_entropy, eq_pressure, chkiapws95table7
 
 
 
