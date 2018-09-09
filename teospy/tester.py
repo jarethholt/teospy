@@ -69,10 +69,24 @@ class Tester(object):
     :type fnames: str or list[str]
     :arg str argfmt: Format string for the function arguments. Used in
         printing.
+    :arg eqfun: Function to calculate primary variable values. Used by
+        modules level 3 and higher. Use None (default) for lower-level
+        modules.
+    :type eqfun: function or None
+    :arg eqargs: Values to pass to the equilibrium function. Used by
+        modules level 3 and higher. Use None (default) for lower-level
+        modules.
+    :type eqargs: tuple(float) or None
+    :arg eqkws: Names of the keyword arguments for primary variables.
+        Used by modules level 3 and higher. Use None (default) for
+        lower-level modules.
+    :type eqkws: list[str] or None
+    :arg header: Header line to print at the start of the summary or
+        None (default) to print nothing.
     :raises RuntimeWarning: If the shape of the reference values does
         not match the shape of the functions and arguments lists.
     
-    :Additional:
+    :Additional attributes:
     
     * nfun (int): Number of functions to test.
     * narg (int): Number of arguments to test the functions on.
@@ -95,7 +109,8 @@ class Tester(object):
     
     """
     
-    def __init__(self,funs,fargs,refs,fnames,argfmt):
+    def __init__(self,funs,fargs,refs,fnames,argfmt,eqfun=None,
+        eqargs=None,eqkws=None,header=None):
         if isinstance(funs,list):
             self.funs = numpy.array(funs,dtype=object)
             nfun = len(funs)
@@ -120,17 +135,33 @@ class Tester(object):
         self.nstr = max(len(fname) for fname in fnames)
         self.argfmt = argfmt
         self.nfmt = len(argfmt.format(*self.fargs[0]))
+        
+        # Include equilibrium function and keywords
+        self.eqfun = eqfun
+        self.eqargs = eqargs
+        self.eqkws = eqkws
+        self.header = header
         return None
     
     def run(self,zerotol=_ZEROTOL):
         """Run all the functions in the test.
         """
+        # Run equilibrium function if it exists
+        if self.eqfun is None:
+            eqdict = dict()
+        else:
+            eqvals = self.eqfun(*self.eqargs)
+            if isinstance(eqvals,float):
+                eqvals = (eqvals,)
+            eqdict = {kw: val for (kw,val) in zip(self.eqkws,eqvals)}
+            self.eqdict = eqdict
+        
         results = numpy.zeros((self.nfun,self.narg),dtype=float)
         for ifun in range(self.nfun):
             fun = self.funs[ifun]
             for iarg in range(self.narg):
                 farg = self.fargs[iarg]
-                res = fun(*farg)
+                res = fun(*farg,**eqdict)
                 results[ifun,iarg] = res
         self.results = results
         self.errs = _geterr(self.refs,results,zerotol=zerotol)
@@ -145,18 +176,24 @@ class Tester(object):
             raise ValueError(errmsg)
         if numpy.max(numpy.abs(self.errs)) <= chktol:
             okmsg = 'All results within tolerance {0}'.format(chktol)
+            if self.header is not None:
+                okmsg = self.header + ': ' + okmsg
             print(okmsg)
             return None
         
         # Print only results that are out of range
+        msg = 'Results outside of tolerance {0}'.format(chktol)
+        if self.header is not None:
+            msg = self.header + ': ' + msg
+        print(msg)
         nstr = max(self.nstr,len('Function'))
-        header = 'Function'.rjust(nstr) + '  '
+        lead = 'Function'.rjust(nstr) + '  '
         nfmt = self.nfmt
-        header += 'Args'.ljust(nfmt) + '  '
-        header += 'Ref'.ljust(_NFMT) + '  '
-        header += 'Result'.ljust(_NFMT) + '  '
-        header += 'Error'.ljust(_NFMT)
-        print(header)
+        lead += 'Args'.ljust(nfmt) + '  '
+        lead += 'Ref'.ljust(_NFMT) + '  '
+        lead += 'Result'.ljust(_NFMT) + '  '
+        lead += 'Error'.ljust(_NFMT)
+        print(lead)
         
         for ifun in range(self.nfun):
             for iarg in range(self.narg):
