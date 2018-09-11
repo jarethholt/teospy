@@ -624,10 +624,10 @@ def mixentropy(salt1,salt2,wgt1,temp,pres,chkbnd=False,useext=False):
         errmsg = 'Mass fraction {0} is not between 0 and 1'.format(wgt1)
         raise ValueError(errmsg)
     
-    s1 = salt1 * sal_saltentropy(salt1,temp,pres,useext=useext)
-    s2 = salt2 * sal_saltentropy(salt2,temp,pres,useext=useext)
+    s1 = salt1 * saltentropy(salt1,temp,pres,useext=useext)
+    s2 = salt2 * saltentropy(salt2,temp,pres,useext=useext)
     salt0 = wgt1*salt1 + (1-wgt1)*salt2
-    s0 = salt0 * sal_saltentropy(salt0,temp,pres,useext=useext)
+    s0 = salt0 * saltentropy(salt0,temp,pres,useext=useext)
     smix = s0 - wgt1*s1 - (1-wgt1)*s2
     return smix
 

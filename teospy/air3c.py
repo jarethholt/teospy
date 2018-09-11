@@ -22,14 +22,18 @@ properties under (dry) adiabatic displacement.
 
 :Functions:
 
+* eq_aep: Calculate equilibrium quantities at dry fraction, entropy,
+    and pressure.
 * air_h: Humid air enthalpy with derivatives.
+* eq_pot: Calculate equilibrium quantities at dry fraction, in-situ
+    temperature, in-situ pressure, and potential pressure.
 * pottemp: Calculate the humid air potential temperature.
 * potdensity: Calculate the humid air potential density.
 * potenthalpy: Calculate the humid air potential enthalpy.
 
 """
 
-__all__ = ['air_h','pottemp','potdensity','potenthalpy']
+__all__ = ['eq_aep','air_h','eq_pot','pottemp','potdensity','potenthalpy']
 
 import warnings
 import numpy
@@ -124,7 +128,7 @@ def _diff_aep(t,d,airf,entr,pres):
     drhs = numpy.array([[shum_t,shum_d], [phum_t,phum_d]])
     return lhs, rhs, dlhs, drhs
 
-def _eq_aep(airf,entr,pres,temp=None,dhum=None,chkvals=False,
+def eq_aep(airf,entr,pres,temp=None,dhum=None,chkvals=False,
     chktol=_CHKTOL,temp0=None,dhum0=None,chkbnd=False,mathargs=None):
     """Get primary variables at AEP.
     
@@ -246,7 +250,7 @@ def air_h(drva,drve,drvp,airf,entr,pres,temp=None,dhum=None,chkvals=False,
     >>> air_h(0,2,0,0.9,900.,1e5)
     0.223684689765
     """
-    temp, dhum = _eq_aep(airf,entr,pres,temp=temp,dhum=dhum,chkvals=chkvals,
+    temp, dhum = eq_aep(airf,entr,pres,temp=temp,dhum=dhum,chkvals=chkvals,
         chktol=chktol,temp0=temp0,dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
     
     # Simple cases: First-order derivatives
@@ -318,7 +322,7 @@ def air_h(drva,drve,drvp,airf,entr,pres,temp=None,dhum=None,chkvals=False,
 
 
 ## Adiabatic ascent/descent calculations
-def _eq_pot(airf,temp,pres,ppot,dhum=None,tpot=None,dpot=None,
+def eq_pot(airf,temp,pres,ppot,dhum=None,tpot=None,dpot=None,
     chkvals=False,chktol=_CHKTOL,dhum0=None,tpot0=None,dpot0=None,
     chkbnd=False,mathargs=None):
     """Get primary variables at ATP1P2.
@@ -372,7 +376,7 @@ def _eq_pot(airf,temp,pres,ppot,dhum=None,tpot=None,dpot=None,
         chktol, if chkvals is True and all values are given.
     """
     if dhum is None:
-        dhum = air3a._eq_atp(airf,temp,pres,dhum0=dhum0,chkbnd=chkbnd,
+        dhum = air3a.eq_atp(airf,temp,pres,dhum0=dhum0,chkbnd=chkbnd,
             mathargs=mathargs)
     _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     
@@ -462,7 +466,7 @@ def pottemp(airf,temp,pres,ppot,dhum=None,tpot=None,dpot=None,
     >>> pottemp(0.9,300.,5e4,1e5)
     363.653905688
     """
-    dhum, tpot, dpot = _eq_pot(airf,temp,pres,ppot,dhum=dhum,tpot=tpot,
+    dhum, tpot, dpot = eq_pot(airf,temp,pres,ppot,dhum=dhum,tpot=tpot,
         dpot=dpot,chkvals=chkvals,chktol=chktol,dhum0=dhum0,tpot0=tpot0,
         dpot0=dpot0,chkbnd=chkbnd,mathargs=mathargs)
     return tpot
@@ -519,7 +523,7 @@ def potdensity(airf,temp,pres,ppot,dhum=None,tpot=None,dpot=None,
     >>> potdensity(0.9,300.,5e4,1e5)
     0.903509489711
     """
-    dhum, tpot, dpot = _eq_pot(airf,temp,pres,ppot,dhum=dhum,tpot=tpot,
+    dhum, tpot, dpot = eq_pot(airf,temp,pres,ppot,dhum=dhum,tpot=tpot,
         dpot=dpot,chkvals=chkvals,chktol=chktol,dhum0=dhum0,tpot0=tpot0,
         dpot0=dpot0,chkbnd=chkbnd,mathargs=mathargs)
     return dpot
@@ -576,7 +580,7 @@ def potenthalpy(airf,temp,pres,ppot,dhum=None,tpot=None,dpot=None,
     >>> potenthalpy(0.9,300.,5e4,1e5)
     348872.568665
     """
-    dhum, tpot, dpot = _eq_pot(airf,temp,pres,ppot,dhum=dhum,tpot=tpot,
+    dhum, tpot, dpot = eq_pot(airf,temp,pres,ppot,dhum=dhum,tpot=tpot,
         dpot=dpot,chkvals=chkvals,chktol=chktol,dhum0=dhum0,tpot0=tpot0,
         dpot0=dpot0,chkbnd=chkbnd,mathargs=mathargs)
     hpot = air2.enthalpy(airf,tpot,dpot)

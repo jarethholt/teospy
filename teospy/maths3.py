@@ -42,7 +42,7 @@ import numpy
 
 # Default values
 RYTOL = 1e-8  # Use a relative tolerance of 0.01 ppm
-RXTOL = 1e-10  # Limit step sizes to >.1 ppb
+RXTOL = 1e-12  # Limit step sizes to >1 ppt
 MAXITER = 100  # Use up to 100 iterations
 
 # Formatting specification for printing warnings
@@ -223,6 +223,10 @@ def newton(fun,x0,fargs=None,fkwargs=None,maxiter=MAXITER,rxtol=RXTOL,
             x1 += dx*(1-gamma)
             continue
         
+        # Calculate iteration step
+        dx = numpy.linalg.solve(drhs-dlhs,-(rhs-lhs))
+        x1 += dx*(1-gamma)
+        
         # Are the function values sufficiently close?
         ryerr = numpy.zeros_like(x1)
         cond = (numpy.abs(lhs) >= rytol)
@@ -235,10 +239,6 @@ def newton(fun,x0,fargs=None,fkwargs=None,maxiter=MAXITER,rxtol=RXTOL,
         if (numpy.all(ryerr<rytol_np) and numpy.all(ayerr<aytol_np)):
             break
         
-        # Calculate iteration step
-        dx = numpy.linalg.solve(drhs-dlhs,-(rhs-lhs))
-        x1 += dx*(1-gamma)
-        
         # Are the steps between iterations too small to continue?
         rxdiff = numpy.zeros_like(x1)
         cond = (numpy.abs(x1) >= rxtol)
@@ -250,7 +250,7 @@ def newton(fun,x0,fargs=None,fkwargs=None,maxiter=MAXITER,rxtol=RXTOL,
         axdiff = numpy.abs(dx)
         if (numpy.all(rxdiff<rxtol_np) and numpy.all(axdiff<axtol_np)):
             warnmsg = 'Step sizes are smaller than accepted tolerance.\n'
-            if np.all(rxdiff < rxtol_np):
+            if numpy.all(rxdiff < rxtol_np):
                 rxtol_str = [_FLOATFMT.format(tol) if tol<numpy.inf
                     else 'None'.rjust(_NONELEN) for tol in rxtol_np[:]]
                 rxdif_str = [_FLOATFMT.format(dif) for dif in rxdiff[:]]
@@ -258,9 +258,10 @@ def newton(fun,x0,fargs=None,fkwargs=None,maxiter=MAXITER,rxtol=RXTOL,
                     + '\n')
                 warnmsg += ('rxdif:  ' + '  '.join(dif for dif in rxdif_str)
                     + '\n')
-            if np.all(axdiff < axtol_np):
+            if numpy.all(axdiff < axtol_np):
                 axtol_str = [_FLOATFMT.format(tol) if tol<numpy.inf
                     else 'None'.rjust(_NONELEN) for tol in axtol_np[:]]
+                axdif_str = [_FLOATFMT.format(dif) for dif in axdiff[:]]
                 warnmsg += ('axtol:  ' + '  '.join(tol for tol in axtol_str)
                     + '\n')
                 warnmsg += ('axdif:  ' + '  '.join(dif for dif in axdif_str)

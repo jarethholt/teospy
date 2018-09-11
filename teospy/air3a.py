@@ -6,6 +6,8 @@ temperature, and pressure.
 
 :Examples:
 
+>>> eq_atp(0.9,300.,1e5)
+1.09708772444
 >>> air_g(0,0,0,0.9,300.,1e5)
 4577.93065689
 >>> air_g(0,0,1,0.9,300.,1e5)
@@ -17,11 +19,13 @@ temperature, and pressure.
 
 :Functions:
 
+* eq_atp: Calculate equilibrium quantities at dry fraction, temperature,
+    and pressure.
 * air_g: Humid air Gibbs free energy with derivatives.
 
 """
 
-__all__ = ['air_g']
+__all__ = ['eq_atp','air_g']
 
 import warnings
 import constants0
@@ -83,7 +87,7 @@ def _diff_atp(d,airf,temp,pres):
     drhs = phum_d
     return lhs, rhs, dlhs, drhs
 
-def _eq_atp(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
+def eq_atp(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     dhum0=None,chkbnd=False,mathargs=None):
     """Get primary variables at ATP.
     
@@ -118,6 +122,11 @@ def _eq_atp(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     :returns: Humid air density in kg/m3.
     :raises RuntimeWarning: If the relative disequilibrium is more than
         chktol, if chkvals is True and all values are given.
+    
+    :Examples:
+    
+    >>> eq_atp(0.9,300.,1e5)
+    1.09708772444
     """
     if dhum is None:
         if dhum0 is None:
@@ -139,7 +148,7 @@ def _eq_atp(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
         warnmsg = ('Given value {0} and solution {1} disagree to more than the '
             'tolerance {2}').format(lhs,rhs,chktol)
         warnings.warn(warnmsg,RuntimeWarning)
-    return airf, temp, pres, dhum
+    return dhum
     
 
 ## Public functions
@@ -191,7 +200,7 @@ def air_g(drva,drvt,drvp,airf,temp,pres,dhum=None,chkvals=False,
     >>> air_g(0,2,0,0.9,300.,1e5)
     -4.15449972148
     """
-    dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
+    dhum = eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
     
     # Simple cases: First-order derivatives

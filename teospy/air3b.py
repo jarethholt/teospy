@@ -53,7 +53,7 @@ import air2
 import air3a
 
 _CHKTOL = constants0.CHKTOL
-_eq_atp = air3a._eq_atp
+_eq_atp = air3a.eq_atp
 _air_g = air3a.air_g
 _LEMMONTOL = 3e-4  # Special tolerance level for the Lemmon tests
 

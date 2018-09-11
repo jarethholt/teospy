@@ -145,7 +145,7 @@ def _poly_gyz(term,drvy,drvz,y,z,useext=False):
         gi += gijk
     return gi
 
-def poly_gtp(term,drvt,drvp,temp,pres,useext=False):
+def _poly_gtp(term,drvt,drvp,temp,pres,useext=False):
     """Evaluate a dimensional polynomial from GSCOEFFS.
     
     Evaluate a bivariate polynomial or its derivatives whose
@@ -226,7 +226,7 @@ def sal_g_term(term,drvt,drvp,temp,pres,chkbnd=False,useext=False):
             '{1}').format(term,NSALTERMS)
         raise ValueError(errmsg)
     constants0.chksalbnds(0.,temp,pres,chkbnd=chkbnd)
-    gi = poly_gtp(term,drvt,drvp,temp,pres,useext=useext)
+    gi = _poly_gtp(term,drvt,drvp,temp,pres,useext=useext)
     return gi
 
 
