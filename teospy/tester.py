@@ -69,6 +69,12 @@ class Tester(object):
     :type fnames: str or list[str]
     :arg str argfmt: Format string for the function arguments. Used in
         printing.
+    :arg header: Header line to print at the start of the summary or
+        None (default) to print nothing.
+    :type header: str or None
+    :arg fkwargs: Keyword arguments to pass to the functions. Use None
+        (default) for no additional arguments.
+    :type fkwargs: dict or None
     :arg eqfun: Function to calculate primary variable values. Used by
         modules level 3 and higher. Use None (default) for lower-level
         modules.
@@ -81,8 +87,6 @@ class Tester(object):
         Used by modules level 3 and higher. Use None (default) for
         lower-level modules.
     :type eqkws: list[str] or None
-    :arg header: Header line to print at the start of the summary or
-        None (default) to print nothing.
     :raises RuntimeWarning: If the shape of the reference values does
         not match the shape of the functions and arguments lists.
     
@@ -109,17 +113,24 @@ class Tester(object):
     
     """
     
-    def __init__(self,funs,fargs,refs,fnames,argfmt,eqfun=None,
-        eqargs=None,eqkws=None,header=None):
+    def __init__(self,funs,fargs,refs,fnames,argfmt,header=None,
+        fkwargs=None,eqfun=None,eqargs=None,eqkws=None):
         if isinstance(funs,list):
-            self.funs = numpy.array(funs,dtype=object)
+            self.funs = funs
             nfun = len(funs)
         else:
-            self.funs = numpy.array([funs],dtype=object)
+            self.funs = [funs]
             nfun = 1
         self.nfun = nfun
-        self.fargs = numpy.atleast_2d(numpy.array(fargs))
-        narg, nvar = self.fargs.shape
+        
+        if isinstance(fargs,list):
+            self.fargs = fargs
+            narg = len(fargs)
+            nvar = len(fargs[0])
+        else:
+            self.fargs = [fargs]
+            narg = 1
+            nvar = len(fargs)
         self.narg = narg
         self.nvar = nvar
         
@@ -131,21 +142,29 @@ class Tester(object):
         self.errs = None
         
         # Check that the shape of fnames matches funs
-        self.fnames = numpy.atleast_1d(numpy.array(fnames,dtype=str))
-        self.nstr = max(len(fname) for fname in fnames)
+        if nfun == 1:
+            assert isinstance(fnames,str)
+            self.fnames = [fnames]
+        else:
+            self.fnames = fnames
+        self.nstr = max(len(fname) for fname in self.fnames)
         self.argfmt = argfmt
         self.nfmt = len(argfmt.format(*self.fargs[0]))
+        self.header = header
+        self.fkwargs = fkwargs
         
         # Include equilibrium function and keywords
         self.eqfun = eqfun
         self.eqargs = eqargs
         self.eqkws = eqkws
-        self.header = header
         return None
     
     def run(self,zerotol=_ZEROTOL):
         """Run all the functions in the test.
         """
+        kwargs = dict()
+        if self.fkwargs is not None:
+            kwargs.update(self.fkwargs)
         # Run equilibrium function if it exists
         if self.eqfun is None:
             eqdict = dict()
@@ -155,13 +174,14 @@ class Tester(object):
                 eqvals = (eqvals,)
             eqdict = {kw: val for (kw,val) in zip(self.eqkws,eqvals)}
             self.eqdict = eqdict
+        kwargs.update(eqdict)
         
         results = numpy.zeros((self.nfun,self.narg),dtype=float)
         for ifun in range(self.nfun):
             fun = self.funs[ifun]
             for iarg in range(self.narg):
                 farg = self.fargs[iarg]
-                res = fun(*farg,**eqdict)
+                res = fun(*farg,**kwargs)
                 results[ifun,iarg] = res
         self.results = results
         self.errs = _geterr(self.refs,results,zerotol=zerotol)
