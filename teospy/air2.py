@@ -801,7 +801,7 @@ def chkiapws10table(number,printresult=True,chktol=_CHKTOL):
     """Check accuracy against IAPWS 2010.
     
     Evaluate the functions in this module and compare to reference
-    values in IAPWS 2010. Thus function is simply a wrapper for the
+    values in IAPWS 2010. This function is simply a wrapper for the
     three chkiapws10table* functions.
     
     :arg int number: Table number to check; 13, 14, or 15.
@@ -814,8 +814,7 @@ def chkiapws10table(number,printresult=True,chktol=_CHKTOL):
         functions, arguments, reference values, results, and relative
         errors from the tests. See the individual functions to find what
         each instance corresponds to.
-    :rtype: (Tester,Tester)
-    :raises ValueError: If number is not 13, 14, or 15.
+    :raises ValueError: If `number` is not 13, 14, or 15.
     """
     if number == 13:
         fun = chkiapws10table13
@@ -859,9 +858,7 @@ def chkiapws10table13(printresult=True,chktol=_CHKTOL):
     
     # Tester instance for derivative of air_f
     derfuns = air_f
-    derfnames = 'air_f'
     derfargs = [(der+fargs) for fargs in propfargs for der in ders]
-    derargfmt = '({0:1g},{1:1g},{2:1g},{3:8.6f},{4:3g},{5:10.4e})'
     # Derivatives change before arguments do here
     derrefs = [-0.682093392e+6,-0.572680404e+6,-0.405317966e+4,0.374173101e+10,
         0.920967684e+6,0.915653743e+4,-0.213442099e+10,-0.394011921e+1,
@@ -871,13 +868,14 @@ def chkiapws10table13(printresult=True,chktol=_CHKTOL):
         0.240345570e+5,0.311096733e+6,-0.106891931e+4,0.158878781e+5,
         0.113786423e+7,0.702631471e+4,-0.727972651e+4,-0.222449294e+1,
         0.414350772e+2,-0.201886184e+4]
-    dertest = Tester(derfuns,derfargs,derrefs,derfnames,derargfmt)
+    derfnames = 'air_f'
+    derargfmt = '({0:1g},{1:1g},{2:1g},{3:8.6f},{4:3g},{5:10.4e})'
+    header = 'Humid air Helmholtz energy'
+    dertest = Tester(derfuns,derfargs,derrefs,derfnames,derargfmt,
+        header=header)
     
     # Tester instance for other air properties
     propfuns = [pressure,enthalpy,gibbsenergy,entropy,cp,soundspeed,vappot]
-    propfnames = ['pressure','enthalpy','gibbsenergy','entropy','cp',
-        'soundspeed','vappot']
-    propargfmt = '({0:8.6f},{1:3g},{2:10.4e})'
     proprefs = [
         [0.999999998,0.1e+6,0.1e+7],
         [0.189712231e+6,0.834908383e+5,0.577649408e+6],
@@ -887,17 +885,18 @@ def chkiapws10table13(printresult=True,chktol=_CHKTOL):
         [0.291394959e+3,0.349234196e+3,0.416656820e+3],
         [-0.109950917e+6,-0.526505193e+4,-0.106748981e+6]
     ]
-    proptest = Tester(propfuns,propfargs,proprefs,propfnames,propargfmt)
+    propfnames = ['pressure','enthalpy','gibbsenergy','entropy','cp',
+        'soundspeed','vappot']
+    propargfmt = '({0:8.6f},{1:3g},{2:10.4e})'
+    header = 'Humid air thermodynamic properties'
+    proptest = Tester(propfuns,propfargs,proprefs,propfnames,propargfmt,
+        header=header)
     
     # Run Tester instances and print results
     dertest.run()
     proptest.run()
     if printresult:
-        msg = 'Air Helmholtz energy'
-        print(msg)
         dertest.printresults(chktol=chktol)
-        msg = 'Air thermodynamic properties'
-        print(msg)
         proptest.printresults(chktol=chktol)
     return dertest, proptest
 
@@ -933,33 +932,31 @@ def chkiapws10table14(printresult=True,chktol=_CHKTOL):
     
     # Dry air tester
     dryfuns = _dry_f
-    dryfnames = 'dry_f'
     dryrefs = [-0.740041144e+6,-0.304774177e+4,0.393583654e+10,-0.357677878e+1,
         0.196791837e+8,-0.269828549e+15,-0.916103453e+5,-0.108476220e+3,
         0.768326795e+5,-0.239319940e+1,0.256683306e+3,-0.685917373e+5,
         0.895561286e+5,0.193271394e+3,0.175560114e+5,-0.181809877e+1,
         0.442769673e+2,-0.267635928e+4]
-    drytest = Tester(dryfuns,dryfargs,dryrefs,dryfnames,argfmt)
+    dryfnames = 'dry_f'
+    header = 'Dry air Helmholtz energy'
+    drytest = Tester(dryfuns,dryfargs,dryrefs,dryfnames,argfmt,header=header)
     
     # Water vapour tester
     vapfuns = _flu_f
-    vapfnames = 'flu_f'
     vaprefs = [-0.202254351e+6,-0.123787544e+5,0.523995674e+11,-0.694877601e+1,
         0.262001885e+9,-0.297466671e+17,-0.143157426e+6,-0.851598213e+4,
         0.538480619e+7,-0.480817011e+1,0.181489502e+5,-0.210184992e+9,
         -0.285137534e+6,-0.705288048e+4,0.129645039e+6,-0.411710659e+1,
         0.361784086e+3,-0.965539462e+5]
-    vaptest = Tester(vapfuns,vapfargs,vaprefs,vapfnames,argfmt)
+    vapfnames = 'flu_f'
+    header = 'Water vapour Helmholtz energy'
+    vaptest = Tester(vapfuns,vapfargs,vaprefs,vapfnames,argfmt,header=header)
     
     # Run Tester instances and print results
     drytest.run()
     vaptest.run()
     if printresult:
-        msg = 'Dry air Helmholtz energy'
-        print(msg)
         drytest.printresults(chktol=chktol)
-        msg = 'Water vapour Helmholtz energy'
-        print(msg)
         vaptest.printresults(chktol=chktol)
     return drytest, vaptest
 
@@ -986,11 +983,9 @@ def chkiapws10table15(printresult=True,chktol=_CHKTOL):
     
     # Test virial coefficients
     virfuns = [_air_baw, _air_caaw, _air_caww]
-    virfnames = ['air_baw','air_caaw','air_caww']
     virders = (0,1,2)
     temps = (200.,300.,400.)
     virfargs = [(der,temp) for temp in temps for der in virders]
-    virargfmt = '({0:1g},{1:3g})'
     virrefs = [
         [-0.784874277752e-4,0.848076624222e-6,-0.122622146106e-7,
             -0.295672747428e-4,0.280097360438e-6,-0.242599241306e-8,
@@ -1002,11 +997,14 @@ def chkiapws10table15(printresult=True,chktol=_CHKTOL):
             -0.115552783680e-6,0.261363277754e-8,-0.751334581804e-10,
             -0.200806020909e-7,0.274535402840e-9,-0.491763909891e-11]
     ]
-    virtest = Tester(virfuns,virfargs,virrefs,virfnames,virargfmt)
+    virfnames = ['air_baw','air_caaw','air_caww']
+    virargfmt = '({0:1g},{1:3g})'
+    header = 'Virial coefficients'
+    virtest = Tester(virfuns,virfargs,virrefs,virfnames,virargfmt,
+        header=header)
     
     # Test energy of mixing
     mixfuns = _air_f_mix
-    mixfnames = 'air_f_mix'
     mixders = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
         (0,2,0),(0,1,1),(0,0,2))
     mixargs = [
@@ -1015,7 +1013,6 @@ def chkiapws10table15(printresult=True,chktol=_CHKTOL):
         (0.825531379,400.,0.793198757e+1)
     ]
     mixfargs = [(der+arg) for arg in mixargs for der in mixders]
-    mixargfmt = '({0:1g},{1:1g},{2:1g},{3:8.6f},{4:3g},{5:10.4e})'
     mixrefs = [-0.786211837111e-3,0.641377589024e-2,0.456427011454e-5,
         -0.481026562160e+2,0.163518396765e-1,-0.372355250910e-4,
         0.392414346187e+3,-0.378866038500e-7,0.279261664337,
@@ -1026,17 +1023,17 @@ def chkiapws10table15(printresult=True,chktol=_CHKTOL):
         0.830802876130e+3,0.178961265299e+1,-0.223365431713e+2,
         0.135815609516e+4,-0.916586082354e+1,0.125823777783e+3,
         -0.536718535916e-2,0.249618216264,-0.482803925450]
-    mixtest = Tester(mixfuns,mixfargs,mixrefs,mixfnames,mixargfmt)
+    mixfnames = 'air_f_mix'
+    mixargfmt = '({0:1g},{1:1g},{2:1g},{3:8.6f},{4:3g},{5:10.4e})'
+    header = 'Free energy of mixing'
+    mixtest = Tester(mixfuns,mixfargs,mixrefs,mixfnames,mixargfmt,
+        header=header)
     
     # Run Tester instances and print results
     virtest.run()
     mixtest.run()
     if printresult:
-        msg = 'Virial coefficients'
-        print(msg)
         virtest.printresults(chktol=chktol)
-        msg = 'Free energy of mixing'
-        print(msg)
         mixtest.printresults(chktol=chktol)
     return virtest, mixtest
 

@@ -21,10 +21,11 @@ summary.
 * :mod:`flu2`
 * :mod:`flu3a`
 * :mod:`flu3b`
+* :mod:`liq5_f03`
 
 """
 
-__all__ = ['genflu1','genflu2','genflu3a','genflu3b']
+__all__ = ['genflu1','genflu2','genflu3a','genflu3b','genliq5']
 from tester import Tester
 _DERS2 = ((0,0),(1,0),(0,1),(2,0),(1,1),(0,2))
 
@@ -181,7 +182,7 @@ def genliq5():
 
 ## Dictionary relating modules to functions
 _GENDICT = {'flu1': genflu1, 'flu2': genflu2, 'flu3a': genflu3a,
-    'flu3b': genflu3b}
+    'flu3b': genflu3b, 'liq5': genliq5}
 
 
 ## See if all values fall within the given tolerances

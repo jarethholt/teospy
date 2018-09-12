@@ -916,25 +916,25 @@ def chkiapws95table6(printresult=True,chktol=_CHKTOL):
     
     # Initialize Tester instances
     idealfuns = [_phi0,_phi0_d,_phi0_dd,_phi0_t,_phi0_td,_phi0_tt]
-    idealfnames = ['phi0','phi0_d','phi0_dd','phi0_t','phi0_td','phi0_tt']
     idealrefs = [0.20479773347960e1,0.38423674711375,-0.147637877832556,
         0.90461110617524e1,0.,-0.193249185013052e1]
-    idealtest = Tester(idealfuns,fargs,idealrefs,idealfnames,argfmt)
+    idealfnames = ['phi0','phi0_d','phi0_dd','phi0_t','phi0_td','phi0_tt']
+    header = 'Fluid water ideal gas component'
+    idealtest = Tester(idealfuns,fargs,idealrefs,idealfnames,argfmt,
+        header=header)
     residfuns = [_phir,_phir_d,_phir_dd,_phir_t,_phir_td,_phir_tt]
     residfnames = ['phir','phir_d','phir_dd','phir_t','phir_td','phir_tt']
     residrefs = [-0.34269320568156e1,-0.36436665036388,0.85606370097461,
         -0.58140343523842e1,-0.11217691467031e1,-0.223440736884336e1]
-    residtest = Tester(residfuns,fargs,residrefs,residfnames,argfmt)
+    header = 'Fluid water residual component'
+    residtest = Tester(residfuns,fargs,residrefs,residfnames,argfmt,
+        header=header)
     
     # Run tester instances and print results
     idealtest.run()
     residtest.run()
     if printresult:
-        msg = 'Fluid water ideal gas component'
-        print(msg)
         idealtest.printresults(chktol=chktol)
-        msg = 'Fluid water residual component'
-        print(msg)
         residtest.printresults(chktol=chktol)
     return idealtest, residtest
 

@@ -587,11 +587,10 @@ def chkiapws95table7(printresult=True,chktol=_CHKTOL):
     scales = [1e6,1e3,1.,1e3]
     refs = [[r*scale for r in ref]
         for (ref,scale) in zip(refs_scaled,scales)]
-    test = Tester(funs,fargs,refs,fnames,argfmt)
+    header = 'Fluid water functions'
+    test = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     test.run()
     if printresult:
-        msg = 'Fluid water properties'
-        print(msg)
         test.printresults(chktol=chktol)
     return test
 

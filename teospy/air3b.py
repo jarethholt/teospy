@@ -868,6 +868,7 @@ def chklemmon2000(mode,printresult=True,chktol=_LEMMONTOL):
         argfmt = '({1:4g},{2:10.4e})'
         funs = [air2.internalenergy,air2.enthalpy,air2.entropy,air2.cv,air2.cp,
             air2.soundspeed]
+        header = 'Dry air Helmholtz functions'
     else:
         fargs = [
             (1., 140.,101325.), (1., 270.,101325.), (1., 400.,101325.),
@@ -877,6 +878,7 @@ def chklemmon2000(mode,printresult=True,chktol=_LEMMONTOL):
         ]
         argfmt = '({1:4g},{2:6g})'
         funs = [internalenergy,enthalpy,entropy,cv,cp,soundspeed]
+        header = 'Dry air Gibbs functions'
     fnames = ['internalenergy','enthalpy','entropy','cv','cp','soundspeed']
     
     refs_scaled = [
@@ -904,15 +906,9 @@ def chklemmon2000(mode,printresult=True,chktol=_LEMMONTOL):
     refs = [[(r*scl-off) for r in ref]
         for (ref,scl,off) in zip(refs_scaled,refscales,refoffsets)]
     
-    # TODO: Incorporate equilibrium + kwargs into Tester
-    test = Tester(funs,fargs,refs,fnames,argfmt)
+    test = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     test.run()
     if printresult:
-        if mode==1:
-            msg = 'Dry air Helmholtz functions'
-        else:
-            msg = 'Dry air Gibbs functions'
-        print(msg)
         test.printresults(chktol=chktol)
     return test
 

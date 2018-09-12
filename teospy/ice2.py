@@ -438,7 +438,8 @@ def chkiapws06table6(printresult=True,chktol=_CHKTOL):
         0.174362219972e-6,-0.128485364928e-12,-0.222296513088e+6,
         0.261195122589e+4,0.106193389260e-2,-0.866333195517e+1,
         0.274505162488e-7,-0.941807981761e-13]
-    dertest = Tester(derfuns,derfargs,derrefs,derfnames,derargfmt)
+    header = 'Ice Gibbs energy derivatives'
+    dertest = Tester(derfuns,derfargs,derrefs,derfnames,derargfmt,header=header)
     
     # Tester instance for other ice properties
     propfuns = [enthalpy,helmholtzenergy,internalenergy,entropy,cp,density,
@@ -458,17 +459,15 @@ def chkiapws06table6(printresult=True,chktol=_CHKTOL):
         [0.117793449348e-9,0.117785291765e-9,0.886880048115e-10],
         [0.114161597779e-9,0.114154442556e-9,0.886060982687e-10]
     ]
-    proptest = Tester(propfuns,propfargs,proprefs,propfnames,propargfmt)
+    header = 'Ice thermodynamic properties'
+    proptest = Tester(propfuns,propfargs,proprefs,propfnames,propargfmt,
+        header=header)
     
     # Run Tester instances and print results
     dertest.run()
     proptest.run()
     if printresult:
-        msg = 'Ice Gibbs energy'
-        print(msg)
         dertest.printresults(chktol=chktol)
-        msg = 'Ice thermodynamic properties'
-        print(msg)
         proptest.printresults(chktol=chktol)
     return dertest, proptest
 
