@@ -23,12 +23,12 @@ This module implements the Gibbs free energies of both liquid water and water va
 
 :Functions:
 
-* eq_tp_liq: Calculate equilibrium liquid water quantities at
-    temperature and pressure.
-* eq_tp_vap: Calculate equilibrium water vapour quantities at
-    temperature and pressure.
-* liq_g: Liquid water Gibbs free energy with derivatives.
-* vap_g: Water vapour Gibbs free energy with derivatives.
+* :func:`eq_tp_liq`: Calculate equilibrium liquid water quantities at
+  temperature and pressure.
+* :func:`eq_tp_vap`: Calculate equilibrium water vapour quantities at
+  temperature and pressure.
+* :func:`liq_g`: Liquid water Gibbs free energy with derivatives.
+* :func:`vap_g`: Water vapour Gibbs free energy with derivatives.
 
 """
 
@@ -464,6 +464,7 @@ _LIQMETHODS = {'eos80': _dliq_eos80, 'if97': _dliq_if97, 'f03': _dliq_f03,
     'crit': _dliq_crit, 'const': _dliq_const, 'default': _dliq_default}
 _VAPMETHODS = {'if97': _dvap_if97, 'crit': _dvap_crit, 'ideal': _dvap_ideal,
     'default': _dvap_default}
+
 
 ## Auxiliary equilibrium functions
 def _diff_tp(d,temp,pres):

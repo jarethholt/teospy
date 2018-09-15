@@ -4,7 +4,7 @@ This module implements the Gibbs free energy of ice and its derivatives with res
 
 :Functions:
 
-* ice_g: Ice Gibbs free energy with derivatives.
+* :func:`ice_g`: Ice Gibbs free energy with derivatives.
 
 """
 

@@ -12,7 +12,7 @@ where NSALTERMS(=7) is a constant also provided by this module.
 
 :Functions:
 
-* sal_g_term: Calculate a term in the Gibbs free energy of salt.
+* :func:`sal_g_term`: Calculate a term in the Gibbs free energy of salt.
 
 """
 

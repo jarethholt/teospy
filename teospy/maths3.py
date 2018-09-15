@@ -31,7 +31,7 @@ returning and raising a warning.
 
 :Functions:
 
-* newton: Equate two quantities using Newton iteration.
+* :func:`newton`: Equate two quantities using Newton iteration.
 
 """
 

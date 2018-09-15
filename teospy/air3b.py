@@ -20,30 +20,31 @@ which will compare results from this module to reference values in Lemmon et al.
 
 :Functions:
 
-* compressibility: Deviation of humid air from ideal gas behavior.
-* compressibility_lemmon: Deviation of humid air from ideal gas
-    behavior; uses the Lemmon et al. gas constant.
-* contraction: Humid air contraction coefficient.
-* cp: Humid air isobaric heat capacity.
-* cv: Humid air isochoric heat capacity.
-* density: Humid air density.
-* enthalpy: Humid air enthalpy.
-* entropy: Humid air entropy.
-* expansion: Humid air thermal expansion coefficient.
-* gibbsenergy: Humid air Gibbs free energy.
-* internalenergy: Humid air internal energy.
-* kappas: Humid air isentropic compressibility.
-* kappat: Humid air isothermal compressibility.
-* lapserate: Humid air adiabatic lapse rate.
-* soundspeed: Humid air sound speed.
-* vappot: Water vapour chemical potential.
-* chklemmon2000: Check module against Lemmon et al. 2000.
+* :func:`compressibility`: Deviation of humid air from ideal gas
+  behavior.
+* :func:`compressibility_lemmon`: Deviation of humid air from ideal gas
+  behavior; uses the Lemmon et al. gas constant.
+* :func:`contraction`: Humid air contraction coefficient.
+* :func:`cp`: Humid air isobaric heat capacity.
+* :func:`cv`: Humid air isochoric heat capacity.
+* :func:`density`: Humid air density.
+* :func:`enthalpy`: Humid air enthalpy.
+* :func:`entropy`: Humid air entropy.
+* :func:`expansion`: Humid air thermal expansion coefficient.
+* :func:`gibbsenergy`: Humid air Gibbs free energy.
+* :func:`internalenergy`: Humid air internal energy.
+* :func:`kappa_s`: Humid air isentropic compressibility.
+* :func:`kappa_t`: Humid air isothermal compressibility.
+* :func:`lapserate`: Humid air adiabatic lapse rate.
+* :func:`soundspeed`: Humid air sound speed.
+* :func:`vappot`: Water vapour chemical potential.
+* :func:`chklemmon2000`: Check module against Lemmon et al. 2000.
 
 """
 
 __all__ = ['compressibility','compressibility_lemmon','contraction','cp','cv',
     'density','enthalpy','entropy','expansion','gibbsenergy','internalenergy',
-    'kappas','kappat','lapserate','soundspeed','vappot',
+    'kappa_s','kappa_t','lapserate','soundspeed','vappot',
     'chklemmon2000']
 
 import constants0
@@ -100,7 +101,6 @@ def compressibility(airf,temp,pres,dhum=None,chkvals=False,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
     rav = constants0.GAS_CONSTANT_MOLAR_SI  # Standard constant
     rav /= convert0.air_molarmass(airf)
     compress = pres / (rav*dhum*temp)
@@ -147,7 +147,6 @@ def compressibility_lemmon(airf,temp,pres,dhum=None,chkvals=False,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
     rav = constants0.GAS_CONSTANT_MOLAR_L2000  # Lemmon constant
     rav /= convert0.air_molarmass(airf)
     compress = pres / (rav*dhum*temp)
@@ -193,7 +192,6 @@ def contraction(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
     g_p = _air_g(0,0,1,airf,temp,pres,dhum=dhum)
     g_ap = _air_g(1,0,1,airf,temp,pres,dhum=dhum)
     contract = -g_ap / g_p
@@ -238,7 +236,6 @@ def cp(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,dhum0=None,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
     g_tt = _air_g(0,2,0,airf,temp,pres,dhum=dhum)
     cp = -temp * g_tt
     return cp
@@ -282,13 +279,6 @@ def cv(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,dhum0=None,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
-    '''
-    # Use the air2 function
-    cv = air2.cv(airf,temp,dhum)
-    '''
-    
-    # Use Gibbs energy function
     g_tt = _air_g(0,2,0,airf,temp,pres,dhum=dhum)
     g_tp = _air_g(0,1,1,airf,temp,pres,dhum=dhum)
     g_pp = _air_g(0,0,2,airf,temp,pres,dhum=dhum)
@@ -375,13 +365,6 @@ def enthalpy(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
-    '''
-    # Use the air2 function
-    h = air2.enthalpy(airf,temp,dhum)
-    '''
-    
-    # Use Gibbs energy function
     g = _air_g(0,0,0,airf,temp,pres,dhum=dhum)
     g_t = _air_g(0,1,0,airf,temp,pres,dhum=dhum)
     h = g - temp*g_t
@@ -426,7 +409,6 @@ def entropy(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
     g_t = _air_g(0,1,0,airf,temp,pres,dhum=dhum)
     s = -g_t
     return s
@@ -470,7 +452,6 @@ def expansion(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
     g_p = _air_g(0,0,1,airf,temp,pres,dhum=dhum)
     g_tp = _air_g(0,1,1,airf,temp,pres,dhum=dhum)
     alpha = g_tp / g_p
@@ -515,7 +496,6 @@ def gibbsenergy(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
     g = _air_g(0,0,0,airf,temp,pres,dhum=dhum)
     return g
 
@@ -558,20 +538,13 @@ def internalenergy(airf,temp,pres,dhum=None,chkvals=False,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
-    '''
-    # Use air2 function
-    u = air2.air_f_internal_energy(airf,temp,dhum,chkbnd=chkbnd)
-    '''
-    
-    # Use Gibbs energy function
     g = _air_g(0,0,0,airf,temp,pres,dhum=dhum)
     g_t = _air_g(0,1,0,airf,temp,pres,dhum=dhum)
     g_p = _air_g(0,0,1,airf,temp,pres,dhum=dhum)
     u = g - temp*g_t - pres*g_p
     return u
 
-def kappas(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
+def kappa_s(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     dhum0=None,chkbnd=False,mathargs=None):
     """Calculate humid air isentropic compressibility.
     
@@ -605,18 +578,11 @@ def kappas(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     
     :Examples:
     
-    >>> kappas(0.9,300.,1e5)
+    >>> kappa_s(0.9,300.,1e5)
     7.41034505449e-06
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
-    '''
-    # Use air2 function
-    kappa = air2.air_f_kappa_s(airf,temp,dhum,chkbnd=chkbnd)
-    '''
-    
-    # Use Gibbs energy function
     g_p = _air_g(0,0,1,airf,temp,pres,dhum=dhum)
     g_tt = _air_g(0,2,0,airf,temp,pres,dhum=dhum)
     g_tp = _air_g(0,1,1,airf,temp,pres,dhum=dhum)
@@ -624,7 +590,7 @@ def kappas(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     kappa = -(g_pp - g_tp**2/g_tt) / g_p
     return kappa
 
-def kappat(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
+def kappa_t(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     dhum0=None,chkbnd=False,mathargs=None):
     """Calculate humid air isothermal compressibility.
     
@@ -658,12 +624,11 @@ def kappat(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     
     :Examples:
     
-    >>> kappat(0.9,300.,1e5)
+    >>> kappa_t(0.9,300.,1e5)
     1.00324517749e-05
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
     g_p = _air_g(0,0,1,airf,temp,pres,dhum=dhum)
     g_pp = _air_g(0,0,2,airf,temp,pres,dhum=dhum)
     kappa = -g_pp / g_p
@@ -711,13 +676,6 @@ def lapserate(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
-    '''
-    # Use air2 function
-    gamma = air2.air_f_lapserate(airf,temp,dhum,chkbnd=False)
-    '''
-    
-    # Use Gibbs energy function
     g_p = _air_g(0,0,1,airf,temp,pres,dhum=dhum)
     g_tt = _air_g(0,2,0,airf,temp,pres,dhum=dhum)
     g_tp = _air_g(0,1,1,airf,temp,pres,dhum=dhum)
@@ -764,13 +722,6 @@ def soundspeed(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
-    '''
-    # Use air2 function
-    c = air2.air_f_soundspeed(airf,temp,dhum,chkbnd=False)
-    '''
-    
-    # Use Gibbs energy function
     g_p = _air_g(0,0,1,airf,temp,pres,dhum=dhum)
     g_tt = _air_g(0,2,0,airf,temp,pres,dhum=dhum)
     g_tp = _air_g(0,1,1,airf,temp,pres,dhum=dhum)
@@ -818,7 +769,6 @@ def vappot(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    
     g = _air_g(0,0,0,airf,temp,pres,dhum=dhum)
     g_a = _air_g(1,0,0,airf,temp,pres,dhum=dhum)
     gvap = g - airf*g_a

@@ -19,24 +19,25 @@ This module provides the contribution of salt to the Gibbs free energy of seawat
 
 :Functions:
 
-* sal_g: Gibbs free energy of salt in seawater.
-* actcoeff: Activity coefficient of salt in seawater.
-* actpotential: Activity potential of salt in seawater.
-* dilution: Dilution coefficient of salt in seawater.
-* osmcoeff: Osmotic coefficient of salt in seawater.
-* activityw: Activity of water in seawater.
-* liqpot: Chemical potential of water in seawater.
-* salpot: Chemical potential of salt in seawater.
-* chemcoeff: Chemical coefficient of salt in seawater.
-* saltenthalpy: Specific enthalpy of salt in seawater.
-* saltentropy: Specific entropy of salt in seawater.
-* saltvolume: Specific volume of salt in seawater.
-* mixenthalpy: Specific enthalpy of mixing of seawater parcels.
-* mixentropy: Specific entropy of mixing of seawater parcels.
-* mixvolume: Specific volume of mixing of seawater parcels.
-* eq_liqpot: Chemical potential of water in seawater with derivatives.
-* eq_entropy: Specific entropy of seawater with derivatives.
-* eq_enthalpy: Specific enthalpy of seawater with derivatives.
+* :func:`sal_g`: Gibbs free energy of salt in seawater.
+* :func:`actcoeff`: Activity coefficient of salt in seawater.
+* :func:`actpotential`: Activity potential of salt in seawater.
+* :func:`dilution`: Dilution coefficient of salt in seawater.
+* :func:`osmcoeff`: Osmotic coefficient of salt in seawater.
+* :func:`activityw`: Activity of water in seawater.
+* :func:`liqpot`: Chemical potential of water in seawater.
+* :func:`salpot`: Chemical potential of salt in seawater.
+* :func:`chemcoeff`: Chemical coefficient of salt in seawater.
+* :func:`saltenthalpy`: Specific enthalpy of salt in seawater.
+* :func:`saltentropy`: Specific entropy of salt in seawater.
+* :func:`saltvolume`: Specific volume of salt in seawater.
+* :func:`mixenthalpy`: Specific enthalpy of mixing of seawater parcels.
+* :func:`mixentropy`: Specific entropy of mixing of seawater parcels.
+* :func:`mixvolume`: Specific volume of mixing of seawater parcels.
+* :func:`eq_liqpot`: Chemical potential of water in seawater with
+  derivatives.
+* :func:`eq_entropy`: Specific entropy of seawater with derivatives.
+* :func:`eq_enthalpy`: Specific enthalpy of seawater with derivatives.
 
 """
 
@@ -790,4 +791,143 @@ def eq_entropy(drvs,drvt,drvp,salt,temp,pres,chkbnd=False,useext=False):
     _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
     entr = -sal_g(drvs,drvt+1,drvp,salt,temp,pres,useext=useext)
     return entr
+
+
+## Functions not in the original Fortran
+def _auxcp(salt,temp,pres,chkbnd=False,useext=False):
+    """Calculate salt isobaric heat capacity.
+    
+    Apply the equation for the isobaric heat capacity to the Gibbs
+    function of salt in seawater. This is not a well-defined
+    thermodynamic function, but is used in mod:`sea3a` to compare to
+    reference values.
+    
+    :arg float salt: Absolute salinity in kg/kg.
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg bool useext: If False (default) then the polynomial is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
+    :returns: Heat capacity in J/kg/K.
+    :raises ValueError: If temp or pres are nonpositive, or if salt is
+        not between 0 and 1.
+    :raises RuntimeWarning: If salt, temp, or pres are outside the
+        recommended bounds and chkbnd is True.
+    """
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
+    g_tt = sal_g(0,2,0,salt,temp,pres,useext=useext)
+    cp = -temp*g_tt
+    return cp
+
+def _auxenthalpy(salt,temp,pres,chkbnd=False,useext=False):
+    """Calculate salt enthalpy.
+    
+    Apply the equation for the specific enthalpy to the Gibbs function
+    of salt in seawater. This is not a well-defined thermodynamic
+    function, but is used in mod:`sea3a` to compare to reference values.
+    
+    :arg float salt: Absolute salinity in kg/kg.
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg bool useext: If False (default) then the polynomial is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
+    :returns: Enthalpy in J/kg.
+    :raises ValueError: If temp or pres are nonpositive, or if salt is
+        not between 0 and 1.
+    :raises RuntimeWarning: If salt, temp, or pres are outside the
+        recommended bounds and chkbnd is True.
+    """
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
+    g = sal_g(0,0,0,salt,temp,pres,useext=useext)
+    g_t = sal_g(0,1,0,salt,temp,pres,useext=useext)
+    h = g - temp*g_t
+    return h
+
+def _auxentropy(salt,temp,pres,chkbnd=False,useext=False):
+    """Calculate salt entropy.
+    
+    Apply the equation for the specific entropy to the Gibbs function of
+    salt in seawater. This is not a well-defined thermodynamic function,
+    but is used in mod:`sea3a` to compare to reference values.
+    
+    :arg float salt: Absolute salinity in kg/kg.
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg bool useext: If False (default) then the polynomial is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
+    :returns: Entropy in J/kg/K.
+    :raises ValueError: If temp or pres are nonpositive, or if salt is
+        not between 0 and 1.
+    :raises RuntimeWarning: If salt, temp, or pres are outside the
+        recommended bounds and chkbnd is True.
+    """
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
+    g_t = sal_g(0,1,0,salt,temp,pres,useext=useext)
+    s = -g_t
+    return s
+
+def _auxhelmholtzenergy(salt,temp,pres,chkbnd=False,useext=False):
+    """Calculate salt Helmholtz free energy.
+    
+    Apply the equation for the specific Helmholtz free energy to the
+    Gibbs function of salt in seawater. This is not a well-defined
+    thermodynamic function, but is used in mod:`sea3a` to compare to
+    reference values.
+    
+    :arg float salt: Absolute salinity in kg/kg.
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg bool useext: If False (default) then the polynomial is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
+    :returns: Helmholtz energy in J/kg.
+    :raises ValueError: If temp or pres are nonpositive, or if salt is
+        not between 0 and 1.
+    :raises RuntimeWarning: If salt, temp, or pres are outside the
+        recommended bounds and chkbnd is True.
+    """
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
+    g = sal_g(0,0,0,salt,temp,pres,useext=useext)
+    g_p = sal_g(0,0,1,salt,temp,pres,useext=useext)
+    f = g - pres*g_p
+    return f
+
+def _auxinternalenergy(salt,temp,pres,chkbnd=False,useext=False):
+    """Calculate salt internal energy.
+    
+    Apply the equation for the specific internal energy to the Gibbs
+    function of salt in seawater. This is not a well-defined
+    thermodynamic function, but is used in mod:`sea3a` to compare to
+    reference values.
+    
+    :arg float salt: Absolute salinity in kg/kg.
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg bool useext: If False (default) then the polynomial is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
+    :returns: Internal energy in J/kg.
+    :raises ValueError: If temp or pres are nonpositive, or if salt is
+        not between 0 and 1.
+    :raises RuntimeWarning: If salt, temp, or pres are outside the
+        recommended bounds and chkbnd is True.
+    """
+    _chksalbnds(salt,temp,pres,chkbnd=chkbnd)
+    g = sal_g(0,0,0,salt,temp,pres,useext=useext)
+    g_t = sal_g(0,1,0,salt,temp,pres,useext=useext)
+    g_p = sal_g(0,0,1,salt,temp,pres,useext=useext)
+    u = g - temp*g_t - pres*g_p
+    return u
 

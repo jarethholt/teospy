@@ -16,30 +16,31 @@ IAPWS 2006, table 6.
 2073.47946211
 >>> density(270.,1e5)
 917.181167192
->>> kappat(270.,1e5)
+>>> kappa_t(270.,1e5)
 1.17226047281e-10
 
 :Functions:
 
-* chempot: Chemical potential of ice.
-* cp: Isobaric heat capacity of ice.
-* density: Density of ice.
-* enthalpy: Specific enthalpy of ice.
-* entropy: Specific entropy of ice.
-* expansion: Thermal expansion coefficient of ice.
-* helmholtzenergy: Specific Helmholtz free energy of ice.
-* internalenergy: Specific internal energy of ice.
-* kappas: Isentropic compressibility of ice.
-* kappat: Isothermal compressibility of ice.
-* lapserate: Adiabatic lapse rate of ice.
-* pcoefficient: Isochoric pressure coefficient of ice.
-* specificvolume: Specific volume of ice.
-* chkiapws06table6: Check module accuracy against IAPWS 2006 table 6.
+* :func:`chempot`: Chemical potential of ice.
+* :func:`cp`: Isobaric heat capacity of ice.
+* :func:`density`: Density of ice.
+* :func:`enthalpy`: Specific enthalpy of ice.
+* :func:`entropy`: Specific entropy of ice.
+* :func:`expansion`: Thermal expansion coefficient of ice.
+* :func:`helmholtzenergy`: Specific Helmholtz free energy of ice.
+* :func:`internalenergy`: Specific internal energy of ice.
+* :func:`kappa_s`: Isentropic compressibility of ice.
+* :func:`kappa_t`: Isothermal compressibility of ice.
+* :func:`lapserate`: Adiabatic lapse rate of ice.
+* :func:`pcoefficient`: Isochoric pressure coefficient of ice.
+* :func:`specificvolume`: Specific volume of ice.
+* :func:`chkiapws06table6`: Check module accuracy against IAPWS 2006
+  table 6.
 
 """
 
 __all__ = ['chempot','cp','density','enthalpy','entropy','expansion',
-    'helmholtzenergy','internalenergy','kappas','kappat','lapserate',
+    'helmholtzenergy','internalenergy','kappa_s','kappa_t','lapserate',
     'pcoefficient','specificvolume',
     'chkiapws06table6']
 
@@ -262,7 +263,7 @@ def internalenergy(temp,pres,chkbnd=False):
     u = g - pres*g_p - temp*g_t
     return u
 
-def kappas(temp,pres,chkbnd=False):
+def kappa_s(temp,pres,chkbnd=False):
     """Calculate ice isentropic compressibility.
     
     Calculate the isentropic compressibility of ice from temperature and
@@ -280,7 +281,7 @@ def kappas(temp,pres,chkbnd=False):
     
     :Examples:
     
-    >>> kappas(270.,1e5)
+    >>> kappa_s(270.,1e5)
     1.13667916416e-10
     """
     _chkicebnds(temp,pres,chkbnd=chkbnd)
@@ -291,7 +292,7 @@ def kappas(temp,pres,chkbnd=False):
     kappa = (g_tp**2 - g_tt*g_pp) / (g_p*g_tt)
     return kappa
 
-def kappat(temp,pres,chkbnd=False):
+def kappa_t(temp,pres,chkbnd=False):
     """Calculate ice isothermal compressibility.
     
     Calculate the isothermal compressibility of ice from temperature and
@@ -309,7 +310,7 @@ def kappat(temp,pres,chkbnd=False):
     
     :Examples:
     
-    >>> kappat(270.,1e5)
+    >>> kappa_t(270.,1e5)
     1.17226047281e-10
     """
     _chkicebnds(temp,pres,chkbnd=chkbnd)
@@ -443,9 +444,9 @@ def chkiapws06table6(printresult=True,chktol=_CHKTOL):
     
     # Tester instance for other ice properties
     propfuns = [enthalpy,helmholtzenergy,internalenergy,entropy,cp,density,
-        expansion,pcoefficient,kappat,kappas]
+        expansion,pcoefficient,kappa_t,kappa_s]
     propfnames = ['enthalpy','helmholtzenergy','internalenergy','entropy','cp',
-        'density','expansion','pcoefficient','kappat','kappas']
+        'density','expansion','pcoefficient','kappa_t','kappa_s']
     propargfmt = '({0:7.3f},{1:7g})'
     proprefs = [
         [-0.333444253966e+6,-0.333354873637e+6,-0.483491635676e+6],

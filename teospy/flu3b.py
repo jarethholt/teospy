@@ -8,47 +8,53 @@ This module provides thermodynamic properties (e.g. heat capacity) of both liqui
 4180.63952202
 >>> liq_expansion(300.,1e5)
 2.74803716256e-04
->>> liq_kappat(300.,1e5)
+>>> liq_kappa_t(300.,1e5)
 4.50515304336e-10
 >>> vap_cp(300.,1e3)
 1874.12149028
 >>> vap_expansion(300.,1e3)
 3.34352010567e-03
->>> vap_kappat(300.,1e3)
+>>> vap_kappa_t(300.,1e3)
 1.00048646242e-03
 
 :Functions:
 
-* liq_cp: Liquid water isobaric heat capacity.
-* liq_cv: Liquid water isochoric heat capacity.
-* liq_enthalpy: Liquid water enthalpy.
-* liq_entropy: Liquid water entropy.
-* liq_expansion: Liquid water thermal expansion coefficient.
-* _liq_gibbsenergy: Liquid water Gibbs free energy.
-* liq_internalenergy: Liquid water internal energy.
-* liq_kappas: Liquid water isentropic compressibility.
-* liq_kappat: Liquid water isothermal compressibility.
-* liq_lapserate: Liquid water adiabatic lapse rate.
-* liq_soundspeed: Liquid water sound speed.
-* vap_cp: Water vapour isobaric heat capacity.
-* vap_cv: Water vapour isochoric heat capacity.
-* vap_enthalpy: Water vapour enthalpy.
-* vap_entropy: Water vapour entropy.
-* vap_expansion: Water vapour thermal expansion coefficient.
-* _vap_gibbsenergy: Water vapour Gibbs free energy.
-* vap_internalenergy: Water vapour internal energy.
-* vap_kappas: Water vapour isentropic compressibility.
-* vap_kappat: Water vapour isothermal compressibility.
-* vap_lapserate: Water vapour adiabatic lapse rate.
-* vap_soundspeed: Water vapour sound speed.
+* :func:`liq_cp`: Liquid water isobaric heat capacity.
+* :func:`liq_cv`: Liquid water isochoric heat capacity.
+* :func:`liq_density`: Liquid water density.
+* :func:`liq_enthalpy`: Liquid water enthalpy.
+* :func:`liq_entropy`: Liquid water entropy.
+* :func:`liq_expansion`: Liquid water thermal expansion coefficient.
+* :func:`liq_gibbsenergy`: Liquid water Gibbs free energy.
+* :func:`liq_helmholtzenergy`: Liquid water Helmholtz free energy.
+* :func:`liq_internalenergy`: Liquid water internal energy.
+* :func:`liq_kappa_s`: Liquid water isentropic compressibility.
+* :func:`liq_kappa_t`: Liquid water isothermal compressibility.
+* :func:`liq_lapserate`: Liquid water adiabatic lapse rate.
+* :func:`liq_soundspeed`: Liquid water sound speed.
+* :func:`vap_cp`: Water vapour isobaric heat capacity.
+* :func:`vap_cv`: Water vapour isochoric heat capacity.
+* :func:`vap_density`: Water vapour density.
+* :func:`vap_enthalpy`: Water vapour enthalpy.
+* :func:`vap_entropy`: Water vapour entropy.
+* :func:`vap_expansion`: Water vapour thermal expansion coefficient.
+* :func:`vap_gibbsenergy`: Water vapour Gibbs free energy.
+* :func:`vap_helmholtzenergy`: Water vapour Helmholtz free energy.
+* :func:`vap_internalenergy`: Water vapour internal energy.
+* :func:`vap_kappa_s`: Water vapour isentropic compressibility.
+* :func:`vap_kappa_t`: Water vapour isothermal compressibility.
+* :func:`vap_lapserate`: Water vapour adiabatic lapse rate.
+* :func:`vap_soundspeed`: Water vapour sound speed.
 
 """
 
-_all__ = ['liq_cp','liq_cv','liq_enthalpy','liq_entropy','liq_expansion',
-    'liq_gibbsenergy','liq_internalenergy','liq_kappas','liq_kappat',
-    'liq_lapserate','liq_soundspeed','vap_cp','vap_cv','vap_enthalpy',
-    'vap_entropy','vap_expansion','vap_gibbsenergy','vap_internalenergy',
-    'vap_kappas','vap_kappat','vap_lapserate','vap_soundspeed']
+__all__ = ['liq_cp','liq_cv','liq_density','liq_enthalpy','liq_entropy',
+    'liq_expansion','liq_gibbsenergy','liq_helmholtzenergy',
+    'liq_internalenergy','liq_kappa_s','liq_kappa_t','liq_lapserate',
+    'liq_soundspeed','vap_cp','vap_cv','vap_density','vap_enthalpy',
+    'vap_entropy','vap_expansion','vap_gibbsenergy','vap_helmholtzenergy',
+    'vap_internalenergy','vap_kappa_s','vap_kappa_t','vap_lapserate',
+    'vap_soundspeed']
 
 import constants0
 import flu2
@@ -67,7 +73,7 @@ def liq_cp(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,dliq0=None,
     """Calculate liquid water isobaric heat capacity.
     
     Calculate the isobaric (constant pressureheat capacity of liquid
-    water.
+    water at temperature and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -117,7 +123,7 @@ def liq_cv(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,dliq0=None,
     """Calculate liquid water isochoric heat capacity.
     
     Calculate the isochoric (constant volume) heat capacity of liquid
-    water.
+    water at temperature and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -164,11 +170,54 @@ def liq_cv(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,dliq0=None,
     cv = temp * (-g_tt + g_tp**2/g_pp)
     return cv
 
+def liq_density(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
+    dliq0=None,chkbnd=False,mathargs=None):
+    """Calculate liquid water density.
+    
+    Calculate the density of liquid water at temperature and pressure.
+    
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg dliq: Liquid water density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dliq: float or None
+    :arg bool chkvals: If True (default False) and all values are given,
+        this function will calculate the disequilibrium and raise a
+        warning if the results are not within a given tolerance.
+    :arg float chktol: Tolerance to use when checking values (default
+        _CHKTOL).
+    :arg dliq0: Initial guess for the liquid water density in kg/m3. If
+        None (default) then `_dliq_default` is used. A string specifier
+        of the method (e.g. 'crit') can also be passed. See _LIQMETHODS
+        in flu3a for valid specifiers.
+    :type dliq0: float or str or None
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg mathargs: Keyword arguments to the root-finder
+        :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
+        (default) then no arguments are passed and default parameters
+        will be used.
+    :returns: Density in kg/m3.
+    :raises RuntimeWarning: If a string is passed for `dliq0` that does
+        not match an available method. The default is used instead.
+    :raises UserWarning: If a string is passed for `dliq0` that
+        specifies a function intended for water vapour.
+    :raises RuntimeWarning: If the value of dliq is more consistent with
+        water vapour in the subcritical region.
+    :raises RuntimeWarning: If the relative disequilibrium is more than
+        chktol, if chkvals is True and all values are given.
+    """
+    dliq = _eq_tp_liq(temp,pres,dliq=dliq,chkvals=chkvals,chktol=chktol,
+        dliq0=dliq0,chkbnd=chkbnd,mathargs=mathargs)
+    return dliq
+
 def liq_enthalpy(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     dliq0=None,chkbnd=False,mathargs=None):
     """Calculate liquid water enthalpy.
     
-    Calculate the specific enthalpy of liquid water.
+    Calculate the specific enthalpy of liquid water at temperature and
+    pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -214,11 +263,12 @@ def liq_enthalpy(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     h = g - temp*g_t
     return h
 
-def liq_entropy(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,dliq0=None,
-    chkbnd=False,mathargs=None):
+def liq_entropy(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
+    dliq0=None,chkbnd=False,mathargs=None):
     """Calculate liquid water entropy.
     
-    Calculate the specific entropy of liquid water.
+    Calculate the specific entropy of liquid water at temperature and
+    pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -267,7 +317,8 @@ def liq_expansion(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     dliq0=None,chkbnd=False,mathargs=None):
     """Calculate liquid water thermal expansion coefficient.
     
-    Calculate the thermal expansion coefficient of liquid water.
+    Calculate the thermal expansion coefficient of liquid water at
+    temperature and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -317,7 +368,8 @@ def liq_gibbsenergy(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     dliq0=None,chkbnd=False,mathargs=None):
     """Calculate liquid water Gibbs free energy.
     
-    Calculate the specific Gibbs free energy of liquid water.
+    Calculate the specific Gibbs free energy of liquid water at
+    temperature and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -361,11 +413,58 @@ def liq_gibbsenergy(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     g = _liq_g(0,0,temp,pres,dliq=dliq)
     return g
 
+def liq_helmholtzenergy(temp,pres,dliq=None,chkvals=False,
+    chktol=_CHKTOL,dliq0=None,chkbnd=False,mathargs=None):
+    """Calculate liquid water Helmholtz free energy.
+    
+    Calculate the specific Helmholtz free energy of liquid water at
+    temperature and pressure.
+    
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg dliq: Liquid water density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dliq: float or None
+    :arg bool chkvals: If True (default False) and all values are given,
+        this function will calculate the disequilibrium and raise a
+        warning if the results are not within a given tolerance.
+    :arg float chktol: Tolerance to use when checking values (default
+        _CHKTOL).
+    :arg dliq0: Initial guess for the liquid water density in kg/m3. If
+        None (default) then `_dliq_default` is used. A string specifier
+        of the method (e.g. 'crit') can also be passed. See _LIQMETHODS
+        in flu3a for valid specifiers.
+    :type dliq0: float or str or None
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg mathargs: Keyword arguments to the root-finder
+        :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
+        (default) then no arguments are passed and default parameters
+        will be used.
+    :returns: Helmholtz energy in J/kg.
+    :raises RuntimeWarning: If a string is passed for `dliq0` that does
+        not match an available method. The default is used instead.
+    :raises UserWarning: If a string is passed for `dliq0` that
+        specifies a function intended for water vapour.
+    :raises RuntimeWarning: If the value of dliq is more consistent with
+        water vapour in the subcritical region.
+    :raises RuntimeWarning: If the relative disequilibrium is more than
+        chktol, if chkvals is True and all values are given.
+    """
+    dliq = _eq_tp_liq(temp,pres,dliq=dliq,chkvals=chkvals,chktol=chktol,
+        dliq0=dliq0,chkbnd=chkbnd,mathargs=mathargs)
+    g = _liq_g(0,0,temp,pres,dliq=dliq)
+    g_p = _liq_g(0,1,temp,pres,dliq=dliq)
+    f = g - pres*g_p
+    return f
+
 def liq_internalenergy(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     dliq0=None,chkbnd=False,mathargs=None):
     """Calculate liquid water internal energy.
     
-    Calculate the specific internal energy of liquid water.
+    Calculate the specific internal energy of liquid water at
+    temperature and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -412,11 +511,12 @@ def liq_internalenergy(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     u = g - temp*g_t - pres*g_p
     return u
 
-def liq_kappas(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
+def liq_kappa_s(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     dliq0=None,chkbnd=False,mathargs=None):
     """Calculate liquid water isentropic compressibility.
     
-    Calculate the isentropic compressibility of liquid water.
+    Calculate the isentropic compressibility of liquid water at
+    temperature and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -452,7 +552,7 @@ def liq_kappas(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     
     :Examples:
     
-    >>> liq_kappas(300.,1e5)
+    >>> liq_kappa_s(300.,1e5)
     4.45077521253e-10
     """
     dliq = _eq_tp_liq(temp,pres,dliq=dliq,chkvals=chkvals,chktol=chktol,
@@ -464,11 +564,12 @@ def liq_kappas(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     kappa = dliq*(-g_pp - g_tp**2/(-g_tt))
     return kappa
 
-def liq_kappat(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
+def liq_kappa_t(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     dliq0=None,chkbnd=False,mathargs=None):
     """Calculate liquid water isothermal compressibility.
     
-    Calculate the isothermal compressibility of liquid water.
+    Calculate the isothermal compressibility of liquid water at
+    temperature and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -504,7 +605,7 @@ def liq_kappat(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     
     :Examples:
     
-    >>> liq_kappat(300.,1e5)
+    >>> liq_kappa_t(300.,1e5)
     4.50515304336e-10
     """
     dliq = _eq_tp_liq(temp,pres,dliq=dliq,chkvals=chkvals,chktol=chktol,
@@ -518,7 +619,8 @@ def liq_lapserate(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     dliq0=None,chkbnd=False,mathargs=None):
     """Calculate liquid water adiabatic lapse rate.
     
-    Calculate the adiabatic lapse rate of liquid water.
+    Calculate the adiabatic lapse rate of liquid water at temperature
+    and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -568,7 +670,8 @@ def liq_soundspeed(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     dliq0=None,chkbnd=False,mathargs=None):
     """Calculate liquid water sound speed.
     
-    Calculate the speed of sound in liquid water.
+    Calculate the speed of sound in liquid water at temperature and
+    pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -624,7 +727,8 @@ def vap_cp(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,dvap0=None,
     chkbnd=False,mathargs=None):
     """Calculate water vapour isobaric heat capacity.
     
-    Calculate the isobaric heat capacity of water vapour.
+    Calculate the isobaric heat capacity of water vapour at temperature
+    and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -673,7 +777,8 @@ def vap_cv(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,dvap0=None,
     chkbnd=False,mathargs=None):
     """Calculate water vapour isochoric heat capacity.
     
-    Calculate the isochoric heat capacity of water vapour.
+    Calculate the isochoric heat capacity of water vapour at temperature
+    and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -720,11 +825,54 @@ def vap_cv(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,dvap0=None,
     cv = temp*(-g_tt + g_tp**2/g_pp)
     return cv
 
+def vap_density(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
+    dvap0=None,chkbnd=False,mathargs=None):
+    """Calculate water vapour density.
+    
+    Calculate the density of water vapour at temperature and pressure.
+    
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg dvap: Water vapour density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dvap: float or None
+    :arg bool chkvals: If True (default False) and all values are given,
+        this function will calculate the disequilibrium and raise a
+        warning if the results are not within a given tolerance.
+    :arg float chktol: Tolerance to use when checking values (default
+        _CHKTOL).
+    :arg dvap0: Initial guess for the water vapour density in kg/m3. If
+        None (default) then `_dvap_default` is used. A string specifier
+        of the method (e.g. 'crit') can also be passed. See _VAPMETHODS
+        in flu3a for valid specifiers.
+    :type dvap0: float or str or None
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg mathargs: Keyword arguments to the root-finder
+        :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
+        (default) then no arguments are passed and default parameters
+        will be used.
+    :returns: Density in kg/m3.
+    :raises RuntimeWarning: If a string is passed for `dvap0` that does
+        not match an available method. The default is used instead.
+    :raises UserWarning: If a string is passed for `dvap0` that
+        specifies a function intended for water vapour.
+    :raises RuntimeWarning: If the value of dvap is more consistent with
+        water vapour in the subcritical region.
+    :raises RuntimeWarning: If the relative disequilibrium is more than
+        chktol, if chkvals is True and all values are given.
+    """
+    dvap = _eq_tp_vap(temp,pres,dvap=dvap,chkvals=chkvals,chktol=chktol,
+        dvap0=dvap0,chkbnd=chkbnd,mathargs=mathargs)
+    return dvap
+
 def vap_enthalpy(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     dvap0=None,chkbnd=False,mathargs=None):
     """Calculate water vapour enthalpy.
     
-    Calculate the specific enthalpy of water vapour.
+    Calculate the specific enthalpy of water vapour at temperature and
+    pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -774,7 +922,8 @@ def vap_entropy(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     dvap0=None,chkbnd=False,mathargs=None):
     """Calculate water vapour entropy.
     
-    Calculate the specific entropy of water vapour.
+    Calculate the specific entropy of water vapour at temperature and
+    pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -823,7 +972,8 @@ def vap_expansion(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     dvap0=None,chkbnd=False,mathargs=None):
     """Calculate water vapour thermal expansion coefficient.
     
-    Calculate the thermal expansion coefficient of water vapour.
+    Calculate the thermal expansion coefficient of water vapour at
+    temperature and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -873,7 +1023,8 @@ def vap_gibbsenergy(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     dvap0=None,chkbnd=False,mathargs=None):
     """Calculate water vapour Gibbs free energy.
     
-    Calculate the specific Gibbs free energy of water vapour.
+    Calculate the specific Gibbs free energy of water vapour at
+    temperature and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -917,11 +1068,58 @@ def vap_gibbsenergy(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     g = _vap_g(0,0,temp,pres,dvap=dvap)
     return g
 
+def vap_helmholtzenergy(temp,pres,dvap=None,chkvals=False,
+    chktol=_CHKTOL,dvap0=None,chkbnd=False,mathargs=None):
+    """Calculate water vapour Helmholtz free energy.
+    
+    Calculate the specific Helmholtz free energy of water vapour at
+    temperature and pressure.
+    
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg dvap: Water vapour density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dvap: float or None
+    :arg bool chkvals: If True (default False) and all values are given,
+        this function will calculate the disequilibrium and raise a
+        warning if the results are not within a given tolerance.
+    :arg float chktol: Tolerance to use when checking values (default
+        _CHKTOL).
+    :arg dvap0: Initial guess for the water vapour density in kg/m3. If
+        None (default) then `_dvap_default` is used. A string specifier
+        of the method (e.g. 'crit') can also be passed. See _VAPMETHODS
+        in flu3a for valid specifiers.
+    :type dvap0: float or str or None
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg mathargs: Keyword arguments to the root-finder
+        :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
+        (default) then no arguments are passed and default parameters
+        will be used.
+    :returns: Helmholtz energy in J/kg.
+    :raises RuntimeWarning: If a string is passed for `dvap0` that does
+        not match an available method. The default is used instead.
+    :raises UserWarning: If a string is passed for `dvap0` that
+        specifies a function intended for water vapour.
+    :raises RuntimeWarning: If the value of dvap is more consistent with
+        water vapour in the subcritical region.
+    :raises RuntimeWarning: If the relative disequilibrium is more than
+        chktol, if chkvals is True and all values are given.
+    """
+    dvap = _eq_tp_vap(temp,pres,dvap=dvap,chkvals=chkvals,chktol=chktol,
+        dvap0=dvap0,chkbnd=chkbnd,mathargs=mathargs)
+    g = _vap_g(0,0,temp,pres,dvap=dvap)
+    g_p = _vap_g(0,1,temp,pres,dvap=dvap)
+    f = g - pres*g_p
+    return f
+
 def vap_internalenergy(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     dvap0=None,chkbnd=False,mathargs=None):
     """Calculate water vapour internal energy.
     
-    Calculate the specific internal energy of water vapour.
+    Calculate the specific internal energy of water vapour at
+    temperature and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -968,11 +1166,12 @@ def vap_internalenergy(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     u = g - temp*g_t - pres*g_p
     return u
 
-def vap_kappas(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
+def vap_kappa_s(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     dvap0=None,chkbnd=False,mathargs=None):
     """Calculate water vapour isentropic compressibility.
     
-    Calculate the isentropic compressibility of water vapour.
+    Calculate the isentropic compressibility of water vapour at
+    temperature and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -1008,7 +1207,7 @@ def vap_kappas(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     
     :Examples:
     
-    >>> vap_kappas(300.,1e3)
+    >>> vap_kappa_s(300.,1e3)
     7.52840457971e-04
     """
     dvap = _eq_tp_vap(temp,pres,dvap=dvap,chkvals=chkvals,chktol=chktol,
@@ -1019,11 +1218,12 @@ def vap_kappas(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     kappa = dvap*(-g_pp - g_tp**2/(-g_tt))
     return kappa
 
-def vap_kappat(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
+def vap_kappa_t(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     dvap0=None,chkbnd=False,mathargs=None):
     """Calculate water vapour isothermal compressibility.
     
-    Calculate the isothermal compressibility of water vapour.
+    Calculate the isothermal compressibility of water vapour at
+    temperature and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -1059,7 +1259,7 @@ def vap_kappat(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     
     :Examples:
     
-    >>> vap_kappat(300.,1e3)
+    >>> vap_kappa_t(300.,1e3)
     1.00048646242e-03
     """
     dvap = _eq_tp_vap(temp,pres,dvap=dvap,chkvals=chkvals,chktol=chktol,
@@ -1073,7 +1273,8 @@ def vap_lapserate(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     dvap0=None,chkbnd=False,mathargs=None):
     """Calculate water vapour adiabatic lapse rate.
     
-    Calculate the adiabatic lapse rate of water vapour.
+    Calculate the adiabatic lapse rate of water vapour at temperature
+    and pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
@@ -1123,7 +1324,8 @@ def vap_soundspeed(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     dvap0=None,chkbnd=False,mathargs=None):
     """Calculate water vapour sound speed.
     
-    Calculate the speed of sound in water vapour.
+    Calculate the speed of sound in water vapour at temperature and
+    pressure.
     
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.

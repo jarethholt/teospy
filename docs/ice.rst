@@ -6,8 +6,8 @@ Ice modules
 The `ice` modules provide thermodynamic properties of ice, specifically
 hexagonal ice 1 (Ih) which is most relevant to geophysical applications. The
 primary variables are temperature and pressure. The only modules dealing with
-ice are `ice1` that provides the Gibbs energy function and `ice2` that provides
-all other thermodynamic properties.
+ice are :mod:`ice1` that provides the Gibbs energy function and :mod:`ice2` that
+provides all other thermodynamic properties.
 
 
 
@@ -23,7 +23,6 @@ all other thermodynamic properties.
 
 .. automodule:: ice2
     :members: chempot, cp, density, enthalpy, entropy, expansion,
-        helmholtzenergy, internalenergy, kappas, kappat, lapserate,
+        helmholtzenergy, internalenergy, kappa_s, kappa_t, lapserate,
         pcoefficient, specificvolume, chkiapws06table6
-
 

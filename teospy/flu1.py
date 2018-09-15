@@ -19,8 +19,8 @@ IAPWS 1995, table 6.
 
 :Functions:
 
-* flu_f: Fluid water Helmholtz free energy with derivatives.
-* chkiapws95table6: Compare module results to reference values.
+* :func:`flu_f`: Fluid water Helmholtz free energy with derivatives.
+* :func:`chkiapws95table6`: Compare module results to reference values.
 
 """
 

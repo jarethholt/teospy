@@ -21,28 +21,29 @@ IAPWS 1995, table 7.
 
 :Functions:
 
-* cp: Isobaric heat capacity of fluid water.
-* cv: Isochoric heat capacity of fluid water.
-* enthalpy: Specific enthalpy of fluid water.
-* entropy: Specific entropy of fluid water.
-* expansion: Thermal expansion coefficient of fluid water.
-* gibbsenergy: Specific Gibbs free energy of fluid water.
-* internalenergy: Specific internal energy of fluid water.
-* kappas: Isentropic compressibility of fluid water.
-* kappat: Isothermal compressibility of fluid water.
-* lapserate: Adiabatic lapse rate of fluid water.
-* pressure: Pressure of fluid water.
-* soundspeed: Speed of sound in fluid water.
-* eq_chempot: Fluid water chemical potential with derivatives.
-* eq_enthalpy: Fluid water enthalpy with derivatives.
-* eq_entropy: Fluid water entropy with derivatives.
-* eq_pressure: Fluid water pressure with derivatives.
-* chkiapws95table7: Check module accuracy against IAPWS 1995 table 7.
+* :func:`cp`: Isobaric heat capacity of fluid water.
+* :func:`cv`: Isochoric heat capacity of fluid water.
+* :func:`enthalpy`: Specific enthalpy of fluid water.
+* :func:`entropy`: Specific entropy of fluid water.
+* :func:`expansion`: Thermal expansion coefficient of fluid water.
+* :func:`gibbsenergy`: Specific Gibbs free energy of fluid water.
+* :func:`internalenergy`: Specific internal energy of fluid water.
+* :func:`kappa_s`: Isentropic compressibility of fluid water.
+* :func:`kappa_t`: Isothermal compressibility of fluid water.
+* :func:`lapserate`: Adiabatic lapse rate of fluid water.
+* :func:`pressure`: Pressure of fluid water.
+* :func:`soundspeed`: Speed of sound in fluid water.
+* :func:`eq_chempot`: Fluid water chemical potential with derivatives.
+* :func:`eq_enthalpy`: Fluid water enthalpy with derivatives.
+* :func:`eq_entropy`: Fluid water entropy with derivatives.
+* :func:`eq_pressure`: Fluid water pressure with derivatives.
+* :func:`chkiapws95table7`: Check module accuracy against IAPWS 1995
+  table 7.
 
 """
 
 __all__ = ['cp','cv','enthalpy','entropy','expansion','gibbsenergy',
-    'internalenergy','kappas','kappat','lapserate','pressure','soundspeed',
+    'internalenergy','kappa_s','kappa_t','lapserate','pressure','soundspeed',
     'eq_chempot','eq_enthalpy','eq_entropy','eq_pressure',
     'chkiapws95table7']
 
@@ -248,7 +249,7 @@ def internalenergy(temp,dflu,chkbnd=False):
     u = f - temp*f_t
     return u
 
-def kappas(temp,dflu,chkbnd=False):
+def kappa_s(temp,dflu,chkbnd=False):
     """Calculate fluid water isentropic compressibility.
     
     Calculate the isentropic compressibility of fluid water from
@@ -266,7 +267,7 @@ def kappas(temp,dflu,chkbnd=False):
     
     :Examples:
     
-    >>> kappas(300.,1000.)
+    >>> kappa_s(300.,1000.)
     4.35960581171e-10
     """
     _chkflubnds(temp,dflu,chkbnd=chkbnd)
@@ -278,7 +279,7 @@ def kappas(temp,dflu,chkbnd=False):
     kappa = f_tt / denom
     return kappa
 
-def kappat(temp,dflu,chkbnd=False):
+def kappa_t(temp,dflu,chkbnd=False):
     """Calculate fluid water isothermal compressibility.
     
     Calculate the isothermal compressibility of fluid water from
@@ -296,7 +297,7 @@ def kappat(temp,dflu,chkbnd=False):
     
     :Examples:
     
-    >>> kappat(300.,1000.)
+    >>> kappa_t(300.,1000.)
     4.41713172024e-10
     """
     _chkflubnds(temp,dflu,chkbnd=chkbnd)

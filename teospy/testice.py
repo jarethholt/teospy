@@ -38,7 +38,7 @@ def genice1():
     refs = [-3786.74963128,1244.97335506,1.09029713624e-03,-7.67955356337,
         1.72604208697e-07,-1.27811223643e-13]
     fnames = 'ice_g'
-    argfmt = '({0:1d},{1:1d},{2:3g},{3:3g})'
+    argfmt = '({0:1d},{1:1d},{2:3g},{3:5g})'
     header = 'ice1 ice_g derivatives'
     testice1 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     return (testice1,)
@@ -48,17 +48,17 @@ def genice2():
     """
     import ice2
     funs = [ice2.chempot,ice2.cp,ice2.density,ice2.enthalpy,ice2.entropy,
-        ice2.expansion,ice2.helmholtzenergy,ice2.internalenergy,ice2.kappas,
-        ice2.kappat,ice2.lapserate,ice2.pcoefficient,ice2.specificvolume]
+        ice2.expansion,ice2.helmholtzenergy,ice2.internalenergy,ice2.kappa_s,
+        ice2.kappa_t,ice2.lapserate,ice2.pcoefficient,ice2.specificvolume]
     fargs = (270.,1e5)
     refs = [-3786.74963128,2073.47946211,917.181167192,-339929.555499,
         -1244.97335506,1.58309329594e-04,-3895.77934490,-340038.585212,
         1.13667916416e-10,1.17226047281e-10,2.24758128545e-08,1350462.06254,
         1.09029713624e-03]
     fnames = ['chempot','cp','density','enthalpy','entropy','expansion',
-        'helmholtzenergy','internalenergy','kappas','kappat','lapserate',
+        'helmholtzenergy','internalenergy','kappa_s','kappa_t','lapserate',
         'pcoefficient','specificvolume']
-    argfmt = '({0:3g},{1:3g})'
+    argfmt = '({0:3g},{1:5g})'
     header = 'ice2 functions'
     testice2 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     return (testice2,)

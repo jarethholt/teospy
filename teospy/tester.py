@@ -83,10 +83,13 @@ class Tester(object):
         modules level 3 and higher. Use None (default) for lower-level
         modules.
     :type eqargs: tuple(float) or None
-    :arg eqkws: Names of the keyword arguments for primary variables.
+    :arg eqkwargs: Keyword arguments to pass to the equilibrium
+        function. Used by modules level 3 and higher.
+    :type eqkwargs: dict or None
+    :arg eqkeys: Names of the keyword arguments for primary variables.
         Used by modules level 3 and higher. Use None (default) for
         lower-level modules.
-    :type eqkws: list[str] or None
+    :type eqkeys: list[str] or None
     :raises RuntimeWarning: If the shape of the reference values does
         not match the shape of the functions and arguments lists.
     
@@ -114,7 +117,7 @@ class Tester(object):
     """
     
     def __init__(self,funs,fargs,refs,fnames,argfmt,header=None,
-        fkwargs=None,eqfun=None,eqargs=None,eqkws=None):
+        fkwargs=None,eqfun=None,eqargs=None,eqkwargs=None,eqkeys=None):
         if isinstance(funs,list):
             self.funs = funs
             nfun = len(funs)
@@ -149,14 +152,19 @@ class Tester(object):
             self.fnames = fnames
         self.nstr = max(len(fname) for fname in self.fnames)
         self.argfmt = argfmt
-        self.nfmt = len(argfmt.format(*self.fargs[0]))
+        args = self.fargs[0]
+        if fkwargs is not None:
+            for (key,val) in fkwargs.items():
+                args += (key,val)
+        self.nfmt = len(argfmt.format(*args))
         self.header = header
         self.fkwargs = fkwargs
         
         # Include equilibrium function and keywords
         self.eqfun = eqfun
         self.eqargs = eqargs
-        self.eqkws = eqkws
+        self.eqkwargs = eqkwargs
+        self.eqkeys = eqkeys
         return None
     
     def run(self,zerotol=_ZEROTOL):
@@ -169,10 +177,14 @@ class Tester(object):
         if self.eqfun is None:
             eqdict = dict()
         else:
-            eqvals = self.eqfun(*self.eqargs)
+            if self.eqkwargs is not None:
+                eqkwargs = self.eqkwargs
+            else:
+                eqkwargs = dict()
+            eqvals = self.eqfun(*self.eqargs,**eqkwargs)
             if isinstance(eqvals,float):
                 eqvals = (eqvals,)
-            eqdict = {kw: val for (kw,val) in zip(self.eqkws,eqvals)}
+            eqdict = {key: val for (key,val) in zip(self.eqkeys,eqvals)}
             self.eqdict = eqdict
         kwargs.update(eqdict)
         
@@ -221,6 +233,9 @@ class Tester(object):
                     continue
                 fname = self.fnames[ifun]
                 farg = self.fargs[iarg]
+                if self.fkwargs is not None:
+                    for (key,val) in self.fkwargs.items():
+                        farg += (key,val)
                 ref = self.refs[ifun,iarg]
                 res = self.results[ifun,iarg]
                 err = self.errs[ifun,iarg]

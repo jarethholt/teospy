@@ -22,14 +22,14 @@ properties under (dry) adiabatic displacement.
 
 :Functions:
 
-* eq_aep: Calculate equilibrium quantities at dry fraction, entropy,
-    and pressure.
-* air_h: Humid air enthalpy with derivatives.
-* eq_pot: Calculate equilibrium quantities at dry fraction, in-situ
-    temperature, in-situ pressure, and potential pressure.
-* pottemp: Calculate the humid air potential temperature.
-* potdensity: Calculate the humid air potential density.
-* potenthalpy: Calculate the humid air potential enthalpy.
+* :func:`eq_aep`: Calculate equilibrium quantities at dry fraction,
+  entropy, and pressure.
+* :func:`air_h`: Humid air enthalpy with derivatives.
+* :func:`eq_pot`: Calculate equilibrium quantities at dry fraction,
+  in-situ temperature, in-situ pressure, and potential pressure.
+* :func:`pottemp`: Calculate the humid air potential temperature.
+* :func:`potdensity`: Calculate the humid air potential density.
+* :func:`potenthalpy`: Calculate the humid air potential enthalpy.
 
 """
 

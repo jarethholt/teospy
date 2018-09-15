@@ -26,33 +26,36 @@ variables.
 
 :Functions:
 
-* air_f: Helmholtz free energy of humid air with derivatives.
-* cp: Isobaric heat capacity of humid air.
-* cv: Isochoric heat capacity of humid air.
-* enthalpy: Specific enthalpy of humid air.
-* entropy: Specific entropy of humid air.
-* expansion: Thermal expansion coefficient of humid air.
-* gibbsenergy: Specific Gibbs free energy of humid air.
-* internalenergy: Specific internal energy of humid air.
-* kappas: Isentropic compressibility of humid air.
-* kappat: Isothermal compressibility of humid air.
-* lapserate: Adiabatic lapse rate of humid air.
-* pressure: Pressure of humid air.
-* soundspeed: Speed of sound in humid air.
-* vappot: Water vapour chemical potential in humid air.
-* eq_entropy: Humid air entropy with derivatives.
-* eq_pressure: Humid air pressure with derivatives.
-* eq_vappot: Water vapour chemical potential with derivatives.
-* chkiapws10table: Check module accuracy against an IAPWS 2010 reference
-    table.
-* chkiapws10table13: Check module accuracy against IAPWS10 table 13.
-* chkiapws10table14: Check module accuracy against IAPWS10 table 14.
-* chkiapws10table15: Check module accuracy against IAPWS10 table 15.
+* :func:`air_f`: Helmholtz free energy of humid air with derivatives.
+* :func:`cp`: Isobaric heat capacity of humid air.
+* :func:`cv`: Isochoric heat capacity of humid air.
+* :func:`enthalpy`: Specific enthalpy of humid air.
+* :func:`entropy`: Specific entropy of humid air.
+* :func:`expansion`: Thermal expansion coefficient of humid air.
+* :func:`gibbsenergy`: Specific Gibbs free energy of humid air.
+* :func:`internalenergy`: Specific internal energy of humid air.
+* :func:`kappa_s`: Isentropic compressibility of humid air.
+* :func:`kappa_t`: Isothermal compressibility of humid air.
+* :func:`lapserate`: Adiabatic lapse rate of humid air.
+* :func:`pressure`: Pressure of humid air.
+* :func:`soundspeed`: Speed of sound in humid air.
+* :func:`vappot`: Water vapour chemical potential in humid air.
+* :func:`eq_entropy`: Humid air entropy with derivatives.
+* :func:`eq_pressure`: Humid air pressure with derivatives.
+* :func:`eq_vappot`: Water vapour chemical potential with derivatives.
+* :func:`chkiapws10table`: Check module accuracy against an IAPWS 2010
+  reference table.
+* :func:`chkiapws10table13`: Check module accuracy against IAPWS10
+  table 13.
+* :func:`chkiapws10table14`: Check module accuracy against IAPWS10
+  table 14.
+* :func:`chkiapws10table15`: Check module accuracy against IAPWS10
+  table 15.
 
 """
 
 __all__ = ['air_f','cp','cv','enthalpy','entropy','expansion','gibbsenergy',
-    'internalenergy','kappas','kappat','lapserate','pressure','soundspeed',
+    'internalenergy','kappa_s','kappa_t','lapserate','pressure','soundspeed',
     'vappot',
     'eq_entropy','eq_pressure','eq_vappot',
     'chkiapws10table','chkiapws10table13','chkiapws10table14',
@@ -489,7 +492,7 @@ def internalenergy(airf,temp,dhum,chkbnd=False):
     u = f - temp*f_t
     return u
 
-def kappas(airf,temp,dhum,chkbnd=False):
+def kappa_s(airf,temp,dhum,chkbnd=False):
     """Calculate humid air isentropic compressibility.
     
     Calculate the isentropic compressibility of humid air from the dry
@@ -509,7 +512,7 @@ def kappas(airf,temp,dhum,chkbnd=False):
     
     :Examples:
     
-    >>> kappas(0.9,300.,1.)
+    >>> kappa_s(0.9,300.,1.)
     8.07913626816e-06
     """
     _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
@@ -521,7 +524,7 @@ def kappas(airf,temp,dhum,chkbnd=False):
     kappa = f_tt / denom
     return kappa
 
-def kappat(airf,temp,dhum,chkbnd=False):
+def kappa_t(airf,temp,dhum,chkbnd=False):
     """Calculate humid air isothermal compressibility.
     
     Calculate the isothermal compressibility of humid air from dry air
@@ -541,7 +544,7 @@ def kappat(airf,temp,dhum,chkbnd=False):
     
     :Examples:
     
-    >>> kappat(0.9,300.,1.)
+    >>> kappa_t(0.9,300.,1.)
     1.09975521396e-05
     """
     _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)

@@ -62,7 +62,7 @@ def genair1():
     refs = [-696239.965190,-2124.55145456,86114714.9596,-2.39242390806,
         287049.624545,-86114738036.1]
     fnames = 'dry_f'
-    argfmt = '({0:1d},{1:1d},{2:3g},{3:4g})'
+    argfmt = '({0:1d},{1:1d},{2:3g},{3:5g})'
     header = 'air1 dry_f derivatives'
     testair1 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     return (testair1,)
@@ -94,14 +94,15 @@ def genair2():
     testair2_2 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     
     funs = [air2.cp,air2.cv,air2.enthalpy,air2.entropy,air2.expansion,
-        air2.gibbsenergy,air2.internalenergy,air2.kappas,air2.kappat,
+        air2.gibbsenergy,air2.internalenergy,air2.kappa_s,air2.kappa_t,
         air2.lapserate,air2.pressure,air2.soundspeed]
     fargs = (0.9,300.,1.)
     refs = [1210.74031058,889.446654163,278208.408750,940.175394023,
         3.43193033077e-03,-3844.20945693,187033.023884,8.07913626816e-06,
         1.09975521396e-05,8.50371537341e-04,91175.3848662,351.817577078]
     fnames = ['cp','cv','enthalpy','entropy','expansion','gibbsenergy',
-        'internalenergy','kappas','kappat','lapserate','pressure','soundspeed']
+        'internalenergy','kappa_s','kappa_t','lapserate','pressure',
+        'soundspeed']
     argfmt = '({0:3.1f},{1:3g},{2:1g})'
     header = 'air2 functions'
     testair2_3 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
@@ -115,7 +116,7 @@ def genair3a():
     fargs = (0.9,300.,1e5)
     refs = 1.09708772444
     fnames = 'eq_atp'
-    argfmt = '({0:3.1f},{1:3g},{2:3g})'
+    argfmt = '({0:3.1f},{1:3g},{2:5g})'
     header = 'air3a equilibrium function'
     testair3a_1 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     
@@ -123,16 +124,16 @@ def genair3a():
     args1 = (0.9,300.,1e5)
     fargs = [(der+args1) for der in _DERS3]
     eqfun = air3a.eq_atp
-    eqkws = ['dhum']
+    eqkeys = ['dhum']
     eqargs = args1
     refs = [4577.93065689,-210141.953243,-911.170080461,0.911504137473,
         1415779.23410,7566.34779196,-0.483353002176,-4.15449972148,
         3.15111222847e-03,-9.14462130186e-06]
     fnames = 'air_g'
-    argfmt = '({0:1d},{1:1d},{2:1d},{3:3.1f},{4:3g},{5:3g})'
+    argfmt = '({0:1d},{1:1d},{2:1d},{3:3.1f},{4:3g},{5:5g})'
     header = 'air3a air_g derivatives'
     testair3a_2 = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     return (testair3a_1, testair3a_2)
 
 def genair3b():
@@ -141,23 +142,23 @@ def genair3b():
     import air3b
     funs = [air3b.contraction,air3b.compressibility_lemmon,air3b.cp,air3b.cv,
         air3b.density,air3b.enthalpy,air3b.entropy,air3b.expansion,
-        air3b.gibbsenergy,air3b.internalenergy,air3b.kappas,air3b.kappat,
+        air3b.gibbsenergy,air3b.internalenergy,air3b.kappa_s,air3b.kappa_t,
         air3b.lapserate,air3b.soundspeed,air3b.vappot]
     fargs = (0.9,300.,1e5)
     eqfun = air3b._eq_atp
     eqargs = fargs
-    eqkws = ['dhum']
+    eqkeys = ['dhum']
     refs = [0.530280645260,0.997825670991,1246.34991644,920.600781012,
         1.09708772444,277928.954795,911.170080461,3.45704654420e-3,
         4577.93065689,186778.541048,7.41034505449e-6,1.00324517749e-5,
         7.58481752251e-4,350.719656182,193705.688576]
     fnames = ['contraction','compress_lemmon','cp','cv','density','enthalpy',
-        'entropy','expansion','gibbsenergy','internalenergy','kappas',
-        'kappat','lapserate','soundspeed','vappot']
-    argfmt = '({0:3.1f},{1:3g},{2:3g})'
+        'entropy','expansion','gibbsenergy','internalenergy','kappa_s',
+        'kappa_t','lapserate','soundspeed','vappot']
+    argfmt = '({0:3.1f},{1:3g},{2:5g})'
     header = 'air3b functions'
     testair3b = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     return (testair3b,)
 
 def genair3c():
@@ -169,27 +170,27 @@ def genair3c():
     fargs = [(der+args1) for der in _DERS3]
     eqfun = air3c.eq_aep
     eqargs = args1
-    eqkws = ['temp','dhum']
+    eqkeys = ['temp','dhum']
     refs = [274592.611783,-229706.905765,297.403043058,0.903262695636,
         13963273.0104,1676.85098552,4.89772680822,0.223684689765,
         7.15703143992e-04,-6.78105152859e-06]
     fnames = 'air_h'
-    argfmt = '({0:1d},{1:1d},{2:1d},{3:3.1f},{4:3g},{5:3g})'
+    argfmt = '({0:1d},{1:1d},{2:1d},{3:3.1f},{4:3g},{5:5g})'
     header = 'air3c air_h derivatives'
     testair3c_1 = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     funs = [air3c.pottemp,air3c.potdensity,air3c.potenthalpy]
     fargs = (0.9,300.,5e4,1e5)
     eqfun = air3c.eq_pot
     eqargs = fargs
-    eqkws = ['dhum','tpot','dpot']
+    eqkeys = ['dhum','tpot','dpot']
     refs = [363.653905688,0.903509489711,348872.568665]
     fnames = ['pottemp','potdensity','potenthalpy']
-    argfmt = '({0:3.1f},{1:3g},{2:3g},{3:3g})'
+    argfmt = '({0:3.1f},{1:3g},{2:5g},{3:5g})'
     header = 'air3c adiabatic (potential) functions'
     testair3c_2 = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     return (testair3c_1, testair3c_2)
 
 def genair5():
@@ -200,7 +201,7 @@ def genair5():
     fargs = (50.,20.,1e3)
     refs = 0.971588085046
     fnames = 'lapseratemoist'
-    argfmt = '({0:2g},{1:2g},{2:3g})'
+    argfmt = '({0:2g},{1:2g},{2:4g})'
     header = 'air5 lapse rate function'
     testair5 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     return (testair5,)

@@ -18,9 +18,33 @@ In addition, several tests have been compiled into modules such as `testair` to 
 
 
 `testair`
------------
+---------
 
 .. automodule:: testair
+
+
+`testflu`
+---------
+
+.. automodule:: testflu
+
+
+`testice`
+---------
+
+.. automodule:: testice
+
+
+`testsal`
+---------
+
+.. automodule:: testsal
+
+
+`testsea`
+---------
+
+.. automodule:: testsea
 
 
 

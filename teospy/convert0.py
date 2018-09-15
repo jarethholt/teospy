@@ -10,20 +10,22 @@ be calculated from the table, the value GSW_ERRVAL is returned.
 
 Functions:
 
-* air_molarmass: Average molar mass of humid air.
-* air_molfractionvap: Mole fraction of water vapour in humid air.
-* air_molfractiondry: Mole fraction of dry air in humid air.
-* air_massfractionvap: Mass fraction of water vapour in humid air.
-* air_massfractiondry: Mass fraction of dry air in humid air.
-* sal_molality: Molality of salt in seawater.
-* gsw_safromsp: Convert practical to absolute salinity with inputs in
-  GSW units.
-* gsw_spfromsa: Convert absolute to practical salinity with inputs in
-  GSW units.
-* sal_asalfrompsal: Convert practical to absolute salinity with inputs
-  in SI units.
-* sal_psalfromasal: Convert absolute to practical salinity with inputs
-  in SI units.
+* :func:`air_molarmass`: Average molar mass of humid air.
+* :func:`air_molfractionvap`: Mole fraction of water vapour in humid
+  air.
+* :func:`air_molfractiondry`: Mole fraction of dry air in humid air.
+* :func:`air_massfractionvap`: Mass fraction of water vapour in humid
+  air.
+* :func:`air_massfractiondry`: Mass fraction of dry air in humid air.
+* :func:`sal_molality`: Molality of salt in seawater.
+* :func:`gsw_safromsp`: Convert practical to absolute salinity with
+  inputs in GSW units.
+* :func:`gsw_spfromsa`: Convert absolute to practical salinity with
+  inputs in GSW units.
+* :func:`sal_asalfrompsal`: Convert practical to absolute salinity with
+  inputs in SI units.
+* :func:`sal_psalfromasal`: Convert absolute to practical salinity with
+  inputs in SI units.
 
 """
 

@@ -19,11 +19,11 @@ that are used to initialize iterative routines.
 
 :Functions:
 
-* chkdrybnds: Check inputs to the dry air functions.
-* chkflubnds: Check inputs to the fluid water functions.
-* chkhumbnds: Check inputs to the humid air functions.
-* chkicebnds: Check inputs to the ice functions.
-* chksalbnds: Check inputs to the seawater functions.
+* :func:`chkdrybnds`: Check inputs to the dry air functions.
+* :func:`chkflubnds`: Check inputs to the fluid water functions.
+* :func:`chkhumbnds`: Check inputs to the humid air functions.
+* :func:`chkicebnds`: Check inputs to the ice functions.
+* :func:`chksalbnds`: Check inputs to the seawater functions.
 
 """
 

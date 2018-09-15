@@ -5,9 +5,9 @@ Intro
 
 `teospy` is a pure-Python implementation of the `Thermodynamic Equation of Seawater (2010) <http://www.teos-10.org>`_, which can be found in other languages at `https://github.com/TEOS-10 <https://github.com/TEOS-10>`_. The library provides thermodynamic functions of mixtures of dry air, water vapour, liquid water, ice, and sea salt. Examples uses include calculating the density of air from its temperature and pressure, or the vapour pressure of water above seawater from its temperature, pressure, and salinity.
 
-The purpose of this pure-Python implementation is to open up the library to interactive calculations and scripting without needing to compile other languages. It also allows for limited integration with `numpy` for arrays and `scipy` for root-finding and optimization.
+The purpose of this pure-Python implementation is to open up the library to interactive calculations and scripting without needing to compile other languages. It also allows for limited integration with :mod:`numpy` for arrays and :mod:`scipy` for root-finding and optimization.
 
-This library is divided into several sub-modules. The `air`, `flu`, `ice`, and `sea` modules contain the functions pertaining to air (dry and humid), pure fluid water (liquid and vapour), pure ice, and seawater (liquid water and salt). The module `mix` contains functions for mixtures of the above components and focuses on calculating equilibrium between phases.
+This library is divided into several sub-modules. The various `air`, `flu`, `ice`, and `sea` modules contain the functions pertaining to, respectively, dry and humid air; liquid water and water vapour (fluid water collectively); pure ice; and seawater (liquid water and salt). The module `mix` contains functions for mixtures of the above components and focuses on calculating equilibrium between phases.
 
 In addition, the modules are split into several levels as follows:
 

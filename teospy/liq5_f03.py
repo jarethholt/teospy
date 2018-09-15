@@ -26,23 +26,23 @@ IAPWS 2009, table 6.
 
 :Functions:
 
-* liq_g: Liquid water Gibbs energy with derivatives.
-* cp: Liquid water isobaric heat capacity.
-* density: Liquid water density.
-* expansion: Liquid water thermal expansion coefficient.
-* kappat: Liquid water isothermal compressibility
-* soundspeed: Liquid water sound speed.
-* enthalpy: Liquid water enthalpy.
-* entropy: Liquid water entropy.
-* helmholtzenergy: Liquid water Helmholtz free energy.
-* internalenergy: Liquid water internal energy.
-* chkiapws09table6: Check module against IAPWS 2009, table 6.
+* :func:`liq_g`: Liquid water Gibbs energy with derivatives.
+* :func:`cp`: Liquid water isobaric heat capacity.
+* :func:`density`: Liquid water density.
+* :func:`expansion`: Liquid water thermal expansion coefficient.
+* :func:`kappa_t`: Liquid water isothermal compressibility
+* :func:`soundspeed`: Liquid water sound speed.
+* :func:`enthalpy`: Liquid water enthalpy.
+* :func:`entropy`: Liquid water entropy.
+* :func:`helmholtzenergy`: Liquid water Helmholtz free energy.
+* :func:`internalenergy`: Liquid water internal energy.
+* :func:`chkiapws09table6`: Check module against IAPWS 2009, table 6.
 
 """
 
 __all__ = ['liq_g',
-    'cp','density','expansion','kappat','soundspeed',
-    'enthalpy','helmholtzenergy','internalenergy','entropy',
+    'cp','density','expansion','kappa_t','soundspeed',
+    'entropy','enthalpy','helmholtzenergy','internalenergy',
     'chkiapws09table6']
 
 import constants0
@@ -78,7 +78,9 @@ _C_F03 = ((40.,1e8),
 def liq_g(drvt,drvp,temp,pres):
     """Calculate liquid water Gibbs energy using F03.
     
-    Calculate the specific Gibbs free energy of liquid water or its derivatives with respect to temperature and pressure using the Feistel (2003) polynomial formulation.
+    Calculate the specific Gibbs free energy of liquid water or its
+    derivatives with respect to temperature and pressure using the
+    Feistel (2003) polynomial formulation.
     
     :arg int drvt: Number of temperature derivatives.
     :arg int drvp: Number of pressure derivatives.
@@ -194,7 +196,7 @@ def expansion(temp,pres):
     alpha = g_tp / g_p
     return alpha
 
-def kappat(temp,pres):
+def kappa_t(temp,pres):
     """Calculate liquid water isothermal compressibility using F03.
     
     Calculate the isothermal compressibility of liquid water using the
@@ -206,7 +208,7 @@ def kappat(temp,pres):
     
     :Examples:
     
-    >>> kappat(300.,1e5)
+    >>> kappa_t(300.,1e5)
     4.50510795725e-10
     """
     g_p = liq_g(0,1,temp,pres)
@@ -254,6 +256,20 @@ def enthalpy(temp,pres):
     h = g - temp*g_t
     return h
 
+def entropy(temp,pres):
+    """Calculate liquid water entropy using F03.
+    
+    Calculate the specific entropy of liquid water using the Feistel
+    (2003) polynomial formulation.
+    
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :returns: Entropy in J/kg/K.
+    """
+    g_t = liq_g(1,0,temp,pres)
+    s = -g_t
+    return s
+
 def helmholtzenergy(temp,pres):
     """Calculate liquid water Helmholtz energy using F03.
     
@@ -284,20 +300,6 @@ def internalenergy(temp,pres):
     g_p = liq_g(0,1,temp,pres)
     u = g - temp*g_t - pres*g_p
     return u
-
-def entropy(temp,pres):
-    """Calculate liquid water entropy using F03.
-    
-    Calculate the specific entropy of liquid water using the Feistel
-    (2003) polynomial formulation.
-    
-    :arg float temp: Temperature in K.
-    :arg float pres: Pressure in Pa.
-    :returns: Entropy in J/kg/K.
-    """
-    g_t = liq_g(1,0,temp,pres)
-    s = -g_t
-    return s
 
 
 ## Check tables

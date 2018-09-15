@@ -19,9 +19,9 @@ temperature, and pressure.
 
 :Functions:
 
-* eq_atp: Calculate equilibrium quantities at dry fraction, temperature,
-    and pressure.
-* air_g: Humid air Gibbs free energy with derivatives.
+* :func:`eq_atp`: Calculate equilibrium quantities at dry fraction,
+  temperature, and pressure.
+* :func:`air_g`: Humid air Gibbs free energy with derivatives.
 
 """
 

@@ -26,27 +26,27 @@ IAPWS 1997 tables 5 and 15.
 
 :Functions:
 
-* liq_g: Liquid water Gibbs free energy with derivatives.
-* vap_g: Water vapour Gibbs free energy with derivatives.
-* liq_cp: Liquid water isobaric heat capacity.
-* liq_density: Liquid water density.
-* liq_enthalpy: Liquid water enthalpy.
-* liq_entropy: Liquid water entropy.
-* liq_internalenergy: Liquid water internal energy.
-* liq_soundspeed: Liquid water sound speed.
-* liq_volume: Liquid water specific volume.
-* vap_cp: Water vapour isobaric heat capacity.
-* vap_density: Water vapour density.
-* vap_enthalpy: Water vapour enthalpy.
-* vap_entropy: Water vapour entropy.
-* vap_internalenergy: Water vapour internal energy.
-* vap_soundspeed: Water vapour sound speed.
-* vap_volume: Water vapour specific volume.
-* chkiapws97table: Check module against IAPWS 1997.
-* chkiapws97table5: Check module against IAPWS 1997, table 5
-    (liquid water).
-* chkiapws97table15: Check module against IAPWS 1997, table 15
-    (water vapour).
+* :func:`liq_g`: Liquid water Gibbs free energy with derivatives.
+* :func:`vap_g`: Water vapour Gibbs free energy with derivatives.
+* :func:`liq_cp`: Liquid water isobaric heat capacity.
+* :func:`liq_density`: Liquid water density.
+* :func:`liq_enthalpy`: Liquid water enthalpy.
+* :func:`liq_entropy`: Liquid water entropy.
+* :func:`liq_internalenergy`: Liquid water internal energy.
+* :func:`liq_soundspeed`: Liquid water sound speed.
+* :func:`liq_volume`: Liquid water specific volume.
+* :func:`vap_cp`: Water vapour isobaric heat capacity.
+* :func:`vap_density`: Water vapour density.
+* :func:`vap_enthalpy`: Water vapour enthalpy.
+* :func:`vap_entropy`: Water vapour entropy.
+* :func:`vap_internalenergy`: Water vapour internal energy.
+* :func:`vap_soundspeed`: Water vapour sound speed.
+* :func:`vap_volume`: Water vapour specific volume.
+* :func:`chkiapws97table`: Check module against IAPWS 1997.
+* :func:`chkiapws97table5`: Check module against IAPWS 1997, table 5
+  (liquid water).
+* :func:`chkiapws97table15`: Check module against IAPWS 1997, table 15
+  (water vapour).
 
 """
 

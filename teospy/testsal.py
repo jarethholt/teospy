@@ -65,7 +65,7 @@ def gensal1():
         -3776969.31546,-15135.6522248,1.11272425476e-03,0.,0.,0.,6151235.69234,
         14157.0509933,0.,0.,0.,0.,-3734033.38866,0.,0.,0.,0.,0.]
     fnames = 'sal_g_term'
-    argfmt = '({0:1d},{1:1d},{2:1d},{3:3g},{4:3g})'
+    argfmt = '({0:1d},{1:1d},{2:1d},{3:3g},{4:5g})'
     header = 'sal1 derivatives noext'
     testsal1 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     return (testsal1,)
@@ -89,7 +89,7 @@ def gensal1e():
         -15135.6522247701,1.11272425476394e-3,0.,0.,0.,6151235.69234474,
         14157.050993291,0.,0.,0.,0.,-3734033.38866189,0.,0.,0.,0.,0.]
     fnames = 'sal_g_term'
-    argfmt = '({0:1d},{1:1d},{2:1d},{3:3g},{4:3g})'
+    argfmt = '({0:1d},{1:1d},{2:1d},{3:3g},{4:5g})'
     header = 'sal1 derivatives ext'
     fkwargs = {'useext': True}
     testsal1e = Tester(funs,fargs,refs,fnames,argfmt,header=header,
@@ -107,7 +107,7 @@ def gensal2():
         2248200.54660,790.563810558,-7.15686520588e-04,0.597842170749,
         2.85865076269e-08,4.09543164905e-14]
     fnames = 'sal_g'
-    argfmt = '({0:1d},{1:1d},{2:1d},{3:5.3f},{4:3g},{5:3g})'
+    argfmt = '({0:1d},{1:1d},{2:1d},{3:5.3f},{4:3g},{5:5g})'
     header = 'sal2 sal_g derivatives'
     testsal2_1 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     
@@ -120,7 +120,7 @@ def gensal2():
         -156107.959196,-532.458305922,-7.30285943768e-04]
     fnames = ['actcoeff','activityw','actpotential','chemcoeff','dilution',
         'liqpot','osmcoeff','salpot','saltenthalpy','saltentropy','saltvolume']
-    argfmt = '({0:5.3f},{1:3g},{2:3g})'
+    argfmt = '({0:5.3f},{1:3g},{2:5g})'
     header = 'sal2 functions'
     testsal2_2 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     
@@ -128,7 +128,7 @@ def gensal2():
     fargs = (0.01,0.035,0.6,300.,1e6)
     refs = [16.1539911284,0.966829422617,-5.94174956892e-08]
     fnames = ['mixenthalpy','mixentropy','mixvolume']
-    argfmt = '({0:4.2f},{1:5.3f},{2:3.1f},{3:3g},{4:3g})'
+    argfmt = '({0:4.2f},{1:5.3f},{2:3.1f},{3:3g},{4:5g})'
     header = 'sal2 mix functions'
     testsal2_3 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     return (testsal2_1,testsal2_2,testsal2_3)

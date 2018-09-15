@@ -42,7 +42,12 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
+    'sphinx.ext.intersphinx'
 ]
+intersphinx_mapping = {
+    'numpy': ('http://docs.scipy.org/doc/numpy', None),
+    'scipy': ('https://docs.scipy.org/doc/scipy/reference',None)
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -99,6 +104,9 @@ html_static_path = ['_static']
 # 'searchbox.html']``.
 #
 # html_sidebars = {}
+
+# Remove trailing parentheses from function links
+add_function_parentheses = False
 
 
 # -- Options for HTMLHelp output ---------------------------------------------

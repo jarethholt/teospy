@@ -15,10 +15,10 @@ This module implements the Helmholtz free energy of dry air and its derivatives 
 
 :Functions:
 
-* dry_f: Dry air Helmholtz free energy with derivatives.
-* air_baw: Air-water virial coefficient with derivatives.
-* air_caaw: Air-air-water virial coefficient with derivatives.
-* air_caww: Air-water-water virial coefficient with derivatives.
+* :func:`dry_f`: Dry air Helmholtz free energy with derivatives.
+* :func:`air_baw`: Air-water virial coefficient with derivatives.
+* :func:`air_caaw`: Air-air-water virial coefficient with derivatives.
+* :func:`air_caww`: Air-water-water virial coefficient with derivatives.
 
 """
 
