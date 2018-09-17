@@ -2,13 +2,14 @@
 
 This module implements the coefficients of the power expansion of the
 Gibbs free energy of salt in seawater and its derivatives with respect
-to salinity, temperature, and pressure. The total contribution of
-salinity to the Gibbs free energy of seawater is
+to salinity, temperature, and pressure. The number of terms in the
+expansion is provided by this module as `NSALTERMS`.
 
-    gi[i] = sal_g_term(i,T,P)
-    g(S,T,p) = gt[1]*S*log(S) + sum_{i=2}^{NSALTERMS} gi[i]*S^(i/2)
-
-where NSALTERMS(=7) is a constant also provided by this module.
+There are two sets of coefficients used in this module, `_GSCOEFFS` and
+`_GSCOEFFS_EXT`. The `_EXT` version is an extension to the high-
+temperature, high-salinity regime. Any function involving sea salt
+supports the `useext` keyword. If True, the coefficients for the
+extension are used. The default is False.
 
 :Functions:
 
@@ -180,12 +181,8 @@ def _poly_gtp(term,drvt,drvp,temp,pres,useext=False):
 def sal_g_term(term,drvt,drvp,temp,pres,chkbnd=False,useext=False):
     """Calculate a salt Gibbs free energy term.
     
-    Calculate a term in the Gibbs free energy of salt in seawater. The
-    total contribution of salinity to the Gibbs free energy of seawater
-    is
-    
-        gi[i] = sal_g_term(i,T,P)
-        g(S,T,p) = gi[1]*S*log(S) + sum_{i=2}^{NSALTERMS} gi[i]*S^(i/2)
+    Calculate a term in the expansion of the Gibbs free energy of salt
+    in seawater in terms of salinity.
     
     :arg int term: Number of the term in the salinity expansion to
         calculate, between 1 and NSALTERMS.

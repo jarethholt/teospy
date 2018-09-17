@@ -17,6 +17,7 @@ Welcome to teospy's documentation!
    ice
    sal
    sea
+   mix
    tester
 
 

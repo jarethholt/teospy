@@ -7,10 +7,10 @@ The `sea` modules provide thermodynamic properties of seawater by combining the 
 
 The basic contents of the modules are as follows:
 
-* `sea3a` provides the Gibbs free energy of seawater and related properties, using salinity, temperature, and pressure as primary variables.
-* `sea3b` provides the enthalpy of seawater from salinity, entropy, and pressure. It also provides adiabatic ascent functions (e.g. potential temperature) and the related expansion and contraction coefficients defined with respect to potential temperature and potential enthalpy.
-* `sea3c` provides the same functions as `sea3b`, but based on the seawater entropy with salinity, enthalpy, and pressure as primary variables.
-* `sea3d` provides only one function, for calculating salinity from in-situ temperature, pressure, and density.
+* :mod:`sea3a` provides the Gibbs free energy of seawater and related properties, using salinity, temperature, and pressure as primary variables.
+* :mod:`sea3b` provides the enthalpy of seawater from salinity, entropy, and pressure. It also provides adiabatic ascent functions (e.g. potential temperature) and the related expansion and contraction coefficients defined with respect to potential temperature and potential enthalpy.
+* :mod:`sea3c` provides the same functions as `sea3b`, but based on the seawater entropy with salinity, enthalpy, and pressure as primary variables.
+* :mod:`sea3d` provides only one function, for calculating salinity from in-situ temperature, pressure, and density.
 
 
 `sea3a`

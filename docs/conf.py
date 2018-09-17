@@ -42,7 +42,8 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
-    'sphinx.ext.intersphinx'
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.imgmath'
 ]
 intersphinx_mapping = {
     'numpy': ('http://docs.scipy.org/doc/numpy', None),
