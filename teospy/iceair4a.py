@@ -33,27 +33,40 @@ and ice.
 
 :Functions:
 
-* :func:`eq_atpe`: Calculate icy air equilibrium properties at any two of dry fraction, temperature, and pressure, or at dry fraction and entropy.
-* :func:`massfractionair`: Dry air mass fraction in humid air at ice-air equilibrium.
+* :func:`eq_atpe`: Calculate icy air equilibrium properties at any two
+  of dry fraction, temperature, and pressure, or at dry fraction and
+  entropy.
+* :func:`massfractionair`: Dry air mass fraction in humid air at ice-air
+  equilibrium.
 * :func:`temperature`: Temperature at ice-air equilibrium.
 * :func:`pressure`: Pressure at ice-air equilibrium.
 * :func:`densityair`: Humid air density at ice-air equilibrium.
 * :func:`densityvap`: Water vapour density at ice-air equilibrium.
 * :func:`densityice`: Ice density at ice-air equilibrium.
 * :func:`enthalpysubl`: Enthalpy of sublimation.
-* :func:`condensationpressure`: Pressure at which ice will condense out of humid air.
-* :func:`sublimationpressure`: Partial pressure of water vapour at the condensation pressure.
-* :func:`eq_icl`: Calculate icy air equilibrium properties at the isentropic condensation level from in-situ values.
+* :func:`condensationpressure`: Pressure at which ice will condense out
+  of humid air.
+* :func:`sublimationpressure`: Partial pressure of water vapour at the
+  condensation pressure.
+* :func:`eq_icl`: Calculate icy air equilibrium properties at the
+  isentropic condensation level from in-situ values.
 * :func:`icl`: Isentropic condensation (sublimation) pressure.
 * :func:`ict`: Isentropic condensation (sublimation) temperature.
-* :func:`airffromrh_wmo`: Calculate dry air fraction from relative humidity (WMO definition).
-* :func:`rhfromairf_wmo`: Calculate relative humidity (WMO definition) from dry air fraction.
-* :func:`airffromrh_cct`: Calculate dry air fraction from relative humidity (IUPAC/CCT definition).
-* :func:`rhfromairf_cct`: Calculate relative humidity (IUPAC/CCT definition) from dry air fraction.
+* :func:`airffromrh_wmo`: Calculate dry air fraction from relative
+  humidity (WMO definition).
+* :func:`rhfromairf_wmo`: Calculate relative humidity (WMO definition)
+  from dry air fraction.
+* :func:`airffromrh_cct`: Calculate dry air fraction from relative
+  humidity (IUPAC/CCT definition).
+* :func:`rhfromairf_cct`: Calculate relative humidity (IUPAC/CCT
+  definition) from dry air fraction.
 
 """
 
-__all__ = ['eq_atpe','massfractionair','temperature','pressure','densityair','densityvap','densityice','enthalpysubl','condensationpressure','sublimationpressure','eq_icl','icl','ict','airffromrh_wmo','rhfromairf_wmo','airffromrh_cct','rhfromairf_cct']
+__all__ = ['eq_atpe','massfractionair','temperature','pressure','densityair',
+    'densityvap','densityice','enthalpysubl','condensationpressure',
+    'sublimationpressure','eq_icl','icl','ict','airffromrh_wmo',
+    'rhfromairf_wmo','airffromrh_cct','rhfromairf_cct']
 
 import warnings
 import numpy
@@ -162,7 +175,7 @@ def _approx_ae(airf,entr):
     ceff = airf*_CDRY + (1-airf)*_CVAP
     reff = airf*_RDRY + (1-airf)*_RWAT
     gam = ceff/reff
-    s0 = airf*_CDRY*numpy.log(_TTP/_TCELS) - airf*_RDRY*numpy.log(_PTPE/PATM)
+    s0 = airf*_CDRY*numpy.log(_TTP/_TCELS) - airf*_RDRY*numpy.log(_PTPE/_PATM)
     s0 += (1-airf)*_LLVTP/_TTP - airf*_RDRY*numpy.log(_EPSW*airf/(1-airf))
     r = (_AVI-gam)/(gam+_BVI)
     v = (s0 - entr)/(gam+_BVI)/reff
@@ -403,12 +416,12 @@ def eq_atpe(airf=None,temp=None,pres=None,entr=None,dhum=None,
             x1 = _newton(_diff_ap,x0,_approx_ap,fargs=fargs,**mathargs)
             temp, dhum = x1
         else:
-            x0 = (pres0,dhum0)
-            fargs = (airf,temp)
+            x0 = (airf0,dhum0)
+            fargs = (temp,pres)
             if mathargs is None:
                 mathargs = dict()
-            x1 = _newton(_diff_at,x0,_approx_at,fargs=fargs,**mathargs)
-            pres, dhum = x1
+            x1 = _newton(_diff_tp,x0,_approx_tp,fargs=fargs,**mathargs)
+            airf, dhum = x1
     
     _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     _chkicebnds(temp,pres,chkbnd=chkbnd)
@@ -1047,7 +1060,7 @@ def sublimationpressure(temp,pres,airf=None,dhum=None,chkvals=False,
 
 
 ## Condensation level functions
-def _approx_icl(airf,temp,pres):
+def _approx_icl(airf,temp,pres,dhum):
     """Approximate TPDh2 at ATP1.
     
     Approximate the temperature, pressure, and humid air density at the
@@ -1057,6 +1070,7 @@ def _approx_icl(airf,temp,pres):
     :arg float airf: Dry air mass fraction in kg/kg.
     :arg float temp: Temperature in K.
     :arg float pres: Pressure in Pa.
+    :arg float dhum: Humid air density in kg/m3 (unused).
     :returns: ICL temperature, pressure, and humid air density (all in
         SI units).
     """
@@ -1064,12 +1078,12 @@ def _approx_icl(airf,temp,pres):
     ceff = airf*_CDRY + (1-airf)*_CVAP
     ginv = ceff/reff
     r = (_AVI+_BVI)/(_BVI+ginv) - 1
-    v = (numpy.log((1-airf)/(_EPSW*airf+1-airf)*pres/PATM)
+    v = (numpy.log((1-airf)/(_EPSW*airf+1-airf)*pres/_PATM)
         + ginv*numpy.log(_TTP/temp)) / (_BVI+ginv)
     x = maths4.lamb2(v,r)
     ticl = _TTP/x
-    picl = pres * (ticl/temp)**gieff
-    dhicl = pres/(_RDRY*temp) / (airf + (1-airf)/_EPSW)
+    picl = pres * (ticl/temp)**ginv
+    dhicl = picl/(_RDRY*ticl) / (airf + (1-airf)/_EPSW)
     return ticl, picl, dhicl
 
 def _diff_icl(t2,p2,dh2,airf,temp,pres,dhum):
@@ -1331,152 +1345,159 @@ def ict(airf,temp,pres,dhum=None,ticl=None,picl=None,dhicl=None,
 
 
 ## Relative humidity functions
-def ice_air_airffromrh_wmo(rh_wmo,temp,pres,asat=None,dhsat=None,chkvals=False,
+def airffromrh_wmo(rh_wmo,temp,pres,asat=None,dhsat=None,chkvals=False,
     chktol=_CHKTOL,asat0=None,dhsat0=None,chkbnd=False,mathargs=None):
-    """Calculate air fraction from WMO relative humidity.
+    """Calculate dry fraction from WMO RH.
     
     Calculate the dry air mass fraction from the relative humidity. The
     relative humidity used here is defined by the WMO as:
-        rh_wmo = (1-A)/A / ((1-A_sat/A_sat)).
+        rh_wmo = [(1-airf)/airf] / [(1-asat)/asat]
+    where asat is the dry air fraction at saturation.
     
-    Args:
-        rh_wmo (float): Relative humidity, unitless.
-        temp (float): Temperature in K.
-        pres (float): Pressure in Pa.
-        asat (float or None, optional): Dry air mass fraction at saturation in
-            kg/kg. If unknown, pass None (default) and it will be calculated.
-        dhsat (float or None, optional): Humid air density at saturation in
-            kg/m3. If unknown, pass None (default) and it will be calculated.
-        chkvals (boolean, optional): If True (default) and results are given,
-            warnings will be raised if the results are out of equilibrium.
-        chktol (float, optional): Relative tolerance to use for raising warnings
-            when results are given (default 1e-8).
-        asat0 (float or None, optional): Initial guess for the dry air mass
-            fraction at saturation in kg/kg. If None (default) then approx_tp is
-            used.
-        dhsat0 (float or None, optional): Initial guess for the humid air
-            density at saturation in kg/m3. If None (default) then approx_tp is
-            used.
-        chkbnd (boolean, optional): If True (default), warnings are raised when
-            the given values are valid but outside the recommended bounds.
-        mathargs (dict or None, optional): Keyword arguments to pass to the
-            root-finder _newton (e.g. maxiter, rtol). If None (default), no
-            arguments are passed and all parameters will be default.
+    :arg float rh_wmo: Relative humidity, unitless.
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg asat: Saturation dry air mass fraction in kg/kg. If unknown,
+        pass None (default) and it will be calculated.
+    :type asat: float or None
+    :arg dhsat: Saturation humid air density in kg/m3. If unknown, pass
+        None (default) and it will be calculated.
+    :type dhsat: float or None
+    :arg bool chkvals: If True (default False) and all values are given,
+        this function will calculate the disequilibrium and raise a
+        warning if the results are not within a given tolerance.
+    :arg float chktol: Tolerance to use when checking values (default
+        _CHKTOL).
+    :arg asat0: Initial guess for the saturation dry air mass fraction
+        in kg/kg. If None (default) then `_approx_tp` is used.
+    :type asat0: float or None
+    :arg dhsat0: Initial guess for the saturation humid air density in
+        kg/m3. If None (default) then `_approx_tp` is used.
+    :type dhsat0: float or None
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg mathargs: Keyword arguments to the root-finder
+        :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
+        (default) then no arguments are passed and default parameters
+        will be used.
+    :returns: In-situ dry air mass fraction in kg/kg.
+    :raises RuntimeWarning: If the relative disequilibrium is more than
+        chktol, if chkvals is True and all values are given.
     
-    Returns:
-        airf (float): Dry air mass fraction in kg/kg.
-    
-    Examples:
-        >>> ice_air_airffromrh_wmo(0.8,270.,1e5)
-        0.997645698908
+    :Examples:
+        
+    >>> airffromrh_wmo(0.8,270.,1e5)
+    0.997645698908
     """
-    
-    res = ice_air_massfraction_air(airf=asat,temp=temp,pres=pres,dhum=dhsat,
+    asat = massfractionair(temp=temp,pres=pres,airf=asat,dhum=dhsat,
         chkvals=chkvals,chktol=chktol,airf0=asat0,dhum0=dhsat0,chkbnd=chkbnd,
         mathargs=mathargs)
-    if asat is None:
-        asat = res
     airf = asat / (rh_wmo*(1-asat) + asat)
     return airf
 
-def ice_air_rhfromairf_wmo(airf,temp,pres,asat=None,dhsat=None,chkvals=False,
+def rhfromairf_wmo(airf,temp,pres,asat=None,dhsat=None,chkvals=False,
     chktol=_CHKTOL,asat0=None,dhsat0=None,chkbnd=False,mathargs=None):
-    """Calculate WMO relative humidity from air fraction.
+    """Calculate WMO RH from dry fraction.
     
     Calculate the relative humidity from the dry air mass fraction. The
     relative humidity used here is defined by the WMO as:
-        rh_wmo = (1-A)/A / ((1-A_sat/A_sat)).
+        rh_wmo = [(1-airf)/airf] /[(1-asat)/asat].
     
-    Args:
-        airf (float): Dry air mass fraction in kg/kg.
-        temp (float): Temperature in K.
-        pres (float): Pressure in Pa.
-        asat (float or None, optional): Dry air mass fraction at saturation in
-            kg/kg. If unknown, pass None (default) and it will be calculated.
-        dhsat (float or None, optional): Humid air density at saturation in
-            kg/m3. If unknown, pass None (default) and it will be calculated.
-        chkvals (boolean, optional): If True (default) and results are given,
-            warnings will be raised if the results are out of equilibrium.
-        chktol (float, optional): Relative tolerance to use for raising warnings
-            when results are given (default 1e-8).
-        asat0 (float or None, optional): Initial guess for the dry air mass
-            fraction at saturation in kg/kg. If None (default) then approx_tp is
-            used.
-        dhsat0 (float or None, optional): Initial guess for the humid air
-            density at saturation in kg/m3. If None (default) then approx_tp is
-            used.
-        chkbnd (boolean, optional): If True (default), warnings are raised when
-            the given values are valid but outside the recommended bounds.
-        mathargs (dict or None, optional): Keyword arguments to pass to the
-            root-finder _newton (e.g. maxiter, rtol). If None (default), no
-            arguments are passed and all parameters will be default.
+    :arg float airf: Dry air mass fraction in kg/kg.
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg asat: Saturation dry air mass fraction in kg/kg. If unknown,
+        pass None (default) and it will be calculated.
+    :type asat: float or None
+    :arg dhsat: Saturation humid air density in kg/m3. If unknown, pass
+        None (default) and it will be calculated.
+    :type dhsat: float or None
+    :arg bool chkvals: If True (default False) and all values are given,
+        this function will calculate the disequilibrium and raise a
+        warning if the results are not within a given tolerance.
+    :arg float chktol: Tolerance to use when checking values (default
+        _CHKTOL).
+    :arg asat0: Initial guess for the saturation dry air mass fraction
+        in kg/kg. If None (default) then `_approx_tp` is used.
+    :type asat0: float or None
+    :arg dhsat0: Initial guess for the saturation humid air density in
+        kg/m3. If None (default) then `_approx_tp` is used.
+    :type dhsat0: float or None
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg mathargs: Keyword arguments to the root-finder
+        :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
+        (default) then no arguments are passed and default parameters
+        will be used.
+    :returns: Relative humidity, unitless.
+    :raises RuntimeWarning: If the relative disequilibrium is more than
+        chktol, if chkvals is True and all values are given.
     
-    Returns:
-        rh_wmo (float): Relative humidity, unitless.
+    :Examples:
     
-    Examples:
-        >>> ice_air_rhfromairf_wmo(0.998,270.,1e5)
-        0.679365943331
+    >>> rhfromairf_wmo(0.998,270.,1e5)
+    0.679365943331
     """
-    
-    res = ice_air_massfraction_air(airf=asat,temp=temp,pres=pres,dhum=dhsat,
+    asat = massfractionair(temp=temp,pres=pres,airf=asat,dhum=dhsat,
         chkvals=chkvals,chktol=chktol,airf0=asat0,dhum0=dhsat0,chkbnd=chkbnd,
         mathargs=mathargs)
-    if asat is None:
-        asat = res
     rh_wmo = (1-airf) * asat / ((1-asat) * airf)
     return rh_wmo
 
-def ice_air_airffromrh_cct(rh_cct,temp,pres,asat=None,dhsat=None,chkvals=False,
+def airffromrh_cct(rh_cct,temp,pres,asat=None,dhsat=None,chkvals=False,
     chktol=_CHKTOL,asat0=None,dhsat0=None,chkbnd=False,mathargs=None):
-    """Calculate CCT relative humidity from air fraction.
+    """Calculate CCT RH from air fraction.
     
     Calculate the relative humidity from the dry air mass fraction. The
     relative humidity used here is defined by the CCT/IUPAC as:
         rh_cct = vapour mol fraction / saturation vapour mol fraction.
     
-    Args:
-        rh_cct (float): Relative humidity, unitless.
-        temp (float): Temperature in K.
-        pres (float): Pressure in Pa.
-        asat (float or None, optional): Dry air mass fraction at saturation in
-            kg/kg. If unknown, pass None (default) and it will be calculated.
-        dhsat (float or None, optional): Humid air density at saturation in
-            kg/m3. If unknown, pass None (default) and it will be calculated.
-        chkvals (boolean, optional): If True (default) and results are given,
-            warnings will be raised if the results are out of equilibrium.
-        chktol (float, optional): Relative tolerance to use for raising warnings
-            when results are given (default 1e-8).
-        asat0 (float or None, optional): Initial guess for the dry air mass
-            fraction at saturation in kg/kg. If None (default) then approx_tp is
-            used.
-        dhsat0 (float or None, optional): Initial guess for the humid air
-            density at saturation in kg/m3. If None (default) then approx_tp is
-            used.
-        chkbnd (boolean, optional): If True (default), warnings are raised when
-            the given values are valid but outside the recommended bounds.
-        mathargs (dict or None, optional): Keyword arguments to pass to the
-            root-finder _newton (e.g. maxiter, rtol). If None (default), no
-            arguments are passed and all parameters will be default.
+    :arg float rh_cct: Relative humidity, unitless.
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg asat: Saturation dry air mass fraction in kg/kg. If unknown,
+        pass None (default) and it will be calculated.
+    :type asat: float or None
+    :arg dhsat: Saturation humid air density in kg/m3. If unknown, pass
+        None (default) and it will be calculated.
+    :type dhsat: float or None
+    :arg bool chkvals: If True (default False) and all values are given,
+        this function will calculate the disequilibrium and raise a
+        warning if the results are not within a given tolerance.
+    :arg float chktol: Tolerance to use when checking values (default
+        _CHKTOL).
+    :arg asat0: Initial guess for the saturation dry air mass fraction
+        in kg/kg. If None (default) then `_approx_tp` is used.
+    :type asat0: float or None
+    :arg dhsat0: Initial guess for the saturation humid air density in
+        kg/m3. If None (default) then `_approx_tp` is used.
+    :type dhsat0: float or None
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg mathargs: Keyword arguments to the root-finder
+        :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
+        (default) then no arguments are passed and default parameters
+        will be used.
+    :returns: In-situ dry air mass fraction in kg/kg.
+    :raises RuntimeWarning: If the relative disequilibrium is more than
+        chktol, if chkvals is True and all values are given.
     
-    Returns:
-        airf (float): Dry air mass fraction in kg/kg.
+    :Examples:
     
-    Examples:
-        >>> ice_air_airffromrh_cct(0.8,270.,1e5)
-        0.997647924743
+    >>> airffromrh_cct(0.8,270.,1e5)
+    0.997647924743
     """
-    
-    res = ice_air_massfraction_air(airf=asat,temp=temp,pres=pres,dhum=dhsat,
+    asat = massfractionair(temp=temp,pres=pres,airf=asat,dhum=dhsat,
         chkvals=chkvals,chktol=chktol,airf0=asat0,dhum0=dhsat0,chkbnd=chkbnd,
         mathargs=mathargs)
-    if asat is None:
-        asat = res
     xsat = convert0.air_molfractionvap(asat)
     airf = convert0.air_massfractiondry(1 - rh_cct*xsat)
     return airf
 
-def ice_air_rhfromairf_cct(airf,temp,pres,asat=None,dhsat=None,chkvals=False,
+def rhfromairf_cct(airf,temp,pres,asat=None,dhsat=None,chkvals=False,
     chktol=_CHKTOL,asat0=None,dhsat0=None,chkbnd=False,mathargs=None):
     """Calculate air fraction from CCT relative humidity.
     
@@ -1484,45 +1505,46 @@ def ice_air_rhfromairf_cct(airf,temp,pres,asat=None,dhsat=None,chkvals=False,
     relative humidity used here is defined by the CCT/IUPAC as:
         rh_cct = vapour mol fraction / saturation vapour mol fraction.
     
-    Args:
-        airf (float): Dry air mass fraction in kg/kg.
-        temp (float): Temperature in K.
-        pres (float): Pressure in Pa.
-        asat (float or None, optional): Dry air mass fraction at saturation in
-            kg/kg. If unknown, pass None (default) and it will be calculated.
-        dhsat (float or None, optional): Humid air density at saturation in
-            kg/m3. If unknown, pass None (default) and it will be calculated.
-        chkvals (boolean, optional): If True (default) and results are given,
-            warnings will be raised if the results are out of equilibrium.
-        chktol (float, optional): Relative tolerance to use for raising warnings
-            when results are given (default 1e-8).
-        asat0 (float or None, optional): Initial guess for the dry air mass
-            fraction at saturation in kg/kg. If None (default) then approx_tp is
-            used.
-        dhsat0 (float or None, optional): Initial guess for the humid air
-            density at saturation in kg/m3. If None (default) then approx_tp is
-            used.
-        chkbnd (boolean, optional): If True (default), warnings are raised when
-            the given values are valid but outside the recommended bounds.
-        mathargs (dict or None, optional): Keyword arguments to pass to the
-            root-finder _newton (e.g. maxiter, rtol). If None (default), no
-            arguments are passed and all parameters will be default.
+    :arg float airf: Dry air mass fraction in kg/kg.
+    :arg float temp: Temperature in K.
+    :arg float pres: Pressure in Pa.
+    :arg asat: Saturation dry air mass fraction in kg/kg. If unknown,
+        pass None (default) and it will be calculated.
+    :type asat: float or None
+    :arg dhsat: Saturation humid air density in kg/m3. If unknown, pass
+        None (default) and it will be calculated.
+    :type dhsat: float or None
+    :arg bool chkvals: If True (default False) and all values are given,
+        this function will calculate the disequilibrium and raise a
+        warning if the results are not within a given tolerance.
+    :arg float chktol: Tolerance to use when checking values (default
+        _CHKTOL).
+    :arg asat0: Initial guess for the saturation dry air mass fraction
+        in kg/kg. If None (default) then `_approx_tp` is used.
+    :type asat0: float or None
+    :arg dhsat0: Initial guess for the saturation humid air density in
+        kg/m3. If None (default) then `_approx_tp` is used.
+    :type dhsat0: float or None
+    :arg bool chkbnd: If True then warnings are raised when the given
+        values are valid but outside the recommended bounds (default
+        False).
+    :arg mathargs: Keyword arguments to the root-finder
+        :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
+        (default) then no arguments are passed and default parameters
+        will be used.
+    :returns: Relative humidity, unitless.
+    :raises RuntimeWarning: If the relative disequilibrium is more than
+        chktol, if chkvals is True and all values are given.
     
-    Returns:
-        rh_cct (float): Relative humidity, unitless.
+    :Examples:
     
-    Examples:
-        >>> ice_air_rhfromairf_cct(0.998,270.,1e5)
-        0.680395740553
+    >>> rhfromairf_cct(0.998,270.,1e5)
+    0.680395740553
     """
-    
-    res = ice_air_massfraction_air(airf=asat,temp=temp,pres=pres,dhum=dhsat,
+    asat = massfractionair(temp=temp,pres=pres,airf=asat,dhum=dhsat,
         chkvals=chkvals,chktol=chktol,airf0=asat0,dhum0=dhsat0,chkbnd=chkbnd,
         mathargs=mathargs)
-    if asat is None:
-        asat = res
     rh_cct = convert0.air_molfractionvap(airf)
     rh_cct /= convert0.air_molfractionvap(asat)
     return rh_cct
-
 

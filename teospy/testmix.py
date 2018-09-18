@@ -20,10 +20,11 @@ summary.
 * :mod:`liqvap4`
 * :mod:`iceliq4`
 * :mod:`icevap4`
+* :mod:`iceair4a`
 
 """
 
-__all__ = ['genliqvap4','geniceliq4','genicevap4']
+__all__ = ['genliqvap4','geniceliq4','genicevap4','geniceair4a']
 from tester import Tester
 _DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
     (0,2,0),(0,1,1),(0,0,2))
@@ -177,173 +178,126 @@ def genicevap4():
         eqkeys=eqkeys)
     return (test_t, test_p)
 
-
-
-
-
-
-### Dictionaries of reference values
 def geniceair4a():
     """Generate iceair4a Testers.
     """
-    CHK_IA4A_1 = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'temp': 270., 'pres': 1e5},
-        'geteqvals': ice_air_4a.geteqvals_atp,
-        'eqkws': ('airf','temp','pres','entr','dhum'),
-        'funs': (ice_air_4a.ice_air_massfraction_air,
-            ice_air_4a.ice_air_enthalpy_subl,ice_air_4a.ice_air_density_air,
-            ice_air_4a.ice_air_density_vap,ice_air_4a.ice_air_density_ice),
-        'names': ('massfraction_air','enthalpy_subl','density_air','density_vap',
-            'density_ice'),
-        'refs': (0.997058854720,2833359.27614,1.28880078014,3.79055033080e-3,
-            917.181167192)}
-
-    CHK_IA4A_1_ALT = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'temp': 270., 'pres': 1e5},
-        'geteqvals': ice_air_4a.geteqvals_atp,
-        'eqkws': ('airf','temp','pres','entr','dhum'),
-        'funs': (ice_air_4a.ice_air_massfraction_air,
-            ice_air_4a.ice_air_enthalpy_subl,ice_air_4a.ice_air_density_air,
-            ice_air_4a.ice_air_density_vap,ice_air_4a.ice_air_density_ice),
-        'names': ('massfraction_air','enthalpy_subl','density_air','density_vap',
-            'density_ice'),
-        'refs': (0.997058854720,2833397.471581049,1.28880078014,3.79055033080e-3,
-            917.181167192)}
-
-    CHK_IA4A_2 = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'airf': 0.997, 'temp': 270.},
-        'geteqvals': ice_air_4a.geteqvals_atp,
-        'eqkws': ('airf','temp','pres','entr','dhum'),
-        'funs': (ice_air_4a.ice_air_pressure,ice_air_4a.ice_air_enthalpy_subl,
-            ice_air_4a.ice_air_density_air,ice_air_4a.ice_air_density_vap,
-            ice_air_4a.ice_air_density_ice),
-        'names': ('pressure','enthalpy_subl','density_air','density_vap',
-            'density_ice'),
-        'refs': (98034.4511233,2833386.54980,1.26340801028,3.79022403085e-3,
-            917.180955861)}
-
-    CHK_IA4A_2_ALT = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'airf': 0.997, 'temp': 270.},
-        'geteqvals': ice_air_4a.geteqvals_atp,
-        'eqkws': ('airf','temp','pres','entr','dhum'),
-        'funs': (ice_air_4a.ice_air_pressure,ice_air_4a.ice_air_enthalpy_subl,
-            ice_air_4a.ice_air_density_air,ice_air_4a.ice_air_density_vap,
-            ice_air_4a.ice_air_density_ice),
-        'names': ('pressure','enthalpy_subl','density_air','density_vap',
-            'density_ice'),
-        'refs': (98034.4511233,2833421.4055958856,1.26340801028,3.79022403085e-3,
-            917.180955861)}
-
-    CHK_IA4A_3 = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'airf': 0.997, 'pres': 1e5},
-        'geteqvals': ice_air_4a.geteqvals_atp,
-        'eqkws': ('airf','temp','pres','entr','dhum'),
-        'funs': (ice_air_4a.ice_air_temperature,ice_air_4a.ice_air_enthalpy_subl,
-            ice_air_4a.ice_air_density_air,ice_air_4a.ice_air_density_vap,
-            ice_air_4a.ice_air_density_ice),
-        'names': ('temperature','enthalpy_subl','density_air','density_vap',
-            'density_ice'),
-        'refs': (270.232024746,2833296.51317,1.28763121402,3.86289364206e-3,
-            917.147060527)}
-
-    CHK_IA4A_3_ALT = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'airf': 0.997, 'pres': 1e5},
-        'geteqvals': ice_air_4a.geteqvals_atp,
-        'eqkws': ('airf','temp','pres','entr','dhum'),
-        'funs': (ice_air_4a.ice_air_temperature,ice_air_4a.ice_air_enthalpy_subl,
-            ice_air_4a.ice_air_density_air,ice_air_4a.ice_air_density_vap,
-            ice_air_4a.ice_air_density_ice),
-        'names': ('temperature','enthalpy_subl','density_air','density_vap',
-            'density_ice'),
-        'refs': (270.23481612550177,2833334.552629217,1.28763121402,
-            3.86289364206e-3,917.147060527)}
-
-    CHK_IA4A_4 = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'airf': 0.997, 'entr': 100.},
-        'geteqvals': ice_air_4a.geteqvals_atp,
-        'eqkws': ('airf','temp','pres','entr','dhum'),
-        'funs': (ice_air_4a.ice_air_enthalpy_subl,ice_air_4a.ice_air_density_air,
-            ice_air_4a.ice_air_density_vap,ice_air_4a.ice_air_pressure,
-            ice_air_4a.ice_air_temperature,ice_air_4a.ice_air_density_ice),
-        'names': ('enthalpy_subl','density_air','density_vap','pressure',
-            'temperature','density_ice'),
-        'refs': (2834612.42351,0.949325026119,2.84797507836e-3,72721.4579415,
-            266.514349350,917.681749114)}
-
-    CHK_IA4A_4_ALT = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'airf': 0.997, 'entr': 100.},
-        'geteqvals': ice_air_4a.geteqvals_atp,
-        'eqkws': ('airf','temp','pres','entr','dhum'),
-        'funs': (ice_air_4a.ice_air_enthalpy_subl,ice_air_4a.ice_air_density_air,
-            ice_air_4a.ice_air_density_vap,ice_air_4a.ice_air_pressure,
-            ice_air_4a.ice_air_temperature,ice_air_4a.ice_air_density_ice),
-        'names': ('enthalpy_subl','density_air','density_vap','pressure',
-            'temperature','density_ice'),
-        'refs': (2834605.615243472,0.949325026119,2.84797507836e-3,72721.4579415,
-            266.514349350,917.681749114)}
-
-    CHK_IA4A_5 = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (0.997,1e5),
-        'funs': (ice_air_4a.ice_air_frostpoint,),
-        'names': ('frostpoint',),
-        'refs': (270.234816126,)}
-
-    CHK_IA4A_6 = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (270.,1e5),
-        'funs': (ice_air_4a.ice_air_sublimationpressure,),
-        'names': ('sublimationpressure',),
-        'refs': (472.041823975,)}
-
-    CHK_IA4A_7 = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (0.997,270.),
-        'funs': (ice_air_4a.ice_air_condensationpressure,),
-        'names': ('condensationpressure',),
-        'refs': (98034.4511233,)}
-
-    CHK_IA4A_8 = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (0.997,300.,1e5),
-        'geteqvals': ice_air_4a.geteqvals_icl,
-        'eqkws': ('dhum','ticl','picl','dhicl'),
-        'funs': (ice_air_4a.ice_air_ict,ice_air_4a.ice_air_icl),
-        'names': ('ict','icl'),
-        'refs': (265.224998411,64988.3931838)}
-
-    CHK_IA4A_9 = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (0.998,270.,1e5),
-        'funs': (ice_air_4a.ice_air_rhfromairf_cct,
-            ice_air_4a.ice_air_rhfromairf_wmo),
-        'names': ('rhfromairf_cct','rhfromairf_wmo'),
-        'refs': (0.680395740553,0.679365943331)}
-
-    CHK_IA4A_10 = {'modname': 'ice_air_4a',
-        'type': 'fun',
-        'args': (0.8,270.,1e5),
-        'funs': (ice_air_4a.ice_air_airffromrh_wmo,
-            ice_air_4a.ice_air_airffromrh_cct),
-        'names': ('airffromrh_wmo','airffromrh_cct'),
-        'refs': (0.997645698908,0.997647924743)}
-    return None
+    import iceair4a
+    funs = [iceair4a.massfractionair,iceair4a.enthalpysubl,iceair4a.densityair,
+        iceair4a.densityvap,iceair4a.densityice]
+    fargs = tuple()
+    fkwargs = {'temp': 270., 'pres': 1e5}
+    refs = [0.997058854720,2833397.471581049,1.28880078014,3.79055033080e-3,
+        917.181167192]
+    refs_alt = [None,2833359.27614,None,None,None]
+    fnames = ['massfractionair','enthalpysubl','densityair','densityvap',
+        'densityice']
+    argfmt = '({0:s}={1:3g},{2:s}={3:6g})'
+    header = 'Icy air at temp and pres'
+    eqfun = iceair4a.eq_atpe
+    eqargs = fargs
+    eqkwargs = fkwargs
+    eqkeys = ['airf','temp','pres','dhum']
+    test_tp = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=eqargs,eqkwargs=eqkwargs,
+        eqkeys=eqkeys,refs_alt=refs_alt)
+    
+    funs = [iceair4a.pressure,iceair4a.enthalpysubl,iceair4a.densityair,
+        iceair4a.densityvap,iceair4a.densityice]
+    fkwargs = {'airf': 0.997, 'temp': 270.}
+    refs = [98034.4511233,2833421.4055958856,1.26340801028,3.79022403085e-3,
+        917.180955861]
+    refs_alt = [None,2833386.54980,None,None,None]
+    fnames = ['pressure','enthalpysubl','densityair','densityvap','densityice']
+    argfmt = '({0:s}={1:5.3f},{2:s}={3:3g})'
+    header = 'Icy air at airf and temp'
+    eqkwargs = fkwargs
+    test_at = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=eqargs,eqkwargs=eqkwargs,
+        eqkeys=eqkeys,refs_alt=refs_alt)
+    
+    funs = [iceair4a.temperature,iceair4a.enthalpysubl,iceair4a.densityair,
+        iceair4a.densityvap,iceair4a.densityice]
+    fkwargs = {'airf': 0.997, 'pres': 1e5}
+    refs = [270.23481612550177,2833334.552629217,1.28763121402,3.86289364206e-3,
+        917.147060527]
+    refs_alt = [270.232024746,2833296.51317,None,None,None]
+    fnames = ['temperature','enthalpysubl','densityair','densityvap',
+        'densityice']
+    argfmt = '({0:s}={1:5.3f},{2:s}={3:6g})'
+    header = 'Icy air at airf and temp'
+    eqkwargs = fkwargs
+    test_ap = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=eqargs,eqkwargs=eqkwargs,
+        eqkeys=eqkeys,refs_alt=refs_alt)
+    
+    funs = [iceair4a.enthalpysubl,iceair4a.densityair,iceair4a.densityvap,
+        iceair4a.pressure,iceair4a.temperature,iceair4a.densityice]
+    fkwargs = {'airf': 0.997, 'entr': 100.}
+    refs = [2834605.615243472,0.949325026119,2.84797507836e-3,72721.4579415,
+        266.514349350,917.681749114]
+    refs_alt = [2834612.42351,None,None,None,None,None]
+    fnames = ['enthalpysubl','densityair','densityvap','pressure','temperature',
+        'densityice']
+    argfmt = '({0:s}={1:5.3f},{2:s}={3:3g})'
+    header = 'Icy air at airf and entr'
+    eqkwargs = fkwargs
+    test_ae = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=eqargs,eqkwargs=eqkwargs,
+        eqkeys=eqkeys,refs_alt=refs_alt)
+    
+    funs = iceair4a.frostpoint
+    fargs = (0.997,1e5)
+    refs = 270.234816126
+    fnames = 'frostpoint'
+    argfmt = '({0:5.3f},{1:6g})'
+    header = 'Frost point'
+    test_fp = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = iceair4a.sublimationpressure
+    fargs = (270.,1e5)
+    refs = 472.041823975
+    fnames = 'sublimationpressure'
+    argfmt = '({0:3g},{1:6g})'
+    header = 'Sublimation pressure'
+    test_sp = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = iceair4a.condensationpressure
+    fargs = (0.997,270.)
+    refs = 98034.4511233
+    fnames = 'condensationpressure'
+    argfmt = '({0:5.3f},{1:3g})'
+    header = 'Condensation pressure'
+    test_cp = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = [iceair4a.ict,iceair4a.icl]
+    fargs = (0.997,300.,1e5)
+    refs = [265.224998411,64988.3931838]
+    fnames = ['ict','icl']
+    argfmt = '({0:5.3f},{1:3g},{2:6g})'
+    header = 'ICL functions'
+    eqfun = iceair4a.eq_icl
+    eqargs = fargs
+    eqkeys = ['dhum','ticl','picl','dhicl']
+    test_icl = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
+    
+    funs = [iceair4a.rhfromairf_cct,iceair4a.rhfromairf_wmo]
+    fargs = (0.998,270.,1e5)
+    refs = [0.680395740553,0.679365943331]
+    fnames = ['rhfromairf_cct','rhfromairf_wmo']
+    argfmt = '({0:5.3f},{1:3g},{2:6g})'
+    header = 'RH from airf'
+    test_rh1 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = [iceair4a.airffromrh_cct,iceair4a.airffromrh_wmo]
+    fargs = (0.8,270.,1e5)
+    refs = [0.997647924743,0.997645698908]
+    fnames = ['airffromrh_cct','airffromrh_wmo']
+    argfmt = '({0:3.1f},{1:3g},{2:6g})'
+    header = 'airf from RH'
+    test_rh2 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    return (test_tp,test_at,test_ap,test_ae,test_fp,test_sp,test_cp,test_icl,
+        test_rh1,test_rh2)
 
 def geniceair4b():
     """Generate iceair4b Testers.
@@ -1237,7 +1191,8 @@ def genseavap4():
 
 
 ## Dictionary relating modules to functions
-_GENDICT = {'liqvap4': genliqvap4, 'iceliq4': geniceliq4, 'icevap4': genicevap4}
+_GENDICT = {'liqvap4': genliqvap4, 'iceliq4': geniceliq4, 'icevap4': genicevap4,
+    'iceair4a': geniceair4a}
 
 
 ## See if all values fall within the given tolerances

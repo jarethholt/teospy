@@ -90,6 +90,10 @@ class Tester(object):
         Used by modules level 3 and higher. Use None (default) for
         lower-level modules.
     :type eqkeys: list[str] or None
+    :arg refs_alt: Alternative reference values for the functions, if
+        any (default None). These are used to keep track of older
+        reference values before new results are vetted.
+    :type refs_alt: list[float or None] or None
     :raises RuntimeWarning: If the shape of the reference values does
         not match the shape of the functions and arguments lists.
     
@@ -117,7 +121,8 @@ class Tester(object):
     """
     
     def __init__(self,funs,fargs,refs,fnames,argfmt,header=None,
-        fkwargs=None,eqfun=None,eqargs=None,eqkwargs=None,eqkeys=None):
+        fkwargs=None,eqfun=None,eqargs=None,eqkwargs=None,eqkeys=None,
+        refs_alt=None):
         if isinstance(funs,list):
             self.funs = funs
             nfun = len(funs)
@@ -143,6 +148,15 @@ class Tester(object):
         self.refs = refsarr
         self.results = None
         self.errs = None
+        
+        # Include alternative reference values
+        if refs_alt is not None:
+            altrefsarr = numpy.atleast_2d(numpy.array(refs_alt,dtype=float))
+            if (narg == 1 and nfun > 1):
+                altrefsarr = altrefsarr.T
+            cond = numpy.isnan(altrefsarr)
+            altrefsarr[cond] = refsarr[cond]
+            self.refs_alt = altrefsarr
         
         # Check that the shape of fnames matches funs
         if nfun == 1:
