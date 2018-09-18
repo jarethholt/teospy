@@ -205,17 +205,13 @@ def eq_shp(salt,pres,enth=None,temp=None,dliq=None,chkvals=False,
         if enth is None:
             errmsg = 'One of enth or temp must be provided'
             raise ValueError(errmsg)
-        vals1 = (temp0,dliq0)
-        vals2 = (temp0,dliq0)
-        if any(val1 is None for val1 in vals1):
-            vals2 = _approx_shp(salt,enth,pres)
-        x0 = numpy.array([val2 if val1 is None else val1
-            for (val1,val2) in zip(vals1,vals2)])
+        x0 = (temp0,dliq0)
         fargs = (salt,enth,pres)
         fkwargs = {'useext': useext}
         if mathargs is None:
             mathargs = dict()
-        x1 = _newton(_diff_shp,x0,fargs=fargs,fkwargs=fkwargs,**mathargs)
+        x1 = _newton(_diff_shp,x0,_approx_shp,fargs=fargs,fkwargs=fkwargs,
+            **mathargs)
         temp, dliq = x1
     else:
         if dliq is None:

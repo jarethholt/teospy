@@ -229,28 +229,18 @@ def eq_tp(temp=None,pres=None,dvap=None,chkvals=False,chktol=_CHKTOL,
         raise ValueError(errmsg)
     if temp is not None:
         if any(val is None for val in (pres,dvap)):
-            vals1 = (pres0,dvap0)
-            vals2 = (pres0,dvap0)
-            if any(val1 is None for val1 in vals1):
-                vals2 = _approx_t(temp)
-            x0 = numpy.array([val2 if val1 is None else val1
-                for (val1,val2) in zip(vals1,vals2)])
+            x0 = (pres0,dvap0)
             fargs = (temp,)
             if mathargs is None:
                 mathargs = dict()
-            x1 = _newton(_diff_t,x0,fargs=fargs,**mathargs)
+            x1 = _newton(_diff_t,x0,_approx_t,fargs=fargs,**mathargs)
             pres, dvap = x1
     else:
-        vals1 = (temp0,dvap0)
-        vals2 = (temp0,dvap0)
-        if any(val1 is None for val1 in vals1):
-            vals2 = _approx_p(pres)
-        x0 = numpy.array([val2 if val1 is None else val1
-            for (val1,val2) in zip(vals1,vals2)])
+        x0 = (temp0,dvap0)
         fargs = (pres,)
         if mathargs is None:
             mathargs = dict()
-        x1 = _newton(_diff_p,x0,fargs=fargs,**mathargs)
+        x1 = _newton(_diff_p,x0,_approx_p,fargs=fargs,**mathargs)
         temp, dvap = x1
     
     _chkflubnds(temp,dvap,chkbnd=chkbnd)

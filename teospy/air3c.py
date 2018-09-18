@@ -171,16 +171,11 @@ def eq_aep(airf,entr,pres,temp=None,dhum=None,chkvals=False,
         chktol, if chkvals is True and all values are given.
     """
     if any(val is None for val in (temp,dhum)):
-        vals1 = (temp0,dhum0)
-        vals2 = (temp0,dhum0)
-        if any(val is None for val in vals1):
-            vals2 = _approx_aep(airf,entr,pres)
-        x0 = numpy.array([val2 if val1 is None else val1
-            for (val1,val2) in zip(vals1,vals2)])
+        x0 = (temp0,dhum0)
         fargs = (airf,entr,pres)
         if mathargs is None:
             mathargs = dict()
-        x1 = _newton(_diff_aep,x0,fargs=fargs,**mathargs)
+        x1 = _newton(_diff_aep,x0,_approx_aep,fargs=fargs,**mathargs)
         temp, dhum = x1
     
     _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
@@ -382,16 +377,11 @@ def eq_pot(airf,temp,pres,ppot,dhum=None,tpot=None,dpot=None,
     
     entr = air3b.entropy(airf,temp,pres,dhum=dhum,chkvals=False)
     if any(val is None for val in (tpot,dpot)):
-        vals1 = (tpot0,dpot0)
-        vals2 = (tpot0,dpot0)
-        if any(val is None for val in vals1):
-            vals2 = _approx_aep(airf,entr,ppot)
-        x0 = numpy.array([val2 if val1 is None else val1
-            for (val1,val2) in zip(vals1,vals2)])
+        x0 = (tpot0,dpot0)
         fargs = (airf,entr,ppot)
         if mathargs is None:
             mathargs = dict()
-        x1 = _newton(_diff_aep,x0,fargs=fargs,**mathargs)
+        x1 = _newton(_diff_aep,x0,_approx_aep,fargs=fargs,**mathargs)
         tpot, dpot = [val2 if val1 is None else val1
             for (val1,val2) in zip((tpot,dpot),x1)]
     _chkhumbnds(airf,tpot,dpot,chkbnd=chkbnd)

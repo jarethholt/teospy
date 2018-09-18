@@ -135,17 +135,13 @@ def eq_tpd(temp,pres,dsea,salt=None,dliq=None,chkvals=False,
         chktol, if chkvals is True and all values are given.
     """
     if any(val is None for val in (salt,dliq)):
-        vals1 = (salt0,dliq0)
-        vals2 = (salt0,dliq0)
-        if any(val1 is None for val1 in vals1):
-            vals2 = _approx_tpd(temp,pres,dsea)
-        x0 = numpy.array([val2 if val1 is None else val1
-            for (val1,val2) in zip(vals1,vals2)])
+        x0 = (salt0,dliq0)
         fargs = (temp,pres,dsea)
         fkwargs = {'useext': useext}
         if mathargs is None:
             mathargs = dict()
-        x1 = _newton(_diff_tpd,x0,fargs=fargs,fkwargs=fkwargs,**mathargs)
+        x1 = _newton(_diff_tpd,x0,_approx_tpd,fargs=fargs,fkwargs=fkwargs,
+            **mathargs)
         salt, dliq = x1
     
     _chkflubnds(temp,dliq,chkbnd=chkbnd)

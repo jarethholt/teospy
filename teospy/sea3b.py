@@ -191,17 +191,13 @@ def eq_sep(salt,entr,pres,temp=None,dliq=None,chkvals=False,
         chktol, if chkvals is True and all values are given.
     """
     if any(val is None for val in (temp,dliq)):
-        vals1 = (temp0,dliq0)
-        vals2 = (temp0,dliq0)
-        if any(val1 is None for val1 in vals1):
-            vals2 = _approx_sep(salt,entr,pres)
-        x0 = numpy.array([val2 if val1 is None else val1
-            for (val1,val2) in zip(vals1,vals2)])
+        x0 = (temp0,dliq0)
         fargs = (salt,entr,pres)
         fkwargs = {'useext': useext}
         if mathargs is None:
             mathargs = dict()
-        x1 = _newton(_diff_sep,x0,fargs=fargs,fkwargs=fkwargs,**mathargs)
+        x1 = _newton(_diff_sep,x0,_approx_sep,fargs=fargs,fkwargs=fkwargs,
+            **mathargs)
         temp, dliq = x1
     
     _chkflubnds(temp,dliq,chkbnd=chkbnd)
@@ -587,10 +583,8 @@ def eq_pot(salt,pres,ppot,entr=None,temp=None,dliq=None,tpot=None,
         if entr is None:
             errmsg = 'One of entr or temp must be provided'
             raise ValueError(errmsg)
-        res = eq_sep(salt,entr,pres,temp0=temp0,dliq0=dliq0,chkbnd=chkbnd,
-            useext=useext,mathargs=mathargs)
-        temp, dliq = [val2 if val1 is None else val1
-            for (val1,val2) in zip((temp,dliq),res)]
+        temp, dliq = eq_sep(salt,entr,pres,temp0=temp0,dliq0=dliq0,
+            chkbnd=chkbnd,useext=useext,mathargs=mathargs)
     else:
         if dliq is None:
             dliq = flu3a.eq_tp_liq(temp,pres,dliq0=dliq0,chkbnd=chkbnd,
@@ -599,10 +593,8 @@ def eq_pot(salt,pres,ppot,entr=None,temp=None,dliq=None,tpot=None,
             entr = sea3a.entropy(salt,temp,pres,dliq=dliq)
     
     if any(val is None for val in (tpot,dlpot)):
-        res = eq_sep(salt,entr,ppot,temp0=tpot0,dliq0=dlpot0,chkbnd=chkbnd,
-            useext=useext,mathargs=mathargs)
-        tpot, dlpot = [val2 if val1 is None else val1
-            for (val1,val2) in zip((tpot,dlpot),res)]
+        tpot, dlpot = eq_sep(salt,entr,ppot,temp0=tpot0,dliq0=dlpot0,
+            chkbnd=chkbnd,useext=useext,mathargs=mathargs)
     
     if not chkvals:
         return entr, temp, dliq, tpot, dlpot

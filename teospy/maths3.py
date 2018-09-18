@@ -37,6 +37,7 @@ returning and raising a warning.
 
 __all__ = ['RTOL','MAXITER','newton']
 
+import copy
 import warnings
 import numpy
 
@@ -102,8 +103,9 @@ def _fmttol(tols,n,stacklevel=2):
 
 
 ### Main iteration routine
-def newton(fun,x0,fargs=None,fkwargs=None,maxiter=MAXITER,rxtol=RXTOL,
-    axtol=None,rytol=RYTOL,aytol=None,gamma=0.,stacklevel=2):
+def newton(fun,x0,x0fun,fargs=None,fkwargs=None,maxiter=MAXITER,
+    rxtol=RXTOL,axtol=None,rytol=RYTOL,aytol=None,gamma=0.,
+    stacklevel=2):
     """Equate two functions using Newton iteration.
     
     Equate two functions using Newton iteration. Functionally equivalent
@@ -117,14 +119,17 @@ def newton(fun,x0,fargs=None,fkwargs=None,maxiter=MAXITER,rxtol=RXTOL,
     component of a multi-variable function. To bypass checking a
     tolerance, use None or numpy.inf.
     
-    :arg fun: A function with the format
+    :arg function fun: A function with the format
         `(lhs, rhs, dlhs, drhs) = fun(\\*(x+fargs),\\*\\*fkwargs)` where
         (lhs,rhs) at the two quantities to be equated; x contains the
         primary variables to be calculated; and (dlhs,drhs) are the
         Jacobians of the two quantities with respect to x.
-    :type fun: function
-    :arg x0: Initial guess for the values of the primary variables.
-    :type x0: float or iterable(float)
+    :arg x0: Initial guess for the values of the primary variables. If
+        any are None, then x0fun will be used to calculate them.
+    :type x0: float or None or iterable(float or None)
+    :arg function x0fun: Function used to calculate initial values if
+        any are missing. Must accept fargs as input and return exactly
+        the number of primary variables in x0.
     :arg fargs: Values of the secondary variables, which will be held
         constant while solving. If no secondary variables are present,
         use None (default).
@@ -188,15 +193,23 @@ def newton(fun,x0,fargs=None,fkwargs=None,maxiter=MAXITER,rxtol=RXTOL,
     >>> print(rhs/lhs-1)  # Relative error
     2.220446049250313e-16
     """
-    # For no iterations, return initial guess
+    if x0 is None or isinstance(x0,float):
+        vals1 = (x0,)
+    else:
+        vals1 = copy.copy(x0)
+    vals2 = tuple(None for val1 in vals1)
+    if any(val1 is None for val1 in vals1):
+        vals2 = x0fun(*fargs)
+        if isinstance(vals2,(float,numpy.ndarray)):
+            vals2 = (vals2,)
+    x0_np = numpy.array([val2 if val1 is None else val1
+        for (val1,val2) in zip(vals1,vals2)]).flatten()
+    x1 = numpy.copy(x0_np)
     if maxiter <= 0:
         warnmsg = 'Maxiter {0} is <= 0; no iteration was done'.format(maxiter)
         warnings.warn(warnmsg,RuntimeWarning,stacklevel=stacklevel)
-        x1 = x0
         return x1
     
-    # Reformat initial guess, fargs/fkwargs, and tolerances
-    x1 = numpy.atleast_1d(x0)
     nx = x1.size
     if fargs is None:
         fargs = tuple()
@@ -207,7 +220,6 @@ def newton(fun,x0,fargs=None,fkwargs=None,maxiter=MAXITER,rxtol=RXTOL,
     rytol_np = _fmttol(rytol,nx)
     aytol_np = _fmttol(aytol,nx)
     
-    # Main iteration loop
     for it in range(maxiter):
         # Calculate function and its derivatives
         allargs = x1.tolist() + list(fargs)
@@ -290,7 +302,7 @@ def newton(fun,x0,fargs=None,fkwargs=None,maxiter=MAXITER,rxtol=RXTOL,
         warnings.warn(warnmsg,RuntimeWarning,stacklevel=stacklevel)
     
     # Reformat the result to match the input type
-    if isinstance(x0,float):
+    if x0 is None or isinstance(x0,float):
         x1 = float(x1)
     elif isinstance(x0,list):
         x1 = x1.tolist()

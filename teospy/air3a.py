@@ -129,14 +129,10 @@ def eq_atp(airf,temp,pres,dhum=None,chkvals=False,chktol=_CHKTOL,
     1.09708772444
     """
     if dhum is None:
-        if dhum0 is None:
-            x0 = _approx_atp(airf,temp,pres)
-        else:
-            x0 = dhum0
         fargs = (airf,temp,pres)
         if mathargs is None:
             mathargs = dict()
-        dhum = _newton(_diff_atp,x0,fargs=fargs,**mathargs)
+        dhum = _newton(_diff_atp,dhum0,_approx_atp,fargs=fargs,**mathargs)
     
     _chkhumbnds(airf,temp,dhum,chkbnd=chkbnd)
     if not chkvals:

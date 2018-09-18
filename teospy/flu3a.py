@@ -544,26 +544,24 @@ def eq_tp_liq(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     """
     if dliq is None:
         if dliq0 is None:
-            dliq0 = _dliq_default(temp,pres)
+            dliq0fun = _dliq_default
         elif isinstance(dliq0,str):
             if dliq0 in _LIQMETHODS.keys():
-                fun = _LIQMETHODS[dliq0]
+                dliq0fun = _LIQMETHODS[dliq0]
             elif dliq0 in _VAPMETHODS.keys():
                 warnmsg = ('Method {0} is in _VAPMETHODS and is intended for '
                     'water vapour calculations').format(dliq0)
                 warnings.warn(warnmsg,UserWarning)
-                fun = _VAPMETHODS[dliq0]
+                dliq0fun = _VAPMETHODS[dliq0]
             else:
                 warnmsg = ('Method {0} is not recognized; the default '
                     'approximation will be used instead').format(dliq0)
                 warnings.warn(warnmsg,RuntimeWarning)
-                fun = _LIQMETHODS['default']
-            dliq0 = fun(temp,pres)
-    
+                dliq0fun = _LIQMETHODS['default']
         fargs = (temp,pres)
         if mathargs is None:
             mathargs = dict()
-        dliq = _newton(_diff_tp,dliq0,fargs=fargs,**mathargs)
+        dliq = _newton(_diff_tp,dliq0,dliq0fun,fargs=fargs,**mathargs)
     
     # Avoid accidental vapour density
     _chkflubnds(temp,dliq,chkbnd=chkbnd)
@@ -632,26 +630,24 @@ def eq_tp_vap(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     """
     if dvap is None:
         if dvap0 is None:
-            dvap0 = _dvap_default(temp,pres)
+            dvap0fun = _dvap_default
         elif isinstance(dvap0,str):
             if dvap0 in _VAPMETHODS.keys():
-                fun = _VAPMETHODS[dvap0]
+                dvap0fun = _VAPMETHODS[dvap0]
             elif dvap0 in _LIQMETHODS.keys():
                 warnmsg = ('Method {0} is in _LIQMETHODS and is intended for '
                     'liquid water calculations').format(dvap0)
                 warnings.warn(warnmsg,UserWarning)
-                fun = _LIQMETHODS[dvap0]
+                dvap0fun = _LIQMETHODS[dvap0]
             else:
                 warnmsg = ('Method {0} is not recognized; the default '
                     'approximation will be used instead').format(dvap0)
                 warnings.warn(warnmsg,RuntimeWarning)
-                fun = _VAPMETHODS['default']
-            dvap0 = fun(temp,pres)
-        
+                dvap0fun = _VAPMETHODS['default']
         fargs = (temp,pres)
         if mathargs is None:
             mathargs = dict()
-        dvap = _newton(_diff_tp,dvap0,fargs=fargs,**mathargs)
+        dvap = _newton(_diff_tp,dvap0,dvap0fun,fargs=fargs,**mathargs)
     
     # Avoid accidental liquid density
     _chkflubnds(temp,dvap,chkbnd=chkbnd)
