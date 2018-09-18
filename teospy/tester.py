@@ -90,6 +90,9 @@ class Tester(object):
         Used by modules level 3 and higher. Use None (default) for
         lower-level modules.
     :type eqkeys: list[str] or None
+    :arg keepkeys: Names of keyword arguments to actually pass on to
+        other functions. Use None (default) to pass on all keys.
+    :type keepkeys: list[str] or None
     :arg refs_alt: Alternative reference values for the functions, if
         any (default None). These are used to keep track of older
         reference values before new results are vetted.
@@ -122,7 +125,7 @@ class Tester(object):
     
     def __init__(self,funs,fargs,refs,fnames,argfmt,header=None,
         fkwargs=None,eqfun=None,eqargs=None,eqkwargs=None,eqkeys=None,
-        refs_alt=None):
+        keepkeys=None,refs_alt=None):
         if isinstance(funs,list):
             self.funs = funs
             nfun = len(funs)
@@ -179,6 +182,7 @@ class Tester(object):
         self.eqargs = eqargs
         self.eqkwargs = eqkwargs
         self.eqkeys = eqkeys
+        self.keepkeys = keepkeys
         return None
     
     def run(self,zerotol=_ZEROTOL):
@@ -198,7 +202,12 @@ class Tester(object):
             eqvals = self.eqfun(*self.eqargs,**eqkwargs)
             if isinstance(eqvals,float):
                 eqvals = (eqvals,)
-            eqdict = {key: val for (key,val) in zip(self.eqkeys,eqvals)}
+            if self.keepkeys is None:
+                keep = self.eqkeys
+            else:
+                keep = self.keepkeys
+            eqdict = {key: val for (key,val) in zip(self.eqkeys,eqvals)
+                if key in keep}
             self.eqdict = eqdict
         kwargs.update(eqdict)
         
