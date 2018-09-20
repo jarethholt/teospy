@@ -24,6 +24,32 @@ The basic contents of the modules are as follows:
     :members: eq_tp, temperature, pressure, densityliq, chempot, densityice, enthalpyice, enthalpyliq, enthalpymelt, entropyice, entropyliq, entropymelt, volumemelt
 
 
+`icevap4`
+---------
+
+.. automodule:: icevap4
+    :members: eq_tp, temperature, pressure, densityvap, chempot, densityice, enthalpyice, enthalpyvap, entropyice, entropyvap, volumesubl, entropysubl, enthalpysubl
+
+
+`iceair4a`
+----------
+
+.. automodule:: iceair4a
+    :members: eq_atpe, massfractionair, temperature, pressure, densityair, densityvap, densityice, enthalpysubl, condensationpressure, sublimationpressure, eq_icl, icl, ict, airffromrh_wmo, rhfromairf_wmo, airffromrh_cct, rhfromairf_cct
+
+
+`iceair4b`
+----------
+
+.. automodule:: iceair4b
+    :members: iceair_g, cp, density, enthalpy, entropy, expansion, kappa_t, lapserate, solidfraction, vapourfraction
+
+
+`iceair4c`
+----------
+
+.. automodule:: iceair4c
+    :members: eq_wpte, iceair_h, cp, density, kappa_s, lapserate, temperature, eq_pot, potdensity, potenthalpy, pottemp
 
 
 

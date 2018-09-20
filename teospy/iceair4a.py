@@ -1351,7 +1351,9 @@ def airffromrh_wmo(rh_wmo,temp,pres,asat=None,dhsat=None,chkvals=False,
     
     Calculate the dry air mass fraction from the relative humidity. The
     relative humidity used here is defined by the WMO as:
+    
         rh_wmo = [(1-airf)/airf] / [(1-asat)/asat]
+    
     where asat is the dry air fraction at saturation.
     
     :arg float rh_wmo: Relative humidity, unitless.
@@ -1402,6 +1404,7 @@ def rhfromairf_wmo(airf,temp,pres,asat=None,dhsat=None,chkvals=False,
     
     Calculate the relative humidity from the dry air mass fraction. The
     relative humidity used here is defined by the WMO as:
+    
         rh_wmo = [(1-airf)/airf] /[(1-asat)/asat].
     
     :arg float airf: Dry air mass fraction in kg/kg.
@@ -1452,6 +1455,7 @@ def airffromrh_cct(rh_cct,temp,pres,asat=None,dhsat=None,chkvals=False,
     
     Calculate the relative humidity from the dry air mass fraction. The
     relative humidity used here is defined by the CCT/IUPAC as:
+    
         rh_cct = vapour mol fraction / saturation vapour mol fraction.
     
     :arg float rh_cct: Relative humidity, unitless.
@@ -1503,6 +1507,7 @@ def rhfromairf_cct(airf,temp,pres,asat=None,dhsat=None,chkvals=False,
     
     Calculate the dry air mass fraction from the relative humidity. The
     relative humidity used here is defined by the CCT/IUPAC as:
+    
         rh_cct = vapour mol fraction / saturation vapour mol fraction.
     
     :arg float airf: Dry air mass fraction in kg/kg.

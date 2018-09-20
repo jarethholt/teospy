@@ -22,10 +22,12 @@ summary.
 * :mod:`icevap4`
 * :mod:`iceair4a`
 * :mod:`iceair4b`
+* :mod:`iceair4c`
 
 """
 
-__all__ = ['genliqvap4','geniceliq4','genicevap4','geniceair4a','geniceair4b']
+__all__ = ['genliqvap4','geniceliq4','genicevap4','geniceair4a','geniceair4b',
+    'geniceair4c']
 from tester import Tester
 _DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
     (0,2,0),(0,1,1),(0,0,2))
@@ -345,69 +347,56 @@ def geniceair4b():
 def geniceair4c():
     """Generate iceair4c Testers.
     """
-    CHK_IA4C_1 = {'modname': 'ice_air_4c',
-        'type': 'der',
-        'args': (0.5,1e5),
-        'kwargs': {'entr': -600.},
-        'geteqvals': ice_air_4c.geteqvals_wep,
-        'eqkws': ('entr','airf','temp','dhum'),
-        'funs': ice_air_4c.ice_air_h,
-        'names': 'ice_air_h',
-        'ders': DERS3,
-        'refs': (-164588.106002,543.016638396,271.449994437,0.391981878510,
-            224958.525864,-177.457078495,0.781782661019,0.139985868894,
-            2.26912930199e-4,-3.56976697603e-6)}
-
-    CHK_IA4C_1_ALT = {'modname': 'ice_air_4c',
-        'type': 'der',
-        'args': (0.5,1e5),
-        'kwargs': {'entr': -600.},
-        'geteqvals': ice_air_4c.geteqvals_wep,
-        'eqkws': ('entr','airf','temp','dhum'),
-        'funs': ice_air_4c.ice_air_h,
-        'names': 'ice_air_h',
-        'ders': DERS3,
-        'refs': (-164588.10601652123,543.0166476377772,271.44999442990206,
-            0.3919818784985212,224806.0619232994,-177.336808300561,
-            0.4942223281964142,0.13989099452736128,0.00022684010853205218,
-            -3.5698228708362018e-6)}
-
-    CHK_IA4C_2 = {'modname': 'ice_air_4c',
-        'type': 'fun',
-        'args': (0.9,1e5),
-        'kwargs': {'entr': -100.},
-        'geteqvals': ice_air_4c.geteqvals_wep,
-        'eqkws': ('entr','airf','temp','dhum'),
-        'funs': (ice_air_4c.ice_air_h_temperature,ice_air_4c.ice_air_h_lapserate,
-            ice_air_4c.ice_air_h_cp,ice_air_4c.ice_air_h_kappa_s,
-            ice_air_4c.ice_air_h_density),
-        'names': ('temperature','lapserate','cp','kappa_s','density'),
-        'refs': (270.383680119,4.42457786755e-4,1766.52051488,8.23031581047e-6,
-            1.42531895993)}
-
-    CHK_IA4C_2_ALT = {'modname': 'ice_air_4c',
-        'type': 'fun',
-        'args': (0.9,1e5),
-        'kwargs': {'entr': -100.},
-        'geteqvals': ice_air_4c.geteqvals_wep,
-        'eqkws': ('entr','airf','temp','dhum'),
-        'funs': (ice_air_4c.ice_air_h_temperature,ice_air_4c.ice_air_h_lapserate,
-            ice_air_4c.ice_air_h_cp,ice_air_4c.ice_air_h_kappa_s,
-            ice_air_4c.ice_air_h_density),
-        'names': ('temperature','lapserate','cp','kappa_s','density'),
-        'refs': (270.3836801325995,0.00044209256818978005,1768.514396747884,
-            8.23141751514431e-6,1.4253189598569878)}
-
-    CHK_IA4C_3 = {'modname': 'ice_air_4c',
-        'type': 'fun',
-        'args': (0.9,230.,5e4,1e5),
-        'geteqvals': ice_air_4c.geteqvals_pot,
-        'eqkws': ('airf','dhum','apot','tpot','dpot'),
-        'funs': (ice_air_4c.ice_air_pottemp,ice_air_4c.ice_air_potdensity,
-            ice_air_4c.ice_air_potenthalpy),
-        'names': ('pottemp','potdensity','potenthalpy'),
-        'refs': (266.105208871,1.45048110422,-35781.2564451)}
-    return None
+    import iceair4c
+    funs = iceair4c.iceair_h
+    args1 = (0.5,1e5)
+    fargs = [(der+args1) for der in _DERS3]
+    fkwargs = {'entr': -600.}
+    refs = [-164588.106002,543.0166476377772,271.449994437,0.391981878510,
+        224806.0619232994,-177.336808300561,0.4942223281964142,
+        0.13989099452736128,0.00022684010853205218,-3.5698228708362018e-6]
+    refs_alt = [None,543.016638396,None,None,224958.525864,-177.457078495,
+        0.781782661019,0.139985868894,2.26912930199e-4,-3.56976697603e-6]
+    fnames = 'iceair_h'
+    argfmt = '({0:1d},{1:1d},{2:1d},{3:3g},{4:6g},{5:s}={6:4g})'
+    header = 'Icy air enthalpy derivatives'
+    eqfun = iceair4c.eq_wpte
+    eqargs = args1
+    eqkwargs = fkwargs
+    eqkeys = ['airf','temp','dhum']
+    test_der = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=eqargs,eqkwargs=eqkwargs,
+        eqkeys=eqkeys,refs_alt=refs_alt)
+    
+    funs = [iceair4c.temperature,iceair4c.lapserate,iceair4c.cp,
+        iceair4c.kappa_s,iceair4c.density]
+    fargs = (0.9,1e5)
+    fkwargs = {'entr': -100.}
+    refs = [270.3836801325995,0.00044209256818978005,1768.514396747884,
+        8.23141751514431e-6,1.4253189598569878]
+    refs_alt = [270.383680119,4.42457786755e-4,1766.52051488,8.23031581047e-6,
+        1.42531895993]
+    fnames = ['temperature','lapserate','cp','kappa_s','density']
+    argfmt = '({0:3g},{1:6g},{2:s}={3:4g})'
+    header = 'Icy air enthalpy functions'
+    eqargs = fargs
+    eqkwargs = fkwargs
+    test_fun = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=eqargs,eqkwargs=eqkwargs,
+        eqkeys=eqkeys,refs_alt=refs_alt)
+    
+    funs = [iceair4c.pottemp,iceair4c.potdensity,iceair4c.potenthalpy]
+    fargs = (0.9,230.,5e4,1e5)
+    refs = [266.105208871,1.45048110422,-35781.2564451]
+    fnames = ['pottemp','potdensity','potenthalpy']
+    argfmt = '({0:3g},{1:3g},{2:5g},{3:6g})'
+    header = 'Icy air potential functions'
+    eqfun = iceair4c.eq_pot
+    eqargs = fargs
+    eqkeys = ['airf','dhum','apot','tpot','dhpot']
+    test_pot = Tester(funs,fargs,refs,fnames,argfmt,header=header,eqfun=eqfun,
+        eqargs=eqargs,eqkeys=eqkeys)
+    return (test_der, test_fun, test_pot)
 
 def genliqair4a():
     """Generate liqair4a Testers.
@@ -1175,7 +1164,7 @@ def genseavap4():
 
 ## Dictionary relating modules to functions
 _GENDICT = {'liqvap4': genliqvap4, 'iceliq4': geniceliq4, 'icevap4': genicevap4,
-    'iceair4a': geniceair4a, 'iceair4b': geniceair4b}
+    'iceair4a': geniceair4a, 'iceair4b': geniceair4b, 'iceair4c': geniceair4c}
 
 
 ## See if all values fall within the given tolerances

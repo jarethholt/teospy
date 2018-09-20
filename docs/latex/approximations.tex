@@ -1,0 +1,282 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[left=1in,right=1in,bottom=.5in,top=.5in]{geometry}
+
+\hypersetup
+{
+  pdftitle   = {Approximation derivations},
+  pdfauthor  = {Jareth Holt}
+}
+
+\newcommand{\gas}{\text{gas}}
+\newcommand{\liq}{\text{liq}}
+\newcommand{\sol}{\text{sol}}
+\newcommand{\vap}{\text{vap}}
+\newcommand{\dry}{\text{dry}}
+\newcommand{\ice}{\text{ice}}
+\newcommand{\tp}{\text{tp}}
+\newcommand{\epsw}{\epsilon_w}
+
+\title{Approximation derivations}
+\author{Jareth Holt}
+
+\begin{document}
+
+\maketitle
+
+This document exists to describe and derive the various approximations I made in \texttt{teospy} for creating initial guesses for the root-finding methods. It is mostly personal, as a way to remember how and why the functions take the form they do.
+
+
+\section{General formulas}
+
+
+\subsection{Idealized Gibbs free energy}
+
+The way I approximated most phase equilibria was to take the heat capacities as constant. The latent heats between two phases are then linear in temperature. Combined with the ideal gas law, the specific Gibbs free energy of a gas is then
+\begin{equation*}
+    g_{\gas}(T,p_{\gas}) = c_{p,\gas} (T - T_0 - T \ln(T/T_0)) - \frac{L_{\gas}}{T_0} (T - T_0) + R_* T \ln(p_{\gas}/p_0)
+\end{equation*}
+where $c_p$ is the isobaric heat capacity, $R_*$ is the specific gas constant, $L$ is the latent heat (if there is a condensed phase), and $(T_0,p_0)$ specify a reference state for the gas. The pressure here is the partial pressure of that gas. For gas mixtures, we assume Dalton's law of partial pressures, so that $p_{\gas} = x_{\gas} p$ where $p$ is the total pressure and $x$ is the mole fraction of that gas across all gas components. It is often convenient to then split this contribution into
+\begin{equation*}
+    g_{\gas}(x,T,p) = c_{p,\gas} (T - T_0 - T \ln(T/T_0)) - \frac{L_{\gas}}{T_0} (T - T_0) + R_* T \ln(p/p_0) + R_* T \ln(x).
+\end{equation*}
+
+For the liquid and solid states, we can start by assuming they are incompressible. This gives the functions
+\begin{gather*}
+    g_{\liq}(T,p) = c_{\liq} (T - T_0 - T \ln(T/T_0)) + p v_{\liq} \\
+    g_{\sol}(T,p) = c_{\sol} (T - T_0 - T \ln(T/T_0)) + \frac{L_{\sol}}{T_0} (T - T_0) + (p - p_0) v_{\sol} + p_0 v_{\liq}.
+\end{gather*}
+Here, $v_{\liq}$ and $v_{\sol}$ are the specific volumes of the liquid and solid phases, assumed constant for now, and $L_{\sol}$ is the latent heat of fusion. I am following the convention here that if there are three separate phases, we can choose the constants so that the internal energy and specific entropy of the liquid phase at the triple point are both zero. When equating gas and condensed phases, the pressure term in the condensed phase energies is negligible. It is not negligible for liquid-solid equilibrium, but in that case higher-order effects (thermal expansion, compressibility) may have to be accounted for as well.
+
+Equating the Gibbs energies of the liquid and vapour phases and solving for pressure (ignoring the volume term in the liquid energy) gives the saturation vapour pressure equation:
+\begin{equation}\label{eqn:satvap}
+    \ln(p/p_0) = \frac{L_{\gas}}{R_* T_0} \left( 1 - \frac{T_0}{T} \right) + \frac{c_{\liq} - c_{\gas}}{R_*} \left( 1 - \frac{T_0}{T} + \ln(T_0/T) \right) = A (1 - x) + B (1 - x + \ln(x)).
+\end{equation}
+The parameters $A$ and $B$ are nondimensional ways of expressing the latent heat of condensation and the difference in heat capacities between the components. As far as I know, the condensed phase heat capacities are always several times larger than the gas phase heat capacity, so the $B$ parameter is positive. (At the very least, this is true of water.) If this is applied to gas-solid equilibrium, the $B$ parameter uses that difference in heat capacity and $A$ includes both the heat of condensation and the heat of fusion. Keep in mind that the pressure in this equation is the partial pressure of that gas component. Various forms of equation \ref{eqn:satvap} arise in almost all of the equilibrium modules.
+
+Many other thermodynamic properties can be calculated from the Gibbs energy. Of particular note are the entropy and enthalpy, which are intensive quantities: the total entropy is the mass-weighted sum of the entropies of each component. With these idealized Gibbs energies:
+\begin{gather*}
+    s_{\gas}(x,T,p) = c_{\gas} \ln(T/T_0) + \frac{L_{\gas}}{T_0} - R_* \ln(x p/p_0) \\
+    s_{\liq}(T,p) = c_{\liq} \ln(T/T_0) \\
+    s_{\sol}(T,p) = c_{\sol} \ln(T/T_0) - \frac{L_{\sol}}{T_0} \\
+    h_{\gas}(x,T,p) = c_{\gas} (T - T_0) + L_{\gas} \\
+    h_{\liq}(T,p) = c_{\liq} (T - T_0) + p v_{\liq} \\
+    h_{\sol}(T,p) = c_{\sol} (T - T_0) - L_{\sol} + (p - p_0) v_{\sol} + p_0 v_{\liq}.
+\end{gather*}
+These expressions more clearly show that the $L$ are the latent heats of condensation and fusion and the $c$ are heat capacities.
+
+The last consideration to be made is for salt in seawater. In idealized mixing, the total Gibbs energy picks up an additional term
+\begin{equation*}
+    G_{\text{mix}} = n R T \cdot \sum_i x_i \ln(x_i)
+\end{equation*}
+where $n$ is molar amount of the liquid, $R$ is the universal gas constant, and $x_i$ are the mole fractions of all components in the liquid. The contribution to the Gibbs energy of any component is $\partial G/\partial M_i = R_i T \ln(x_i)$ where $R_i$ is the specific gas constant of that component. For water in seawater, the other component of the solution is salt and provided as its mass fraction (absolute salinity) $S$. Assuming that the salinity is relatively low, this leads to an expansion
+\begin{equation*}
+    g_{\liq} = R_w T \ln(x_w) = R_w T \ln\left( \frac{1-S}{1-S + \epsilon S} \right) \approx -R_s T S
+\end{equation*}
+where $\epsilon = M_w/M_s$ is the ratio of the molar masses of water and salt and $R_s = R/M_s = R_w \epsilon$ is the effective gas constant for salt. The term above is the idealized effect of salt on the chemical potential of water in seawater.
+
+
+\subsection{Lambert W-function}
+
+For equation \ref{eqn:satvap} I equated the Gibbs energies of the gas and liquid phases and solved for the gas pressure, assuming the temperature was known. If instead the pressure is known, rearranging to collect temperature terms gives
+\begin{equation*}
+    -(1+r) x \exp(-(1+r) x) = z e^z = -(1+r) \exp(-(1+r)) (p/p_0)^{1/B} = w
+\end{equation*}
+where $r = A/B$ is the ratio of the parameters and $x=T_0/T$. This is a transcendental equation for $z(w)$. Its solution, the \href{https://en.wikipedia.org/wiki/Lambert_W_function}{Lambert W function}, is actually well-known. Since the value of $z$ is negative, the solution we want is actually the lower branch $z = W_{-1}(w)$.
+
+The Lambert function is available in special function packages, including \texttt{scipy.special}. However, as a transcendental equation, all solutions (as far as I know) are iterative. I only want to use the solution to initialize an iterative root-finder, so calculating $W_{-1}$ exactly and creating a dependency of \texttt{teospy} on \texttt{scipy} seems inappropriate.
+
+Fortunately, bounds on this branch of the Lambert function were recently found that help. (See the \href{https://en.wikipedia.org/wiki/Lambert_W_function#Asymptotic_expansions}{Wikipedia section} and the \href{https://arxiv.org/abs/1601.04895}{original paper}.) The bounds are
+\begin{equation*}
+    -1 - \sqrt{2u} - u < W_{-1}\left( -e^{-u-1} \right) < -1 - \sqrt{2u} - \frac{2}{3} u
+\end{equation*}
+which apply to any value $u > 0$. The argument $u$ is related to the physical parameters by
+\begin{equation*}
+    u = r - \ln(1+r) - \frac{1}{B} \ln(p/p_0).
+\end{equation*}
+The approximation I use is to simply average the two bounds, to get
+\begin{equation}\label{eqn:lamb1}
+    T = T_0 \frac{1+r}{1 + \sqrt{2u} + u \frac{2 + \alpha}{3}} = T_0 \frac{1+r}{\texttt{lamb1}(u,\alpha)}
+\end{equation}
+where $\alpha$ is a parameter between 0 and 1 that just controls whether to be closer to the lower or upper bound. The denominator above is implemented in \texttt{maths4} as \texttt{lamb1}.
+
+This equation could be used as-is, with a fixed value of $\alpha$. However, it seems advisable to be able to recreate the triple-point values, at least. That is, the approximation should give $T=T_0$ when $p=p_0$. This constraint gives
+\begin{equation}\label{eqn:alpha}
+    \alpha = \frac{3}{u_0} (r - \sqrt{2 u_0}) - 2, \qquad u_0 = r - \ln(1+r)
+\end{equation}
+which is in fact always between 0 and 1 for any (positive) value of $r$. This has been combined with the Lambert approximation above to give
+\begin{equation}\label{eqn:lamb2}
+    x = \texttt{lamb2}(v,r) = \frac{1}{1+r} \left[ 1 + \sqrt{2(u_0-v)} + \frac{r - \sqrt{2 u_0}}{u_0} (u_0-v) \right]
+\end{equation}
+where $u = u_0 - v$, and from the derivation above, $v = \ln(p/p_0)/B$. This approximation to the Lambert function, with this value of $\alpha$, gives an approach based on elementary functions that recreates the triple point exactly. Hopefully this is enough physical consistency to provide a sufficient initial condition. A more general form of this function is
+\begin{equation}\label{eqn:lamb3}
+    y = a (1-x) + b \ln(x), \qquad r = \frac{a}{b}-1, \quad v = \frac{y}{b}
+\end{equation}
+so that \texttt{lamb2} can be used for any equation of this form.
+
+
+
+\section{Specific approximations}
+
+
+\subsection{\texttt{liqvap4}}
+
+This module is for pure liquid water-pure water vapour equilibrium. It uses a few different approximations, all provided by the TEOS group. The function \texttt{\_approx\_t} needs to calculate the liquid and vapour densities at a given temperature. At low temperatures, the densities are given by
+\begin{gather*}
+    \frac{d_{\liq}}{d_{\liq,\tp}} - 1 = \sum_{i=1}^5 c_{1,i} (T/T_{\tp} - 1)^i \\
+    \ln\left( \frac{d_{\vap}}{d_{\vap,\tp}} \right) = \sum_{i=1}^3 c_{3,i} (T_{\tp}/T - 1)^i.
+\end{gather*}
+That is, the densities are related to the temperatures by some form of polynomial expansion in temperature. Here, $c_{j,i}$ are empirical constants recorded in \texttt{\_C\_APPS}. At higher temperatures, closer to the critical point, an equation of state that is `cubic' in terms of the density is assumed. For liquid water, this requires solving the cubic equation
+\begin{equation*}
+    0 = c_{2,3} x^3 + c_{2,2} x^2 + c_{2,1} x + 1 - \frac{T}{T_c}, \qquad x = \left( \frac{d}{d_c} - 1 \right)^3
+\end{equation*}
+where $(T_c,d_c)$ is the critical point temperature and density. For the chosen constants, this cubic equation always has one real solution. The solution is positive, and hence $d>d_c$, for $T<T_c$ as expected. A similar `cubic' is used for water vapour as well:
+\begin{equation*}
+    0 = c_{4,3} x^3 + c_{4,2} x^2 + c_{4,1} x + 1 - \frac{T}{T_c}, \qquad x = \left(1 - \frac{d}{d_c} \right)^4.
+\end{equation*}
+
+The function \texttt{\_approx\_p} needs to calculate the temperature along with the liquid and vapour densities at a given pressure. For the temperature, it solves the quadratic equation
+\begin{equation*}
+    0 = c_{5,2} \tau^2 + c_{5,1} \tau - \ln(p/p_{\tp}), \qquad \tau = \frac{T_{\tp}}{T} - 1.
+\end{equation*}
+The root is chosen to smoothly pass through $\tau=0$ when $p=p_{\tp}$, and correctly gives a temperature greater than the triple point when pressure is greater than the triple point. Once the temperature is calculated from the pressure, the above equations are used to get the liquid and vapour densities.
+
+
+\subsection{\texttt{icevap4}}
+
+This module is for ice-pure water vapour equilibrium. The function \texttt{\_approx\_t} uses equation \ref{eqn:satvap} and \texttt{\_approx\_p} uses equation \ref{eqn:lamb2}. The $A$ parameter uses the latent heat of deposition (heat of condensation plus the heat of fusion) and the $B$ parameter uses the difference in heat capacity between ice and water vapour.
+
+
+\subsection{\texttt{iceliq4}}
+
+This module is for ice-pure liquid water equilibrium. The function \texttt{\_approx\_t} gives the pressure and liquid water density from the temperature. It first approximates the density as the polynomial
+\begin{equation*}
+    \frac{d}{d_{\liq,\tp}} - 1 = \sum_{i=1}^3 c_{0,i} (T/T_{\tp}-1)^i
+\end{equation*}
+and then uses the \texttt{flu2} pressure function. \texttt{\_approx\_p} gives the temperature and liquid water density from the pressure. First, the temperature is calculated from the polynomial
+\begin{equation*}
+    \frac{T}{T_{\tp}} - 1 = \sum_{i=1}^2 c_{1,i} (p/p_{\tp}-1)^i.
+\end{equation*}
+The above polynomial is then used to get the liquid density from the temperature.
+
+
+\subsection{\texttt{iceair4a}}
+
+This module is for ice in equilibrium with humid air, i.e. dry air and water vapour. It describes humid air at the isentropic sublimation level. The functions \texttt{\_approx\_tp} and \texttt{\_approx\_at} use equation \ref{eqn:satvap} along with the ideal gas and Dalton's laws to get the other variables given the temperature. The function \texttt{\_approx\_ap} uses equation \ref{eqn:lamb2} to get temperature from pressure.
+
+This module also introduces another function \texttt{\_approx\_ae} that calculates temperature and pressure from dry air fraction and entropy. Its use is in calculating the isentropic sublimation level given the in-situ properties. The total entropy is
+\begin{align*}
+    s &= a s_{\dry} + (1-a) s_{\vap} \\
+    &= a (c_d \ln(T/T_0) - R_d \ln(p_d/p_0)) + (1-a) \left( c_v \ln(T/T_t) + \frac{L_v}{T_t} - R_w \ln(p_v/p_t) \right).
+\end{align*}
+Note that the reference state for dry air as at standard temperature and pressure $(T_0,p_0)$, whereas the reference state for water is at the triple point $(T_t,p_t)$. The dry air and water vapour partial pressures are related to each other by $p_v/p_d = (1-a)/(\epsw a)$, where $\epsw = M_w/M_d$. Next, the saturation vapour equation \ref{eqn:satvap} gives
+\begin{equation*}
+    \ln(p_v/p_t) = \frac{L_v + L_i}{R_w T_t} (1 - T_t/T) + \frac{c_i - c_v}{R_w} (1 - T_t/T + \ln(T_t/T))
+\end{equation*}
+relating the vapour pressure to temperature. Combining all of these considerations allows us to rewrite the entropy as
+\begin{align*}
+    s(a,T) &= a c_d \ln(T_t/T_0) - a R_d \ln(\epsw a/(1-a)) - a R_d \ln(p_t/p_0) + (1-a) \frac{L_v}{T_t} \\
+    &\qquad - (c_{eff} + B R_{eff}) \ln(T_t/T) - (A+B) R_{eff} (1 - T_t/T) \\
+    &= s_0(a) + s_1(a,T)
+\end{align*}
+where $c_{eff} = a c_d + (1-a) c_v$ and $R_{eff} = a R_d + (1-a) R_w$. The components in the first line depend only on $a$; the components in the second line depend on $T$ and vanish at $T=T_t$. This turns out to be in the form of equation \ref{eqn:lamb3}, with
+\begin{equation*}
+    a \mapsto A+B, \quad b \mapsto \frac{c_{eff}}{R_{eff}} + B, \quad y \mapsto \frac{s_0 - s}{R_{eff}}.
+\end{equation*}
+For the Lambert approach to work, $A-c_{eff}/R_{eff}$ needs to be positive. I {\textit{believe}} that this is always true because although the gaseous heat capacity might be a few times larger than the gas constant, the latent heat is an order of magnitude larger. This is at least true for water, for any value of the dry air fraction.
+
+The other component of this module that requires inversion is the isentropic condensation (deposition) level (ICL). For unsaturated humid air, the entropy is
+\begin{align*}
+    s(a,T,p) &= a \left( c_d \ln(T/T_0) - R_d \ln(p_d/p_0) \right) + (1-a) \left( c_v \ln(T/T_t) + \frac{L_v}{T_t} - R_w \ln(p_v/p_t) \right) \\
+    &= a c_d \ln(T_t/T_0) + (1-a) \frac{L_v}{T_t} - a R_d \ln(\epsilon_W a/(\epsilon_W+1-a)) - (1-a) R_w \ln((1-a)/(\epsilon_W+1-a)\cdot p_0/p_t) \\
+    &\qquad + c_{eff} \ln(T/T_t) - R_{eff} \ln(p/p_0). \\
+\end{align*}
+The first part in the last equality depends only on $a$. During adiabatic (and presumably isentropic) ascent, the entropy stays constant. Since the dry air fraction is also constant, we get the well-known idealized potential temperature relation
+\begin{equation*}
+    p/p_1 = (T/T_1)^{1/\gamma}, \qquad \gamma = R_{eff}/c_{eff}
+\end{equation*}
+where $(T_1,p_1)$ are the initial temperature and pressure. The ICL is the point at which the saturation vapour equation \ref{eqn:satvap} is satisfied, assuming the potential temperature relation between $p$ and $T$. Combining these equations gives
+\begin{equation*}
+    \ln((1-a)/(\epsw+1-a) \cdot p_1/p_t) + \frac{1}{\gamma}\ln(T_t/T_1) = (A+B) (1-x) + (B + 1/\gamma) \ln(x)
+\end{equation*}
+which is in the form of equation \ref{eqn:lamb3} with
+\begin{equation*}
+    a \mapsto A+B, \qquad b \mapsto B + \frac{1}{\gamma}, \qquad y \mapsto \ln\left( \frac{1-a}{\epsw+1-a} \frac{p_1}{p_t} \right) + \frac{1}{\gamma} \ln(T_t/T_1).
+\end{equation*}
+We expect that $y=0$ when $x=1$, so we use the function \texttt{lamb2} to solve this.
+
+
+\subsection{\texttt{iceair4c}}
+
+This module is also for ice in equilibrium with humid air, but using the total dry air mass fraction, entropy, and pressure as primary variables. Equating the water vapour and ice free energies gives a modified equation \ref{eqn:satvap}:
+\begin{align*}
+    \ln(p_v/p_t) &= \ln\left( \frac{p}{p_t} \frac{1-a}{\epsw a + 1-a} \right) = B (1 - T_t/T - \ln(T/T_t)) + A (1 - T_t/T) \\
+    \frac{-\epsw/(1-a)}{\epsw a + 1-a} \left. \frac{\partial a}{\partial T} \right|_p &= \frac{1}{T} (A T_t/T + B (T_t/T-1))
+\end{align*}
+where the dry air mass fraction \textit{in humid air} $a$ changes with temperature because some water condenses into ice. Because of this equality, the entropy of the water vapour is
+\begin{equation*}
+    s_v = c_v \ln(T/T_t) + \frac{L_v}{T_t} - R_w \ln(p_v/p_t) = c_i \ln(T/T_t) - \frac{L_i}{T_t} + R_w (A T_t/T + B (T_t/T - 1)) = s_i + R_w (A T_t/T + B (T_t/T-1)).
+\end{equation*}
+The total dry fraction is $\omega = m_{\dry}/M$, the ratio of the mass of dry air to the total mass. The dry fraction in humid air is $a = m_{\dry}/(m_{\dry}+m_{\vap})$, so the total vapour and ice fractions are $\omega (1/a-1)$ and $1-\omega/a$, respectively. The total entropy of the parcel, in terms of the total dry fraction, temperature, and pressure is
+\begin{align*}
+    s(\omega,T,p;a) &= \omega s_d(a,T,p) + \omega (1/a-1) s_v(a,T,p) + (1-\omega/a) s_i(T,p) \\
+    &= \omega c_d \ln(T_t/T_0) - (1-\omega) \frac{L_i}{T_t} + (\omega c_d + (1-\omega) c_i) \ln(T/T_t) - \omega R_d \ln\left( \frac{p}{p_0} \frac{\epsw a}{\epsw a + 1-a} \right) + \omega \frac{1-a}{a} R_w \left( A \frac{T_t}{T} + B \left( \frac{T_t}{T} - 1 \right) \right) \\
+    \frac{\partial s}{\partial T} &= \frac{1}{T} \left[ \omega c_d + \omega \frac{1-a}{a} c_v + \left( 1 - \frac{\omega}{a} \right) c_i + \omega \frac{(1-a) (\epsw a + 1-a)}{\epsw a^2} R_w \left( A \frac{T_t}{T} + B \left( \frac{T_t}{T} - 1 \right) \right)^2 \right].
+\end{align*}
+
+In the above expressions, the mixed dependence on both $a$ and $T$ is too complex to even reduce the problem to the Lambert equation. What I would like to do instead is Taylor expand around a specific point, the triple-point temperature. The problem is that the air temperature might be well below the triple point. Worse, if the air were brought adiabatically to the triple point temperature, it might not even be saturated with respect to ice.
+
+My approach is to divide the problem into a few domains. First, I look at whether air with the given pressure and total dry fraction would be saturated if it were at the triple point temperature. The maximum vapour pressure of the parcel occurs when it is unsaturated, $p_{v,max} = p (1-\omega)/(\epsw \omega + 1-\omega)$. If this vapour pressure is larger than $p_t$, then the parcel would be saturated at $T_t$. To invert the temperature from the entropy in this case, I use the saturated heat capacity at $T_t$:
+\begin{align*}
+    a(T_t,p) = a_t &= \frac{p-p_t}{p-p_t + \epsw p_t} \\
+    s(\omega,T_t,p;a_t) = s_t &= \omega c_d \ln(T_t/T_0) - (1-\omega) \frac{L_i}{T_t} - \omega R_d \ln\left( \frac{p-p_t}{p_0} \right) + \omega \frac{\epsw p_t}{p - p_t} \frac{L_v+L_i}{T_t} \\
+    \frac{\partial s}{\partial T}(\omega,T_t,p;a) = \frac{c_t}{T_t} &= \frac{1}{T_t} \left[ \omega c_d + \omega \frac{1-a_t}{a_t} c_v + \left( 1 - \frac{\omega}{a_t} \right) c_i + \omega \frac{(1-a_t) (\epsw a_t + 1-a_t)}{\epsw a_t^2} R_w A^2 \right] \\
+    T(\omega,s,p) &\approx T_t \left[ 1 + \frac{s-s_t}{c_t} \right].
+\end{align*}
+
+If the maximum vapour pressure is less than $p_t$, then air at $(\omega,T_t,p)$ would not be saturated. In that case, we can estimate the temperature at which it would be saturated using the Lambert equation on
+\begin{equation*}
+    (A+B) (1-x) + B \ln(x) = \ln(p_{v,max}/p_t)
+\end{equation*}
+to get a saturation value $T_1$. Next, I calculate the entropy $s_1 = s(\omega,T_1,p)$. If the given entropy is larger than this, then the air is likely unsaturated, or very nearly so. In that case, I use the unsaturated form of the entropy (an exponential with dry heat capacity) to directly invert the temperature from the entropy. Otherwise, I use the Taylor expansion approach again, but based around the value $T_1$ and using the saturated form of the heat capacity. 
+
+The other approximation required by \texttt{iceair4c} is for potential temperature. The variation of idealized entropy with pressure is:
+\begin{align*}
+    a_p &= \frac{1}{p} \frac{\epsw a + 1-a}{\epsw/(1-a)} \\
+    s_p &= -\omega R_d \frac{1}{p} \left[ 1 + \frac{1-a}{\epsw^2 a^2} (\epsw a + 1-a) \left( \frac{\epsw a}{\epsw a + 1-a} + A \frac{T_t}{T} + B \left( \frac{T_t}{T} - 1 \right) \right) \right]
+\end{align*}
+assuming that the parcel stays saturated. Moving from temperature and pressure $(T_1,p_1)$ to a nearby state $(T_2,p_2)$ will be adiabatic if
+\begin{equation*}
+    T_2-T_1 \approx \frac{-s_p}{s_T} (p_2-p_1)
+\end{equation*}
+where the entropy derivatives are evaluated at $(T_1,p_1)$. All of this assumes that in both states, the parcel is saturated, and that the resulting states are sufficiently close. The latter assumption can be relaxed somewhat by replacing this with the power law form
+\begin{equation*}
+    T_2/T_1 = (p_2/p_1)^{R_{eff}/c_{eff}}, \qquad c_{eff} = T s_T, \quad R_{eff} = -p s_p.
+\end{equation*}
+More sophisticated approximations might be possible and I will revise this approach later. For example, we might want to account for the cases in which the beginning or ending states are unsaturated, or the entropy curve at one pressure might have saturation at $T_t$ whereas the other does not. For the moment, the above approach seems sufficient but should perhaps be refined later.
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
