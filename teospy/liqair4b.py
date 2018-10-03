@@ -1,77 +1,77 @@
-"""Icy air Gibbs energy and related properties.
+"""Wet air Gibbs energy and related properties.
 
-This module provides the Gibbs function for ice-saturated (icy) air and
-related thermodynamic properties. The primary variables are the total
-dry air fraction, temperature, and pressure. The 'total' fraction here
-is the mass fraction of dry air in the total parcel (including ice), and
-uses the variable `wair`. The dry air mass fraction in humid air uses
-the variable `airf`.
+This module provides the Gibbs function for liquid water-saturated (wet)
+air and related thermodynamic quantities. The primary variables are the
+total dry air fraction, temperature, and pressure. The 'total' fraction
+here is the mass fraction of dry air in the total parcel (including
+liquid) and uses the variable 'wair'. The dry air mass fraction in humid
+air uses the variable 'airf'.
 
 :Examples:
 
->>> iceair_g(0,0,0,.5,270.,1e5)
--2595.57166634
->>> iceair_g(1,0,0,.5,270.,1e5)
-2382.35592988
->>> iceair_g(0,0,1,.5,270.,1e5)
-0.389645501224
->>> iceair_g(1,1,0,.5,270.,1e5)
--1269.41767949
->>> cp(0.5,270.,1e5)
-1892.18951300
->>> enthalpy(0.5,270.,1e5)
--167366.990802
->>> lapserate(0.5,270.,1e5)
-2.28443875629e-4
->>> solidfraction(0.5,270.,1e5)
-0.498525089434
+>>> liqair_g(0,0,0,0.5,300.,1e5)
+-5396.77820137
+>>> liqair_g(0,0,1,0.5,300.,1e5)
+0.446729465555
+>>> liqair_g(0,1,1,0.5,300.,1e5)
+2.43183979422e-3
+>>> cp(0.5,300.,1e5)
+4229.87866191
+>>> expansion(0.5,300.,1e5)
+5.44365210207e-3
+>>> lapserate(0.5,300.,1e5)
+1.72475854884e-4
 
 :Functions:
 
-* :func:`iceair_g`: Icy air Gibbs free energy with derivatives.
-* :func:`cp`: Icy air isobaric heat capacity.
-* :func:`density`: Icy air density.
-* :func:`enthalpy`: Icy air enthalpy.
-* :func:`entropy`: Icy air entropy.
-* :func:`expansion`: Icy air thermal expansion coefficient.
-* :func:`kappa_t`: Icy air isothermal compressibility.
-* :func:`lapserate`: Icy air adiabatic lapse rate.
-* :func:`solidfraction`: Total mass fraction of ice in icy air.
-* :func:`vapourfraction`: Total mass fraction of water vapour in icy
+* :func:`liqair_g`: Wet air Gibbs free energy with derivatives.
+* :func:`cp`: Wet air isobaric heat capacity.
+* :func:`density`: Wet air density.
+* :func:`enthalpy`: Wet air enthalpy.
+* :func:`entropy`: Wet air entropy.
+* :func:`expansion`: Wet air thermal expansion coefficient.
+* :func:`kappa_t`: Wet air isothermal compressibility.
+* :func:`lapserate`: Wet air adiabatic lapse rate.
+* :func:`liquidfraction`: Total mass fraction of liquid water in wet
+  air.
+* :func:`vapourfraction`: Total mass fraction of water vapour in wet
   air.
 
 """
 
-__all__ = ['iceair_g','cp','density','enthalpy','entropy','expansion','kappa_t',
-    'lapserate','solidfraction','vapourfraction']
+__all__ = ['liqair_g','cp','density','enthalpy','entropy','expansion','kappa_t',
+    'lapserate','liquidfraction','vapourfraction']
 
 import numpy
+import warnings
 import constants0
-import ice1
+import flu1
 import air2
-import ice2
+import flu2
 import maths3
 import air3a
-import iceair4a
+import liqair4a
 
 _CHKTOL = constants0.CHKTOL
 _chkhumbnds = constants0.chkhumbnds
-_chkicebnds = constants0.chkicebnds
-_ice_g = ice1.ice_g
+_chkflubnds = constants0.chkflubnds
+_flu_f = flu1.flu_f
 _air_f = air2.air_f
-_eq_pressure = air2.eq_pressure
-_eq_vappot = air2.eq_vappot
+_air_eq_pressure = air2.eq_pressure
+_air_eq_vappot = air2.eq_vappot
+_flu_eq_pressure = flu2.eq_pressure
+_flu_eq_chempot = flu2.eq_chempot
 _newton = maths3.newton
-_eq_atpe = iceair4a.eq_atpe
+_eq_atpe = liqair4a.eq_atpe
 
 
 ## Gibbs function
-def iceair_g(drvw,drvt,drvp,wair,temp,pres,airf=None,dhum=None,
-    chkvals=False,chktol=_CHKTOL,airf0=None,dhum0=None,chkbnd=False,
-    mathargs=None):
-    """Calculate icy air Gibbs free energy with derivatives.
+def liqair_g(drvw,drvt,drvp,wair,temp,pres,airf=None,dhum=None,
+    dliq=None,chkvals=False,chktol=_CHKTOL,airf0=None,dhum0=None,
+    dliq0=None,chkbnd=False,mathargs=None):
+    """Calculate wet air Gibbs free energy with derivatives.
     
-    Calculate the specific Gibbs free energy of icy air or its
+    Calculate the specific Gibbs free energy of wet air or its
     derivatives with respect to total dry air fraction, temperature,
     and pressure.
     
@@ -86,6 +86,9 @@ def iceair_g(drvw,drvt,drvp,wair,temp,pres,airf=None,dhum=None,
     :arg dhum: Humid air density in kg/m3. If unknown, pass None
         (default) and it will be calculated.
     :type dhum: float or None
+    :arg dliq: Liquid water density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dliq: float or None
     :arg bool chkvals: If True (default False) and all values are given,
         this function will calculate the disequilibrium and raise a
         warning if the results are not within a given tolerance.
@@ -95,8 +98,11 @@ def iceair_g(drvw,drvt,drvp,wair,temp,pres,airf=None,dhum=None,
         (default) then `iceair4a._approx_tp` is used.
     :type airf0: float or None
     :arg dhum0: Initial guess for the humid air density in kg/m3. If
-        None (default) then `iceair4a._approx_tp` is used.
+        None (default) then `liqair4a._approx_tp` is used.
     :type dhum0: float or None
+    :arg dliq0: Initial guess for the liquid water density in kg/m3. If
+        None (default) then `liqair4a._approx_tp` is used.
+    :type dliq0: float or None
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
@@ -113,30 +119,30 @@ def iceair_g(drvw,drvt,drvp,wair,temp,pres,airf=None,dhum=None,
     
     :Examples:
     
-    >>> iceair_g(0,0,0,.5,270.,1e5)
-    -2595.57166634
-    >>> iceair_g(1,0,0,.5,270.,1e5)
-    2382.35592988
-    >>> iceair_g(0,1,0,.5,270.,1e5)
-    610.264515318
-    >>> iceair_g(0,0,1,.5,270.,1e5)
-    0.389645501224
-    >>> iceair_g(2,0,0,.5,270.,1e5)
+    >>> liqair_g(0,0,0,0.5,300.,1e5)
+    -5396.77820137
+    >>> liqair_g(1,0,0,0.5,300.,1e5)
+    -263.455491203
+    >>> liqair_g(0,1,0,0.5,300.,1e5)
+    -343.783393872
+    >>> liqair_g(0,0,1,0.5,300.,1e5)
+    0.446729465555
+    >>> liqair_g(2,0,0,0.5,300.,1e5)
     0.
-    >>> iceair_g(1,1,0,.5,270.,1e5)
-    -1269.41767949
-    >>> iceair_g(1,0,1,.5,270.,1e5)
-    0.777110408175
-    >>> iceair_g(0,2,0,.5,270.,1e5)
-    -7.00810930740
-    >>> iceair_g(0,1,1,.5,270.,1e5)
-    1.60095965101e-3
-    >>> iceair_g(0,0,2,.5,270.,1e5)
-    -3.91178603885e-6
+    >>> liqair_g(1,1,0,0.5,300.,1e5)
+    98.5580798842
+    >>> liqair_g(1,0,1,0.5,300.,1e5)
+    0.891452019991
+    >>> liqair_g(0,2,0,0.5,300.,1e5)
+    -14.0995955397
+    >>> liqair_g(0,1,1,0.5,300.,1e5)
+    2.43183979422e-3
+    >>> liqair_g(0,0,2,0.5,300.,1e5)
+    -4.62360294023e-6
     """
-    airf, __, __, dhum = _eq_atpe(temp=temp,pres=pres,airf=airf,dhum=dhum,
-        chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,
-        mathargs=mathargs)
+    airf, __, __, dhum, dliq = _eq_atpe(temp=temp,pres=pres,airf=airf,
+        dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
+        dhum0=dhum0,dliq0=dliq0,chkbnd=chkbnd,mathargs=mathargs)
     if airf <= wair:
         warnmsg = 'Air with the given parameters is unsaturated'
         warnings.warn(warnmsg,RuntimeWarning)
@@ -148,81 +154,83 @@ def iceair_g(drvw,drvt,drvp,wair,temp,pres,airf=None,dhum=None,
     if (drvw,drvt,drvp) == (0,0,0):
         fh = _air_f(0,0,0,airf,temp,dhum)
         fh_d = _air_f(0,0,1,airf,temp,dhum)
-        gi = _ice_g(0,0,temp,pres)
-        g = w*(fh + dhum*fh_d) + (1-w)*gi
+        fl = _flu_f(0,0,temp,dliq)
+        fl_d = _flu_f(0,1,temp,dliq)
+        g = w*(fh + dhum*fh_d) + (1-w)*(fl + dliq*fl_d)
         return g
     elif (drvw,drvt,drvp) == (1,0,0):
         fh_a = _air_f(1,0,0,airf,temp,dhum)
         g_w = fh_a
         return g_w
     elif (drvw,drvt,drvp) == (0,1,0):
-        gh_t = _air_f(0,1,0,airf,temp,dhum)
-        gi_t = _ice_g(1,0,temp,pres)
-        g_t = w*gh_t + (1-w)*gi_t
+        fh_t = _air_f(0,1,0,airf,temp,dhum)
+        fl_t = _flu_f(1,0,temp,dliq)
+        g_t = w*fh_t + (1-w)*fl_t
         return g_t
     elif (drvw,drvt,drvp) == (0,0,1):
-        gh_p = dhum**(-1)
-        gi_p = _ice_g(0,1,temp,pres,chkbnd=chkbnd)
-        g_p = w*gh_p + (1-w)*gi_p
+        g_p = w/dhum + (1-w)/dliq
         return g_p
     elif (drvw,drvt,drvp) == (2,0,0):
         g_ww = 0.
         return g_ww
     elif (drvw,drvt,drvp) == (1,1,0):
-        gh_t = _air_f(0,1,0,airf,temp,dhum)
-        gi_t = _ice_g(1,0,temp,pres)
-        g_wt = (gh_t - gi_t) / airf
+        fh_t = _air_f(0,1,0,airf,temp,dhum)
+        fl_t = _flu_f(1,0,temp,dliq)
+        g_wt = (fh_t - fl_t) / airf
         return g_wt
     elif (drvw,drvt,drvp) == (1,0,1):
-        gh_p = dhum**(-1)
-        gi_p = _ice_g(0,1,temp,pres)
-        g_wp = (gh_p - gi_p) / airf
+        g_wp = (dhum**(-1) - dliq**(-1)) / airf
         return g_wp
     
-    # Derivative cases requiring inversion
-    __, __, __, pg_ad = iceair4a._diff_tp(airf,dhum,temp,pres)
+    # Higher-order derivatives require inversion
+    __, __, dlhs, drhs = liqair4a._diff_tp(airf,dhum,dliq,temp,pres)
+    ppg_x = drhs - dlhs
+    
     if (drvw,drvt,drvp) == (0,2,0):
-        ph_t = _eq_pressure(0,1,0,airf,temp,dhum)
-        gv_t = _eq_vappot(0,1,0,airf,temp,dhum)
-        gi_t = _ice_g(1,0,temp,pres)
-        pg_t = numpy.array([ph_t,gv_t-gi_t])
-        ad_t = numpy.linalg.solve(pg_ad,-pg_t)
+        ph_t = _air_eq_pressure(0,1,0,airf,temp,dhum)
+        pl_t = _flu_eq_pressure(1,0,temp,dliq)
+        muv_t = _air_eq_vappot(0,1,0,airf,temp,dhum)
+        gl_t = _flu_eq_chempot(1,0,temp,dliq)
+        ppg_t = numpy.array([ph_t,pl_t,muv_t-gl_t])
+        x_t = numpy.linalg.solve(ppg_x,-ppg_t)
         
         fh_t = _air_f(0,1,0,airf,temp,dhum)
         fh_at = _air_f(1,1,0,airf,temp,dhum)
         fh_tt = _air_f(0,2,0,airf,temp,dhum)
         fh_td = _air_f(0,1,1,airf,temp,dhum)
-        gi_t = _ice_g(1,0,temp,pres)
-        gi_tt = _ice_g(2,0,temp,pres)
-        g_ta = w/airf*(airf*fh_at - fh_t + gi_t)
-        g_td = w*fh_td
-        g_tx = numpy.array([g_ta,g_td])
-        g_tt = w*fh_tt + (1-w)*gi_tt + g_tx.dot(ad_t)
+        fl_t = _flu_f(1,0,temp,dliq)
+        fl_tt = _flu_f(2,0,temp,dliq)
+        fl_td = _flu_f(1,1,temp,dliq)
+        g_ta = -w/airf*(fh_t - airf*fh_at - fl_t)
+        g_th = w*fh_td
+        g_tl = (1-w)*fl_td
+        g_tx = numpy.array([g_ta,g_th,g_tl])
+        g_tt = w*fh_tt + (1-w)*fl_tt + g_tx.dot(x_t)
         return g_tt
     elif (drvw,drvt,drvp) == (0,1,1):
-        ph_t = _eq_pressure(0,1,0,airf,temp,dhum)
-        gv_t = _eq_vappot(0,1,0,airf,temp,dhum)
-        gi_t = _ice_g(1,0,temp,pres)
-        pg_t = numpy.array([ph_t,gv_t-gi_t])
-        ad_t = numpy.linalg.solve(pg_ad,-pg_t)
+        ppg_p = numpy.array([1.,1.,0.])
+        x_p = numpy.linalg.solve(ppg_x,ppg_p)
         
-        gi_p = _ice_g(0,1,temp,pres)
-        gi_tp = _ice_g(1,1,temp,pres)
-        g_pa = -w/airf * (dhum**(-1) - gi_p)
-        g_pd = -w/dhum**2
-        g_px = numpy.array([g_pa,g_pd])
-        g_tp = (1-w)*gi_tp + g_px.dot(ad_t)
+        fh_t = _air_f(0,1,0,airf,temp,dhum)
+        fh_at = _air_f(1,1,0,airf,temp,dhum)
+        fh_td = _air_f(0,1,1,airf,temp,dhum)
+        fl_t = _flu_f(1,0,temp,dliq)
+        fl_td = _flu_f(1,1,temp,dliq)
+        g_ta = -w/airf*(fh_t - airf*fh_at - fl_t)
+        g_th = w*fh_td
+        g_tl = (1-w)*fl_td
+        g_tx = numpy.array([g_ta,g_th,g_tl])
+        g_tp = g_tx.dot(x_p)
         return g_tp
     elif (drvw,drvt,drvp) == (0,0,2):
-        gi_p = _ice_g(0,1,temp,pres)
-        pg_p = numpy.array([1.,gi_p])
-        ad_p = numpy.linalg.solve(pg_ad,pg_p)
+        ppg_p = numpy.array([1.,1.,0.])
+        x_p = numpy.linalg.solve(ppg_x,ppg_p)
         
-        gi_pp = _ice_g(0,2,temp,pres)
-        g_pa = -w/airf * (dhum**(-1) - gi_p)
-        g_pd = -w/dhum**2
-        g_px = numpy.array([g_pa,g_pd])
-        g_pp = (1-w)*gi_pp + g_px.dot(ad_p)
+        g_pa = -w/airf*(dhum**(-1) - dliq**(-1))
+        g_ph = -w/dhum**2
+        g_pl = -(1-w)/dliq**2
+        g_px = numpy.array([g_pa,g_ph,g_pl])
+        g_pp = g_px.dot(x_p)
         return g_pp
     
     # Should not have made it this far!
@@ -231,11 +239,12 @@ def iceair_g(drvw,drvt,drvp,wair,temp,pres,airf=None,dhum=None,
 
 
 ## Thermodynamic properties
-def cp(wair,temp,pres,airf=None,dhum=None,chkvals=False,chktol=_CHKTOL,
-    airf0=None,dhum0=None,chkbnd=False,mathargs=None):
-    """Calculate icy air isobaric heat capacity.
+def cp(wair,temp,pres,airf=None,dhum=None,dliq=None,chkvals=False,
+    chktol=_CHKTOL,airf0=None,dhum0=None,dliq0=None,chkbnd=False,
+    mathargs=None):
+    """Calculate wet air isobaric heat capacity.
     
-    Calculate the isobaric (constant pressure) heat capacity of icy air.
+    Calculate the isobaric heat capacity of wet air.
     
     :arg float wair: Total dry air fraction in kg/kg.
     :arg float temp: Temperature in K.
@@ -245,6 +254,9 @@ def cp(wair,temp,pres,airf=None,dhum=None,chkvals=False,chktol=_CHKTOL,
     :arg dhum: Humid air density in kg/m3. If unknown, pass None
         (default) and it will be calculated.
     :type dhum: float or None
+    :arg dliq: Liquid water density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dliq: float or None
     :arg bool chkvals: If True (default False) and all values are given,
         this function will calculate the disequilibrium and raise a
         warning if the results are not within a given tolerance.
@@ -254,8 +266,11 @@ def cp(wair,temp,pres,airf=None,dhum=None,chkvals=False,chktol=_CHKTOL,
         (default) then `iceair4a._approx_tp` is used.
     :type airf0: float or None
     :arg dhum0: Initial guess for the humid air density in kg/m3. If
-        None (default) then `iceair4a._approx_tp` is used.
+        None (default) then `liqair4a._approx_tp` is used.
     :type dhum0: float or None
+    :arg dliq0: Initial guess for the liquid water density in kg/m3. If
+        None (default) then `liqair4a._approx_tp` is used.
+    :type dliq0: float or None
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
@@ -271,20 +286,21 @@ def cp(wair,temp,pres,airf=None,dhum=None,chkvals=False,chktol=_CHKTOL,
     
     :Examples:
     
-    >>> cp(0.5,270.,1e5)
-    1892.18951300
+    >>> cp(0.5,300.,1e5)
+    4229.87866191
     """
-    g_tt = iceair_g(0,2,0,wair,temp,pres,airf=airf,dhum=dhum,chkvals=chkvals,
-        chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
+    g_tt = liqair_g(0,2,0,wair,temp,pres,airf=airf,dhum=dhum,dliq=dliq,
+        chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,dliq0=dliq0,
+        chkbnd=chkbnd,mathargs=mathargs)
     cp = -temp * g_tt
     return cp
 
-def density(wair,temp,pres,airf=None,dhum=None,chkvals=False,
-    chktol=_CHKTOL,airf0=None,dhum0=None,chkbnd=False,mathargs=None):
-    """Calculate icy air density.
+def density(wair,temp,pres,airf=None,dhum=None,dliq=None,chkvals=False,
+    chktol=_CHKTOL,airf0=None,dhum0=None,dliq0=None,chkbnd=False,
+    mathargs=None):
+    """Calculate wet air density.
     
-    Calculate the density of icy air, the total density of the parcel
-    including ice mass.
+    Calculate the density of wet air.
     
     :arg float wair: Total dry air fraction in kg/kg.
     :arg float temp: Temperature in K.
@@ -294,6 +310,9 @@ def density(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     :arg dhum: Humid air density in kg/m3. If unknown, pass None
         (default) and it will be calculated.
     :type dhum: float or None
+    :arg dliq: Liquid water density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dliq: float or None
     :arg bool chkvals: If True (default False) and all values are given,
         this function will calculate the disequilibrium and raise a
         warning if the results are not within a given tolerance.
@@ -303,8 +322,11 @@ def density(wair,temp,pres,airf=None,dhum=None,chkvals=False,
         (default) then `iceair4a._approx_tp` is used.
     :type airf0: float or None
     :arg dhum0: Initial guess for the humid air density in kg/m3. If
-        None (default) then `iceair4a._approx_tp` is used.
+        None (default) then `liqair4a._approx_tp` is used.
     :type dhum0: float or None
+    :arg dliq0: Initial guess for the liquid water density in kg/m3. If
+        None (default) then `liqair4a._approx_tp` is used.
+    :type dliq0: float or None
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
@@ -320,19 +342,21 @@ def density(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     
     :Examples:
     
-    >>> density(0.5,270.,1e5)
-    2.56643538000
+    >>> density(0.5,300.,1e5)
+    2.23849125053
     """
-    g_p = iceair_g(0,0,1,wair,temp,pres,airf=airf,dhum=dhum,chkvals=chkvals,
-        chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
-    rho = g_p**(-1)
-    return rho
+    g_p = liqair_g(0,0,1,wair,temp,pres,airf=airf,dhum=dhum,dliq=dliq,
+        chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,dliq0=dliq0,
+        chkbnd=chkbnd,mathargs=mathargs)
+    dtot = g_p**(-1)
+    return dtot
 
-def enthalpy(wair,temp,pres,airf=None,dhum=None,chkvals=False,
-    chktol=_CHKTOL,airf0=None,dhum0=None,chkbnd=False,mathargs=None):
-    """Calculate icy air enthalpy.
+def enthalpy(wair,temp,pres,airf=None,dhum=None,dliq=None,chkvals=False,
+    chktol=_CHKTOL,airf0=None,dhum0=None,dliq0=None,chkbnd=False,
+    mathargs=None):
+    """Calculate wet air enthalpy.
     
-    Calculate the specific enthalpy of icy air.
+    Calculate the specific enthalpy of wet air.
     
     :arg float wair: Total dry air fraction in kg/kg.
     :arg float temp: Temperature in K.
@@ -342,6 +366,9 @@ def enthalpy(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     :arg dhum: Humid air density in kg/m3. If unknown, pass None
         (default) and it will be calculated.
     :type dhum: float or None
+    :arg dliq: Liquid water density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dliq: float or None
     :arg bool chkvals: If True (default False) and all values are given,
         this function will calculate the disequilibrium and raise a
         warning if the results are not within a given tolerance.
@@ -351,8 +378,11 @@ def enthalpy(wair,temp,pres,airf=None,dhum=None,chkvals=False,
         (default) then `iceair4a._approx_tp` is used.
     :type airf0: float or None
     :arg dhum0: Initial guess for the humid air density in kg/m3. If
-        None (default) then `iceair4a._approx_tp` is used.
+        None (default) then `liqair4a._approx_tp` is used.
     :type dhum0: float or None
+    :arg dliq0: Initial guess for the liquid water density in kg/m3. If
+        None (default) then `liqair4a._approx_tp` is used.
+    :type dliq0: float or None
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
@@ -368,27 +398,28 @@ def enthalpy(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     
     :Examples:
     
-    >>> enthalpy(0.5,270.,1e5)
-    -167366.990802
+    >>> enthalpy(0.5,300.,1e5)
+    97738.2399604
     """
-    airf, __, __, dhum = _eq_atpe(temp=temp,pres=pres,airf=airf,dhum=dhum,
-        chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,
-        mathargs=mathargs)
+    airf, __, __, dhum, dliq = _eq_atpe(temp=temp,pres=pres,airf=airf,
+        dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
+        dhum0=dhum0,dliq0=dliq0,chkbnd=chkbnd,mathargs=mathargs)
     if airf <= wair:
         warnmsg = 'Air with the given parameters is unsaturated'
         warnings.warn(warnmsg,RuntimeWarning)
         h = air3b.enthalpy(wair,temp,pres,dhum0=dhum0,mathargs=mathargs)
         return h
-    g = iceair_g(0,0,0,wair,temp,pres,airf=airf,dhum=dhum)
-    g_t = iceair_g(0,1,0,wair,temp,pres,airf=airf,dhum=dhum)
+    g = liqair_g(0,0,0,wair,temp,pres,airf=airf,dhum=dhum,dliq=dliq)
+    g_t = liqair_g(0,1,0,wair,temp,pres,airf=airf,dhum=dhum,dliq=dliq)
     h = g - temp*g_t
     return h
 
-def entropy(wair,temp,pres,airf=None,dhum=None,chkvals=False,
-    chktol=_CHKTOL,airf0=None,dhum0=None,chkbnd=False,mathargs=None):
-    """Calculate icy air entropy.
+def entropy(wair,temp,pres,airf=None,dhum=None,dliq=None,chkvals=False,
+    chktol=_CHKTOL,airf0=None,dhum0=None,dliq0=None,chkbnd=False,
+    mathargs=None):
+    """Calculate wet air entropy.
     
-    Calculate the specific entropy of icy air.
+    Calculate the specific entropy of wet air.
     
     :arg float wair: Total dry air fraction in kg/kg.
     :arg float temp: Temperature in K.
@@ -398,6 +429,9 @@ def entropy(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     :arg dhum: Humid air density in kg/m3. If unknown, pass None
         (default) and it will be calculated.
     :type dhum: float or None
+    :arg dliq: Liquid water density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dliq: float or None
     :arg bool chkvals: If True (default False) and all values are given,
         this function will calculate the disequilibrium and raise a
         warning if the results are not within a given tolerance.
@@ -407,8 +441,11 @@ def entropy(wair,temp,pres,airf=None,dhum=None,chkvals=False,
         (default) then `iceair4a._approx_tp` is used.
     :type airf0: float or None
     :arg dhum0: Initial guess for the humid air density in kg/m3. If
-        None (default) then `iceair4a._approx_tp` is used.
+        None (default) then `liqair4a._approx_tp` is used.
     :type dhum0: float or None
+    :arg dliq0: Initial guess for the liquid water density in kg/m3. If
+        None (default) then `liqair4a._approx_tp` is used.
+    :type dliq0: float or None
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
@@ -424,19 +461,21 @@ def entropy(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     
     :Examples:
     
-    >>> entropy(0.5,270.,1e5)
-    -610.264515318
+    >>> entropy(0.5,300.,1e5)
+    343.783393872
     """
-    g_t = iceair_g(0,1,0,wair,temp,pres,airf=airf,dhum=dhum,chkvals=chkvals,
-        chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
+    g_t = liqair_g(0,1,0,wair,temp,pres,airf=airf,dhum=dhum,dliq=dliq,
+        chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,dliq0=dliq0,
+        chkbnd=chkbnd,mathargs=mathargs)
     s = -g_t
     return s
 
-def expansion(wair,temp,pres,airf=None,dhum=None,chkvals=False,
-    chktol=_CHKTOL,airf0=None,dhum0=None,chkbnd=False,mathargs=None):
-    """Calculate icy air expansion coefficient.
+def expansion(wair,temp,pres,airf=None,dhum=None,dliq=None,
+    chkvals=False,chktol=_CHKTOL,airf0=None,dhum0=None,dliq0=None,
+    chkbnd=False,mathargs=None):
+    """Calculate wet air thermal expansion coefficient.
     
-    Calculate the thermal expansion coefficient of icy air.
+    Calculate the thermal expansion coefficient of wet air.
     
     :arg float wair: Total dry air fraction in kg/kg.
     :arg float temp: Temperature in K.
@@ -446,6 +485,9 @@ def expansion(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     :arg dhum: Humid air density in kg/m3. If unknown, pass None
         (default) and it will be calculated.
     :type dhum: float or None
+    :arg dliq: Liquid water density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dliq: float or None
     :arg bool chkvals: If True (default False) and all values are given,
         this function will calculate the disequilibrium and raise a
         warning if the results are not within a given tolerance.
@@ -455,8 +497,11 @@ def expansion(wair,temp,pres,airf=None,dhum=None,chkvals=False,
         (default) then `iceair4a._approx_tp` is used.
     :type airf0: float or None
     :arg dhum0: Initial guess for the humid air density in kg/m3. If
-        None (default) then `iceair4a._approx_tp` is used.
+        None (default) then `liqair4a._approx_tp` is used.
     :type dhum0: float or None
+    :arg dliq0: Initial guess for the liquid water density in kg/m3. If
+        None (default) then `liqair4a._approx_tp` is used.
+    :type dliq0: float or None
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
@@ -464,7 +509,7 @@ def expansion(wair,temp,pres,airf=None,dhum=None,chkvals=False,
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
         will be used.
-    :returns: Expansion coefficient in J/kg/K.
+    :returns: Expansion coefficient in 1/K.
     :raises RuntimeWarning: If the relative disequilibrium is more than
         chktol, if chkvals is True and all values are given.
     :raises RuntimeWarning: If air with the given parameters would be
@@ -472,27 +517,28 @@ def expansion(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     
     :Examples:
     
-    >>> expansion(0.5,270.,1e5)
-    4.10875949031e-3
+    >>> expansion(0.5,300.,1e5)
+    5.44365210207e-3
     """
-    airf, __, __, dhum = _eq_atpe(temp=temp,pres=pres,airf=airf,dhum=dhum,
-        chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,
-        mathargs=mathargs)
+    airf, __, __, dhum, dliq = _eq_atpe(temp=temp,pres=pres,airf=airf,
+        dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
+        dhum0=dhum0,dliq0=dliq0,chkbnd=chkbnd,mathargs=mathargs)
     if airf <= wair:
         warnmsg = 'Air with the given parameters is unsaturated'
         warnings.warn(warnmsg,RuntimeWarning)
         alpha = air3b.expansion(wair,temp,pres,dhum0=dhum0,mathargs=mathargs)
         return alpha
-    g_p = iceair_g(0,0,1,wair,temp,pres,airf=airf,dhum=dhum)
-    g_tp = iceair_g(0,1,1,wair,temp,pres,airf=airf,dhum=dhum)
+    g_p = liqair_g(0,0,1,wair,temp,pres,airf=airf,dhum=dhum,dliq=dliq)
+    g_tp = liqair_g(0,1,1,wair,temp,pres,airf=airf,dhum=dhum,dliq=dliq)
     alpha = g_tp / g_p
     return alpha
 
-def kappa_t(wair,temp,pres,airf=None,dhum=None,chkvals=False,
-    chktol=_CHKTOL,airf0=None,dhum0=None,chkbnd=False,mathargs=None):
-    """Calculate icy air isothermal compressibility.
+def kappa_t(wair,temp,pres,airf=None,dhum=None,dliq=None,chkvals=False,
+    chktol=_CHKTOL,airf0=None,dhum0=None,dliq0=None,chkbnd=False,
+    mathargs=None):
+    """Calculate wet air isothermal compressibility.
     
-    Calculate the isothermal compressibility of icy air.
+    Calculate the isothermal compressibility of wet air.
     
     :arg float wair: Total dry air fraction in kg/kg.
     :arg float temp: Temperature in K.
@@ -502,6 +548,9 @@ def kappa_t(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     :arg dhum: Humid air density in kg/m3. If unknown, pass None
         (default) and it will be calculated.
     :type dhum: float or None
+    :arg dliq: Liquid water density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dliq: float or None
     :arg bool chkvals: If True (default False) and all values are given,
         this function will calculate the disequilibrium and raise a
         warning if the results are not within a given tolerance.
@@ -511,8 +560,11 @@ def kappa_t(wair,temp,pres,airf=None,dhum=None,chkvals=False,
         (default) then `iceair4a._approx_tp` is used.
     :type airf0: float or None
     :arg dhum0: Initial guess for the humid air density in kg/m3. If
-        None (default) then `iceair4a._approx_tp` is used.
+        None (default) then `liqair4a._approx_tp` is used.
     :type dhum0: float or None
+    :arg dliq0: Initial guess for the liquid water density in kg/m3. If
+        None (default) then `liqair4a._approx_tp` is used.
+    :type dliq0: float or None
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
@@ -528,27 +580,28 @@ def kappa_t(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     
     :Examples:
     
-    >>> kappa_t(0.5,270.,1e5)
-    1.00393460891e-5
+    >>> kappa_t(0.5,300.,1e5)
+    1.03498947276e-5
     """
-    airf, __, __, dhum = _eq_atpe(temp=temp,pres=pres,airf=airf,dhum=dhum,
-        chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,
-        mathargs=mathargs)
+    airf, __, __, dhum, dliq = _eq_atpe(temp=temp,pres=pres,airf=airf,
+        dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
+        dhum0=dhum0,dliq0=dliq0,chkbnd=chkbnd,mathargs=mathargs)
     if airf <= wair:
         warnmsg = 'Air with the given parameters is unsaturated'
         warnings.warn(warnmsg,RuntimeWarning)
         kappa = air3b.kappa_t(wair,temp,pres,dhum0=dhum0,mathargs=mathargs)
         return kappa
-    g_p = iceair_g(0,0,1,wair,temp,pres,airf=airf,dhum=dhum)
-    g_pp = iceair_g(0,0,2,wair,temp,pres,airf=airf,dhum=dhum)
+    g_p = liqair_g(0,0,1,wair,temp,pres,airf=airf,dhum=dhum,dliq=dliq)
+    g_pp = liqair_g(0,0,2,wair,temp,pres,airf=airf,dhum=dhum,dliq=dliq)
     kappa = -g_pp / g_p
     return kappa
 
-def lapserate(wair,temp,pres,airf=None,dhum=None,chkvals=False,
-    chktol=_CHKTOL,airf0=None,dhum0=None,chkbnd=False,mathargs=None):
-    """Calculate icy air adiabatic lapse rate.
+def lapserate(wair,temp,pres,airf=None,dhum=None,dliq=None,
+    chkvals=False,chktol=_CHKTOL,airf0=None,dhum0=None,dliq0=None,
+    chkbnd=False,mathargs=None):
+    """Calculate wet air adiabatic lapse rate.
     
-    Calculate the adiabatic lapse rate of icy air.
+    Calculate the adiabatic lapse rate of wet air.
     
     :arg float wair: Total dry air fraction in kg/kg.
     :arg float temp: Temperature in K.
@@ -558,6 +611,9 @@ def lapserate(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     :arg dhum: Humid air density in kg/m3. If unknown, pass None
         (default) and it will be calculated.
     :type dhum: float or None
+    :arg dliq: Liquid water density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dliq: float or None
     :arg bool chkvals: If True (default False) and all values are given,
         this function will calculate the disequilibrium and raise a
         warning if the results are not within a given tolerance.
@@ -567,8 +623,11 @@ def lapserate(wair,temp,pres,airf=None,dhum=None,chkvals=False,
         (default) then `iceair4a._approx_tp` is used.
     :type airf0: float or None
     :arg dhum0: Initial guess for the humid air density in kg/m3. If
-        None (default) then `iceair4a._approx_tp` is used.
+        None (default) then `liqair4a._approx_tp` is used.
     :type dhum0: float or None
+    :arg dliq0: Initial guess for the liquid water density in kg/m3. If
+        None (default) then `liqair4a._approx_tp` is used.
+    :type dliq0: float or None
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
@@ -584,27 +643,27 @@ def lapserate(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     
     :Examples:
     
-    >>> lapserate(0.5,270.,1e5)
-    2.28443875629e-4
+    >>> lapserate(0.5,300.,1e5)
+    1.72475854884e-4
     """
-    airf, __, __, dhum = _eq_atpe(temp=temp,pres=pres,airf=airf,dhum=dhum,
-        chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,
-        mathargs=mathargs)
+    airf, __, __, dhum, dliq = _eq_atpe(temp=temp,pres=pres,airf=airf,
+        dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
+        dhum0=dhum0,dliq0=dliq0,chkbnd=chkbnd,mathargs=mathargs)
     if airf <= wair:
         warnmsg = 'Air with the given parameters is unsaturated'
         warnings.warn(warnmsg,RuntimeWarning)
         gamma = air3b.lapserate(wair,temp,pres,dhum0=dhum0,mathargs=mathargs)
-        return gamma
-    g_tt = iceair_g(0,2,0,wair,temp,pres,airf=airf,dhum=dhum)
-    g_tp = iceair_g(0,1,1,wair,temp,pres,airf=airf,dhum=dhum)
+    g_tt = liqair_g(0,2,0,wair,temp,pres,airf=airf,dhum=dhum,dliq=dliq)
+    g_tp = liqair_g(0,1,1,wair,temp,pres,airf=airf,dhum=dhum,dliq=dliq)
     gamma = -g_tp / g_tt
     return gamma
 
-def solidfraction(wair,temp,pres,airf=None,dhum=None,chkvals=False,
-    chktol=_CHKTOL,airf0=None,dhum0=None,chkbnd=False,mathargs=None):
-    """Calculate icy air ice fraction.
+def liquidfraction(wair,temp,pres,airf=None,dhum=None,dliq=None,
+    chkvals=False,chktol=_CHKTOL,airf0=None,dhum0=None,dliq0=None,
+    chkbnd=False,mathargs=None):
+    """Calculate wet air liquid water fraction.
     
-    Calculate the mass fraction of ice in icy air.
+    Calculate the mass fraction of liquid water in wet air.
     
     :arg float wair: Total dry air fraction in kg/kg.
     :arg float temp: Temperature in K.
@@ -614,6 +673,9 @@ def solidfraction(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     :arg dhum: Humid air density in kg/m3. If unknown, pass None
         (default) and it will be calculated.
     :type dhum: float or None
+    :arg dliq: Liquid water density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dliq: float or None
     :arg bool chkvals: If True (default False) and all values are given,
         this function will calculate the disequilibrium and raise a
         warning if the results are not within a given tolerance.
@@ -623,8 +685,11 @@ def solidfraction(wair,temp,pres,airf=None,dhum=None,chkvals=False,
         (default) then `iceair4a._approx_tp` is used.
     :type airf0: float or None
     :arg dhum0: Initial guess for the humid air density in kg/m3. If
-        None (default) then `iceair4a._approx_tp` is used.
+        None (default) then `liqair4a._approx_tp` is used.
     :type dhum0: float or None
+    :arg dliq0: Initial guess for the liquid water density in kg/m3. If
+        None (default) then `liqair4a._approx_tp` is used.
+    :type dliq0: float or None
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
@@ -632,7 +697,7 @@ def solidfraction(wair,temp,pres,airf=None,dhum=None,chkvals=False,
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
         will be used.
-    :returns: Mass fraction in kg/kg.
+    :returns: Liquid water mass fraction in kg/kg.
     :raises RuntimeWarning: If the relative disequilibrium is more than
         chktol, if chkvals is True and all values are given.
     :raises RuntimeWarning: If air with the given parameters would be
@@ -640,23 +705,24 @@ def solidfraction(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     
     :Examples:
     
-    >>> solidfraction(0.5,270.,1e5)
-    0.498525089434
+    >>> liquidfraction(0.5,300.,1e5)
+    0.488546404734
     """
-    airf, __, __, dhum = _eq_atpe(temp=temp,pres=pres,airf=airf,dhum=dhum,
-        chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,
-        mathargs=mathargs)
+    airf, __, __, dhum, dliq = _eq_atpe(temp=temp,pres=pres,airf=airf,
+        dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
+        dhum0=dhum0,dliq0=dliq0,chkbnd=chkbnd,mathargs=mathargs)
     if airf <= wair:
         warnmsg = 'Air with the given parameters is unsaturated'
         warnings.warn(warnmsg,RuntimeWarning)
-    wice = max(1 - wair/airf, 0.)
-    return wice
+    wliq = max(1 - wair/airf, 0.)
+    return wliq
 
-def vapourfraction(wair,temp,pres,airf=None,dhum=None,chkvals=False,
-    chktol=_CHKTOL,airf0=None,dhum0=None,chkbnd=False,mathargs=None):
-    """Calculate icy air vapour fraction.
+def vapourfraction(wair,temp,pres,airf=None,dhum=None,dliq=None,
+    chkvals=False,chktol=_CHKTOL,airf0=None,dhum0=None,dliq0=None,
+    chkbnd=False,mathargs=None):
+    """Calculate wet air vapour fraction.
     
-    Calculate the mass fraction of water vapour in icy air.
+    Calculate the mass fraction of water vapour in wet air.
     
     :arg float wair: Total dry air fraction in kg/kg.
     :arg float temp: Temperature in K.
@@ -666,6 +732,9 @@ def vapourfraction(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     :arg dhum: Humid air density in kg/m3. If unknown, pass None
         (default) and it will be calculated.
     :type dhum: float or None
+    :arg dliq: Liquid water density in kg/m3. If unknown, pass None
+        (default) and it will be calculated.
+    :type dliq: float or None
     :arg bool chkvals: If True (default False) and all values are given,
         this function will calculate the disequilibrium and raise a
         warning if the results are not within a given tolerance.
@@ -675,8 +744,11 @@ def vapourfraction(wair,temp,pres,airf=None,dhum=None,chkvals=False,
         (default) then `iceair4a._approx_tp` is used.
     :type airf0: float or None
     :arg dhum0: Initial guess for the humid air density in kg/m3. If
-        None (default) then `iceair4a._approx_tp` is used.
+        None (default) then `liqair4a._approx_tp` is used.
     :type dhum0: float or None
+    :arg dliq0: Initial guess for the liquid water density in kg/m3. If
+        None (default) then `liqair4a._approx_tp` is used.
+    :type dliq0: float or None
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
@@ -684,7 +756,7 @@ def vapourfraction(wair,temp,pres,airf=None,dhum=None,chkvals=False,
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
         will be used.
-    :returns: Mass fraction in kg/kg.
+    :returns: Water vapour mass fraction in kg/kg.
     :raises RuntimeWarning: If the relative disequilibrium is more than
         chktol, if chkvals is True and all values are given.
     :raises RuntimeWarning: If air with the given parameters would be
@@ -692,12 +764,12 @@ def vapourfraction(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     
     :Examples:
     
-    >>> vapourfraction(0.5,270.,1e5)
-    1.47491056602e-3
+    >>> vapourfraction(0.5,300.,1e5)
+    1.14535952655e-2
     """
-    airf, __, __, dhum = _eq_atpe(temp=temp,pres=pres,airf=airf,dhum=dhum,
-        chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,
-        mathargs=mathargs)
+    airf, __, __, dhum, dliq = _eq_atpe(temp=temp,pres=pres,airf=airf,
+        dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
+        dhum0=dhum0,dliq0=dliq0,chkbnd=chkbnd,mathargs=mathargs)
     if airf <= wair:
         warnmsg = 'Air with the given parameters is unsaturated'
         warnings.warn(warnmsg,RuntimeWarning)

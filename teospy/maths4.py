@@ -37,7 +37,7 @@ def lamb1(u,alpha=.5):
     :raises ValueError: If alpha is not between 0 and 1.
     """
     if u < 0:
-        errmsg = 'Argument v must be positive'
+        errmsg = 'Argument u must be positive'
         raise ValueError(errmsg)
     if alpha < 0 or alpha > 1:
         errmsg = 'Parameter alpha must be between 0 and 1'

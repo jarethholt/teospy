@@ -35,7 +35,7 @@ The basic contents of the modules are as follows:
 ----------
 
 .. automodule:: iceair4a
-    :members: eq_atpe, massfractionair, temperature, pressure, densityair, densityvap, densityice, enthalpysubl, condensationpressure, sublimationpressure, eq_icl, icl, ict, airffromrh_wmo, rhfromairf_wmo, airffromrh_cct, rhfromairf_cct
+    :members: eq_atpe, temperature, pressure, densityair, densityvap, densityice, enthalpysubl, condensationpressure, frostpoint, massfractionair, sublimationpressure, eq_icl, icl, ict, airffromrh_wmo, rhfromairf_wmo, airffromrh_cct, rhfromairf_cct
 
 
 `iceair4b`
@@ -50,6 +50,27 @@ The basic contents of the modules are as follows:
 
 .. automodule:: iceair4c
     :members: eq_wpte, iceair_h, cp, density, kappa_s, lapserate, temperature, eq_pot, potdensity, potenthalpy, pottemp
+
+
+`liqair4a`
+----------
+
+.. automodule:: liqair4a
+    :members: eq_atpe, temperature, pressure, densityair, densityvap, densityliq, enthalpyevap, entropy, condensationpressure, dewpoint, massfractionair, eq_icl, icl, ict, airffromrh_wmo, rhfromairf_wmo, airffromrh_cct, rhfromairf_cct
+
+
+`liqair4b`
+----------
+
+.. automodule:: liqair4b
+    :members: liqair_g, cp, density, enthalpy, entropy, expansion, kappa_t, lapserate, liquidfraction, vapourfraction
+
+
+`liqair4c`
+----------
+
+.. automodule:: liqair4c
+    :members: eq_wpte, liqair_h, cp, density, kappa_s, lapserate, temperature, eq_pot, potdensity, potenthalpy, pottemp
 
 
 

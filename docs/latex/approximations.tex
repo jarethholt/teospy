@@ -247,20 +247,22 @@ The other approximation required by \texttt{iceair4c} is for potential temperatu
     a_p &= \frac{1}{p} \frac{\epsw a + 1-a}{\epsw/(1-a)} \\
     s_p &= -\omega R_d \frac{1}{p} \left[ 1 + \frac{1-a}{\epsw^2 a^2} (\epsw a + 1-a) \left( \frac{\epsw a}{\epsw a + 1-a} + A \frac{T_t}{T} + B \left( \frac{T_t}{T} - 1 \right) \right) \right]
 \end{align*}
-assuming that the parcel stays saturated. Moving from temperature and pressure $(T_1,p_1)$ to a nearby state $(T_2,p_2)$ will be adiabatic if
+assuming that the parcel stays saturated. For unsaturated air, the variation is simply $-p s_p = \omega R_d + (1-\omega) R_w$. I approximate the potential temperature using $T_2/T_1 = (p_2/p_1)^{R_{eff}/c_{eff}}$, where $R_{eff} = -p s_p$ and $c_{eff} = T s_T$ have different forms depending on whether the air is saturated or not. This is then augmented by using the ICL approximation from \texttt{iceair4a} to find where the air is saturated. If the air changes saturation state between the pressures $p_1$ and $p_2$, then one form is used to get potential temperature where the saturation changes and then the other form to get to the final pressure. The last thing to be careful of is that if either temperature is above $T_t$, then the ice state will not be well-defined.
+
+One hitch here is that the function to approximate the ICL in \texttt{iceair4a} assumes that the given state is unsaturated. It does not do well in predicting when a saturated parcel might become unsaturated. For that, we use the above power law with the saturated values of $R_{eff}, c_{eff}$ combined with the saturation vapour equation \ref{eqn:satvap}:
 \begin{equation*}
-    T_2-T_1 \approx \frac{-s_p}{s_T} (p_2-p_1)
+    \ln\left( (T_t/T_1)^g \cdot \frac{p_1}{p_t} \cdot \frac{1-\omega}{\epsw \omega + 1-\omega} \right) = (A+B) (1 - x) + (B+g) \ln(x), \qquad g = \frac{c_{eff}}{R_{eff}}
 \end{equation*}
-where the entropy derivatives are evaluated at $(T_1,p_1)$. All of this assumes that in both states, the parcel is saturated, and that the resulting states are sufficiently close. The latter assumption can be relaxed somewhat by replacing this with the power law form
+to get an equation in Lambert form. Here, $(T_1,p_1)$ are the initial temperature and pressure. This is further augmented by a quick check to see whether the air is still saturated at $T_t$. The maximum vapour pressure at the pressure for which the temperature is $T_t$ is
 \begin{equation*}
-    T_2/T_1 = (p_2/p_1)^{R_{eff}/c_{eff}}, \qquad c_{eff} = T s_T, \quad R_{eff} = -p s_p.
+    p_{v,max} = p_1 (T_t/T_1)^g \frac{1-\omega}{\epsw \omega + 1-\omega}
 \end{equation*}
-More sophisticated approximations might be possible and I will revise this approach later. For example, we might want to account for the cases in which the beginning or ending states are unsaturated, or the entropy curve at one pressure might have saturation at $T_t$ whereas the other does not. For the moment, the above approach seems sufficient but should perhaps be refined later.
+and if this is greater than $p_t$ then the air is always ice-saturated.
 
 
-        
+\subsection{\texttt{liqair4a}, \texttt{liqair4b}, and \texttt{liqair4c}}
 
-
+These modules are for liquid water in equilibrium with humid air. The approximations here have the same form as for the ice-air equilibrium modules, only with different values of the $A$ and $B$ parameters. In addition, there is no limit placed on the temperature of liquid-saturated air, as opposed to ice-saturated air. It should be clear how to adapt the above functions to the liquid water case.
 
 
 
