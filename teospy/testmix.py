@@ -26,11 +26,12 @@ summary.
 * :mod:`liqair4a`
 * :mod:`liqair4b`
 * :mod:`liqair4c`
+* :mod:`liqiceair4`
 
 """
 
 __all__ = ['genliqvap4','geniceliq4','genicevap4','geniceair4a','geniceair4b',
-    'geniceair4c','genliqair4a','genliqair4b','genliqair4c']
+    'geniceair4c','genliqair4a','genliqair4b','genliqair4c','genliqiceair4']
 from tester import Tester
 _DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
     (0,2,0),(0,1,1),(0,0,2))
@@ -619,112 +620,75 @@ def genliqair4c():
 def genliqiceair4():
     """Generate liqiceair4 Testers.
     """
-    CHK_LIA4_1 = {'modname': 'liq_ice_air_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'airf': 0.99},
-        'geteqvals': liq_ice_air_4.geteqvals_atp,
-        'eqkws': ('airf','temp','pres','dhum','dliq'),
-        'funs': (liq_ice_air_4.liq_ice_air_pressure,
-            liq_ice_air_4.liq_ice_air_temperature),
-        'names': ('pressure','temperature'),
-        'refs': (38338.9622424,273.157198087)}
-
-    CHK_LIA4_2 = {'modname': 'liq_ice_air_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'temp': 273.155},
-        'geteqvals': liq_ice_air_4.geteqvals_atp,
-        'eqkws': ('airf','temp','pres','dhum','dliq'),
-        'funs': (liq_ice_air_4.liq_ice_air_pressure,
-            liq_ice_air_4.liq_ice_air_airfraction),
-        'names': ('pressure','airfraction'),
-        'refs': (67931.6010764,0.994366063923)}
-
-    CHK_LIA4_3 = {'modname': 'liq_ice_air_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'pres': 1e4},
-        'geteqvals': liq_ice_air_4.geteqvals_atp,
-        'eqkws': ('airf','temp','pres','dhum','dliq'),
-        'funs': (liq_ice_air_4.liq_ice_air_airfraction,
-            liq_ice_air_4.liq_ice_air_temperature),
-        'names': ('airfraction','temperature'),
-        'refs': (0.961024307544,273.159302793)}
-
-    CHK_LIA4_4 = {'modname': 'liq_ice_air_4',
-        'type': 'fun',
-        'args': (0.1,),
-        'kwargs': {'wliq': 0.2, 'wice': 0.3},
-        'geteqvals': liq_ice_air_4.geteqvals_wa,
-        'eqkws': ('entr','wetf','wliq','wice','airf','temp','pres','dhum','dliq'),
-        'funs': (liq_ice_air_4.liq_ice_air_entropy,
-            liq_ice_air_4.liq_ice_air_enthalpy,liq_ice_air_4.liq_ice_air_density,
-            liq_ice_air_4.liq_ice_air_pressure,
-            liq_ice_air_4.liq_ice_air_temperature),
-        'names': ('entropy','enthalpy','density','pressure','temperature'),
-        'refs': (3496.16306903,900361.135280,474.974398769,706.817425301,
-            273.159992933)}
-
-    CHK_LIA4_4_ALT = {'modname': 'liq_ice_air_4',
-        'type': 'fun',
-        'args': (0.1,),
-        'kwargs': {'wliq': 0.2, 'wice': 0.3},
-        'geteqvals': liq_ice_air_4.geteqvals_wa,
-        'eqkws': ('entr','wetf','wliq','wice','airf','temp','pres','dhum','dliq'),
-        'funs': (liq_ice_air_4.liq_ice_air_entropy,
-            liq_ice_air_4.liq_ice_air_enthalpy,liq_ice_air_4.liq_ice_air_density,
-            liq_ice_air_4.liq_ice_air_pressure,
-            liq_ice_air_4.liq_ice_air_temperature),
-        'names': ('entropy','enthalpy','density','pressure','temperature'),
-        'refs': (3496.16306903,900361.135280,0.012136403756794166,706.817425301,
-            273.159992933)}
-
-    CHK_LIA4_5 = {'modname': 'liq_ice_air_4',
-        'type': 'fun',
-        'args': (0.99,),
-        'kwargs': {'entr': 0.0, 'wetf': 0.5},
-        'geteqvals': liq_ice_air_4.geteqvals_wa,
-        'eqkws': ('entr','wetf','wliq','wice','airf','temp','pres','dhum','dliq'),
-        'funs': (liq_ice_air_4.liq_ice_air_enthalpy,
-            liq_ice_air_4.liq_ice_air_density,liq_ice_air_4.liq_ice_air_pressure,
-            liq_ice_air_4.liq_ice_air_airfraction,
-            liq_ice_air_4.liq_ice_air_solidfraction,
-            liq_ice_air_4.liq_ice_air_liquidfraction,
-            liq_ice_air_4.liq_ice_air_vapourfraction,
-            liq_ice_air_4.liq_ice_air_temperature),
-        'names': ('enthalpy','density','pressure','airfraction','solidfraction',
-            'liquidfraction','vapourfraction','temperature'),
-        'refs': (7356.12943724,7.74757979404,112016.075795,0.996583352944,
-            3.30296152581e-3,3.30296152581e-3,3.39407694837e-3,
-            273.151724970)}
-
-    CHK_LIA4_5_ALT = {'modname': 'liq_ice_air_4',
-        'type': 'fun',
-        'args': (0.99,),
-        'kwargs': {'entr': 0.0, 'wetf': 0.5},
-        'geteqvals': liq_ice_air_4.geteqvals_wa,
-        'eqkws': ('entr','wetf','wliq','wice','airf','temp','pres','dhum','dliq'),
-        'funs': (liq_ice_air_4.liq_ice_air_enthalpy,
-            liq_ice_air_4.liq_ice_air_density,liq_ice_air_4.liq_ice_air_pressure,
-            liq_ice_air_4.liq_ice_air_airfraction,
-            liq_ice_air_4.liq_ice_air_solidfraction,
-            liq_ice_air_4.liq_ice_air_liquidfraction,
-            liq_ice_air_4.liq_ice_air_vapourfraction,
-            liq_ice_air_4.liq_ice_air_temperature),
-        'names': ('enthalpy','density','pressure','airfraction','solidfraction',
-            'liquidfraction','vapourfraction','temperature'),
-        'refs': (7356.12943724,1.436115286795335,112016.075795,0.996583352944,
-            3.30296152581e-3,3.30296152581e-3,3.39407694837e-3,
-            273.151724970)}
-
-    CHK_LIA4_6 = {'modname': 'liq_ice_air_4',
-        'type': 'fun',
-        'args': (.99,100.),
-        'funs': (liq_ice_air_4.liq_ice_air_ifl,liq_ice_air_4.liq_ice_air_iml),
-        'names': ('ifl','iml'),
-        'refs': (83234.7314360,81605.5557728)}
-    return None
+    import liqiceair4
+    funs = [liqiceair4.pressure,liqiceair4.temperature]
+    fargs = tuple()
+    fkwargs = {'airf': 0.99}
+    refs = [38338.9622424,273.157198087]
+    fnames = ['pressure','temperature']
+    argfmt = '({0:s}={1:4g})'
+    header = 'Wet-icy air at airf'
+    eqfun = liqiceair4.eq_atp
+    eqkeys = ['airf','temp','pres','dhum','dliq']
+    test_a = Tester(funs,fargs,refs,fnames,argfmt,header=header,fkwargs=fkwargs,
+        eqfun=eqfun,eqargs=fargs,eqkwargs=fkwargs,eqkeys=eqkeys)
+    
+    funs = [liqiceair4.pressure,liqiceair4.airfraction]
+    fkwargs = {'temp': 273.155}
+    refs = [67931.6010764,0.994366063923]
+    fnames = ['pressure','airfraction']
+    argfmt = '({0:s}={1:7.3f})'
+    header = 'Wet-icy air at temp'
+    test_t = Tester(funs,fargs,refs,fnames,argfmt,header=header,fkwargs=fkwargs,
+        eqfun=eqfun,eqargs=fargs,eqkwargs=fkwargs,eqkeys=eqkeys)
+    
+    funs = [liqiceair4.airfraction,liqiceair4.temperature]
+    fkwargs = {'pres': 1e4}
+    refs = [0.961024307544,273.159302793]
+    fnames = ['airfraction','temperature']
+    argfmt = '({0:s}={1:5g})'
+    header = 'Wet-icy air at pres'
+    test_p = Tester(funs,fargs,refs,fnames,argfmt,header=header,fkwargs=fkwargs,
+        eqfun=eqfun,eqargs=fargs,eqkwargs=fkwargs,eqkeys=eqkeys)
+    
+    funs = [liqiceair4.entropy,liqiceair4.enthalpy,liqiceair4.density,
+        liqiceair4.pressure,liqiceair4.temperature]
+    fargs = (0.1,)
+    fkwargs = {'wliq': 0.2, 'wice': 0.3}
+    refs = [3496.16306903,900361.135280,0.012136403756794166,706.817425301,
+        273.159992933]
+    refs_alt = [None,None,474.974398769,None,None]
+    fnames = ['entropy','enthalpy','density','pressure','temperature']
+    argfmt = '({0:3g},{1:s}={2:3g},{3:s}={4:3g})'
+    header = 'Wet-icy air at (wair,wliq,wice)'
+    eqfun = liqiceair4.eq_wefli
+    test_wli = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=fargs,eqkwargs=fkwargs,eqkeys=eqkeys)
+    
+    funs = [liqiceair4.enthalpy,liqiceair4.density,liqiceair4.pressure,
+        liqiceair4.airfraction,liqiceair4.solidfraction,
+        liqiceair4.liquidfraction,liqiceair4.vapourfraction,
+        liqiceair4.temperature]
+    fargs = (0.99,)
+    fkwargs = {'entr': 0., 'wetf': 0.5}
+    refs = [7356.12943724,1.436115286795335,112016.075795,0.996583352944,
+        3.30296152581e-3,3.30296152581e-3,3.39407694837e-3,273.151724970]
+    refs_alt = [None,7.74757979404,None,None,None,None,None,None]
+    fnames = ['enthalpy','density','pressure','airfraction','solidfraction',
+        'liquidfraction','vapourfraction','temperature']
+    argfmt = '({0:4g},{1:s}={2:2g},{3:s}={4:3g})'
+    header = 'Wet-icy air at (wair,entr,wetf)'
+    test_wef = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=fargs,eqkwargs=fkwargs,eqkeys=eqkeys)
+    
+    funs = [liqiceair4.ifl,liqiceair4.iml]
+    fargs = (.99,100.)
+    refs = [83234.7314360,81605.5557728]
+    fnames = ['ifl','iml']
+    argfmt = '({0:3g},{1:3g})'
+    header = 'Wet-icy air isentropic levels'
+    test_ifml = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    return (test_a, test_t, test_p, test_wli, test_wef, test_ifml)
 
 def genseaair4():
     """Generate seaair4 Testers.
@@ -1095,7 +1059,8 @@ def genseavap4():
 ## Dictionary relating modules to functions
 _GENDICT = {'liqvap4': genliqvap4, 'iceliq4': geniceliq4, 'icevap4': genicevap4,
     'iceair4a': geniceair4a, 'iceair4b': geniceair4b, 'iceair4c': geniceair4c,
-    'liqair4a': genliqair4a, 'liqair4b': genliqair4b, 'liqair4c': genliqair4c}
+    'liqair4a': genliqair4a, 'liqair4b': genliqair4b, 'liqair4c': genliqair4c,
+    'liqiceair4': genliqiceair4}
 
 
 ## See if all values fall within the given tolerances

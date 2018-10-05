@@ -265,6 +265,45 @@ and if this is greater than $p_t$ then the air is always ice-saturated.
 These modules are for liquid water in equilibrium with humid air. The approximations here have the same form as for the ice-air equilibrium modules, only with different values of the $A$ and $B$ parameters. In addition, there is no limit placed on the temperature of liquid-saturated air, as opposed to ice-saturated air. It should be clear how to adapt the above functions to the liquid water case.
 
 
+\subsection{\texttt{liqiceair4}}
+
+This module is for liquid water, ice, and humid air in equilibrium. As such, it only applies to temperatures within a very narrow range, about 273.15 K up to the triple point 273.16 K. The total pressure, however, must vary much more for the liquid and ice to be in equilibrium, from about 1.3e5 Pa at 273.15 K to the triple point 611 Pa at 273.16 K.
+
+In this module, I make the initial guesses as follows. When either pressure or temperature are given, the approximation functions in \texttt{iceliq4} can be used to give the other value as well as the liquid water density. From the temperature, equation \ref{eqn:satvap} gives the vapour pressure. When combined with the total pressure, the humid air dry fraction and density can be calculated.
+
+When the humid air dry fraction is given, things are a bit more complicated. For temperatures near the triple point, equating the idealized liquid water and ice chemical potentials gives
+\begin{equation*}
+    p(T) \approx p_t \left( 1 + \frac{L_{\ice}/p_t}{v_{\ice} - v_{\liq}} (1 - T/T_t) \right) = p_t (1 + A (1 - T/T_t))
+\end{equation*}
+where $v_{\ice}$ and $v_{\liq}$ are the specific volumes of ice and liquid water at the triple point. The pressure has such a broad range because the \textit{nondimensional} coefficient $A$ in this equation is about $6\cdot10^6$. At a temperature of 273.15 K, $(1-T/T_t) = 3.7\cdot 10^{-5}$, so the equilibrium pressure is still many times larger than the triple-point pressure. This variation of the pressure with temperature dominates all other terms in the idealized liquid and vapour potentials. Equating those potentials essentially reduces to setting the vapour pressure to the triple point, so
+\begin{equation*}
+    p_t = p \frac{1-airf}{\epsw airf + 1-airf} \quad \Rightarrow \quad T = T_t \left( 1 - \frac{1}{A} \frac{\epsw airf}{1-airf} \right).
+\end{equation*}
+From here, the same tactic as above is used to get the other primary variables.
+
+The last approximation to make for this module is when the total dry air fraction, entropy, and wet fraction of condensate are given. As before, the temperature must stay close to the triple point but the pressures can vary over a wide range. The contributions to the entropy are dominated by the partial pressure of dry air and the intrinsic entropy of the vapour and ice components. Assuming that the vapour pressure is simply $p_t$ allows us to write the humid air dry fraction in terms of the pressure, $a=(p-p_t)/(p-p_t + \epsw p_t)$. The specific entropy with these assumptions is
+\begin{equation*}
+    s(p;\omega,f) \approx -\omega R_{\dry} \ln((p-p_t)/p_0) + \omega \epsw \frac{p_t}{p-p_t} \frac{L_{\vap}}{T_t} + (1-f)(1-\omega - \omega \epsw p_t/(p-p_t)) \frac{-L_{\ice}}{T_t}
+\end{equation*}
+where $\omega$ is the total dry fraction and $f$ is the wet fraction of condensate. This can be rearranged into
+\begin{equation*}
+    \frac{s + (1-f)(1-\omega) \frac{L_{\ice}}{T_t} - \omega R_{\dry} \ln(p_0/p_t)}{\omega R_{\dry}} = \ln(p_t/(p-p_t)) + \frac{p_t}{p-p_t} \frac{L_{\vap} + (1-f) L_{\ice}}{R_w T_t}
+\end{equation*}
+which is evidently a function of $x = p_t/(p-p_t)$. This is, in fact, another form of the Lambert equation, but on the positive branch rather than the negative. Unfortunately, I do not know of any particular approximations or bounds to the positive branch of the Lambert function.
+
+I tested a number of total dry fraction, wet fraction of condensate, and temperature values to calculate the entropy and then see what the function arguments were. The argument to the Lambert function was never more than .35. I therefore use the first 3 terms in the Taylor expansion to calculate the pressure:
+\begin{equation*}
+    w = \frac{L_{\vap} + (1-f) L_{\ice}}{R_w T_t} \exp\left( \frac{s + (1-f)(1-\omega) \frac{L_{\ice}}{T_t} - \omega R_{\dry} \ln(p_0/p_t)}{\omega R_{\dry}} \right), \qquad \frac{p_t}{p-p_t} \frac{L_{\vap} + (1-f) L_{\ice}}{R_w T_t} = w - w^2 + \frac{3}{2} w^3.
+\end{equation*}
+Using only the first term in the expansion is equivalent to ignoring the pressure term in the dry air entropy, and seemed too inaccurate. Using the first two terms has the risk that the resulting function value is negative. Using three terms seems to me to be both safe and accurate enough for an initial condition. From here, the method given above to approximate the parameters from the pressure is used.
+
+
+
+
+
+
+
+
 
 
 

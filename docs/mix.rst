@@ -73,6 +73,13 @@ The basic contents of the modules are as follows:
     :members: eq_wpte, liqair_h, cp, density, kappa_s, lapserate, temperature, eq_pot, potdensity, potenthalpy, pottemp
 
 
+`liqiceair4`
+------------
+
+.. automodule:: liqiceair4
+    :members: eq_atp, eq_wefli, eq_all, pressure, temperature, density, dryairfraction, enthalpy, entropy, liquidfraction, solidfraction, vapourfraction, iml, ifl
+
+
 
 
 
