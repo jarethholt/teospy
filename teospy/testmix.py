@@ -27,11 +27,16 @@ summary.
 * :mod:`liqair4b`
 * :mod:`liqair4c`
 * :mod:`liqiceair4`
+* :mod:`sealiq4`
+* :mod:`seavap4`
+* :mod:`seaice4`
 
 """
 
 __all__ = ['genliqvap4','geniceliq4','genicevap4','geniceair4a','geniceair4b',
-    'geniceair4c','genliqair4a','genliqair4b','genliqair4c','genliqiceair4']
+    'geniceair4c','genliqair4a','genliqair4b','genliqair4c','genliqiceair4',
+    'gensealiq4','genseavap4','genseaice4']
+import warnings
 from tester import Tester
 _DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
     (0,2,0),(0,1,1),(0,0,2))
@@ -690,6 +695,260 @@ def genliqiceair4():
     test_ifml = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     return (test_a, test_t, test_p, test_wli, test_wef, test_ifml)
 
+def gensealiq4():
+    """Generate sealiq4 Testers.
+    """
+    import sealiq4
+    funs = sealiq4.osmoticpressure
+    fargs = (0.035,300.,1e5)
+    refs = 2594603.20968
+    fnames = 'osmoticpressure'
+    argfmt = '({0:5.3f},{1:3g},{2:6g})'
+    header = 'Seawater-pure liquid equilibrium'
+    test = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    return (test,)
+
+def genseavap4():
+    """Generate seavap4 Testers.
+    """
+    import seavap4
+    funs = seavap4.boilingtemperature
+    fargs = (0.035,640.)
+    refs = 274.042416829
+    fnames = 'boilingtemperature'
+    argfmt = '({0:5.3f},{1:3g})'
+    header = 'Seawater-vapour boiling temperature'
+    test_bt = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = seavap4.vapourpressure
+    fargs = (0.035,274.)
+    refs = 638.044692615
+    fnames = 'vapourpressure'
+    argfmt = '({0:5.3f},{1:3g})'
+    header = 'Seawater-vapour vapour pressure'
+    test_vp = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = seavap4.brinesalinity
+    fargs = (274.,640.)
+    refs = 2.94396298294e-2
+    fnames = 'brinesalinity'
+    argfmt = '({0:3g},{1:3g})'
+    header = 'Seawater-vapour brine salinity'
+    test_bs = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = [seavap4.densitysea,seavap4.densityvap,seavap4.enthalpyevap,
+        seavap4.enthalpysea,seavap4.enthalpyvap,seavap4.entropysea,
+        seavap4.entropyvap,seavap4.volumeevap]
+    fargs = tuple()
+    fkwargs = {'salt': 0.035, 'pres': 640.}
+    refs = [1027.87349556,5.06324890264e-3,2498295.32187,3465.122066144071,
+        2502546.89358,13.061700450797833,9140.56256065,197.500648110]
+    refs_alt = [None,None,None,3465.11896144,None,13.0616891215,None,None]
+    fnames = ['densitysea','densityvap','enthalpyevap','enthalpysea',
+        'enthalpyvap','entropysea','entropyvap','volumeevap']
+    argfmt = '({0:s}={1:5.3f},{2:s}={3:g})'
+    header = 'Seawater-vapour at salinity and pressure'
+    eqfun = seavap4.eq_stp
+    eqkeys = ['salt','temp','pres','dliq','dvap']
+    test_sp = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=fargs,eqkwargs=fkwargs,eqkeys=eqkeys,
+        refs_alt=refs_alt)
+    
+    funs = [seavap4.densitysea,seavap4.densityvap,seavap4.enthalpyevap,
+        seavap4.enthalpysea,seavap4.enthalpyvap,seavap4.entropysea,
+        seavap4.entropyvap,seavap4.volumeevap]
+    fargs = tuple()
+    fkwargs = {'salt': 0.035, 'temp': 274.}
+    refs = [1027.87626132,5.04855547811e-3,2498395.40101,3295.96629299,
+        2502469.07187,12.4443983378,9141.68990452,198.075461154]
+    fnames = ['densitysea','densityvap','enthalpyevap','enthalpysea',
+        'enthalpyvap','entropysea','entropyvap','volumeevap']
+    argfmt = '({0:s}={1:5.3f},{2:s}={3:g})'
+    header = 'Seawater-vapour at salinity and temperature'
+    test_st = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=fargs,eqkwargs=fkwargs,eqkeys=eqkeys)
+    
+    funs = [seavap4.densitysea,seavap4.densityvap,seavap4.enthalpyevap,
+        seavap4.enthalpysea,seavap4.enthalpyvap,seavap4.entropysea,
+        seavap4.entropyvap,seavap4.volumeevap]
+    fargs = tuple()
+    fkwargs = {'temp': 274., 'pres': 640.}
+    refs = [1023.42713047,5.06403699513e-3,2498551.19875,3405.93353730,
+        2502466.96633,14.0256815112,9140.27087793,197.469911653]
+    fnames = ['densitysea','densityvap','enthalpyevap','enthalpysea',
+        'enthalpyvap','entropysea','entropyvap','volumeevap']
+    argfmt = '({0:s}={1:3g},{2:s}={3:g})'
+    header = 'Seawater-vapour at temperature and pressure'
+    test_tp = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=fargs,eqkwargs=fkwargs,eqkeys=eqkeys)
+    
+    funs = seavap4.seavap_g
+    args1 = (0.035,274.,610.)
+    fargs = [(der+args1) for der in _DERS3]
+    refs = [-2748.82963245,151028.257424,-6072.50817709,137.534028399,0.,
+        88286.38618253275,-1990.1384855543138,-2760.11106421,63.1093348229,
+        -1.65027885871]
+    refs_alt = [None,None,None,None,None,14965.0677011,-321.591932572,None,None,
+        None]
+    fnames = 'seavap_g'
+    argfmt = '({0:5.3f},{1:3g},{2:3g})'
+    header = 'Seawater-vapour parcel Gibbs function'
+    eqfun = seavap4.eq_seavap
+    eqkeys = ['salt','dliq','dvap']
+    test_der = Tester(funs,fargs,refs,fnames,argfmt,header=header,eqfun=eqfun,
+        eqargs=args1,eqkeys=eqkeys,refs_alt=refs_alt)
+    
+    funs = [seavap4.cp,seavap4.density,seavap4.enthalpy,seavap4.entropy,
+        seavap4.expansion,seavap4.kappa_t]
+    fargs = (0.035,274.,610.)
+    refs = [756270.431593,7.27092786882e-3,1661118.41089,6072.50817709,
+        0.458863421347,1.19990585451e-2]
+    fnames = ['cp','density','enthalpy','entropy','expansion','kappa_t']
+    argfmt = '({0:5.3f},{1:3g},{2:3g})'
+    header = 'Seawater-vapour parcel functions'
+    test_fun = Tester(funs,fargs,refs,fnames,argfmt,header=header,eqfun=eqfun,
+        eqargs=fargs,eqkeys=eqkeys)
+    
+    funs = seavap4.brinefraction
+    fargs = (0.0035,274.,640.)
+    refs = 0.118887364425
+    fnames = 'brinefraction'
+    argfmt = '({0:6.4f},{1:3g},{2:3g})'
+    header = 'Seawater-vapour parcel brine fraction'
+    test_bf = Tester(funs,fargs,refs,fnames,argfmt,header=header,eqfun=eqfun,
+        eqargs=fargs,eqkeys=eqkeys)
+    return (test_bt,test_vp,test_bs,test_sp,test_st,test_tp,test_der,test_fun,
+        test_bf)
+
+def genseaice4():
+    """Generate seaice4 Testers.
+    """
+    import seaice4
+    funs = seaice4.brinesalinity
+    fargs = (270.,1e5)
+    refs = 0.0560264150322
+    fnames = 'brinesalinity'
+    argfmt = '({0:3g},{1:6g})'
+    header = 'Sea-ice brine salinity'
+    test_bs = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = seaice4.meltingpressure
+    fargs = (0.035,270.)
+    refs = 16132047.4385
+    fnames = 'meltingpressure'
+    argfmt = '({0:5.3f},{1:3g})'
+    header = 'Sea-ice melting pressure'
+    test_mp = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = [seaice4.freezingtemperature,seaice4.dtfdp,seaice4.dtfds]
+    fargs = (0.035,1e5)
+    refs = [271.240373585,7.48210942879e-8,-56.8751336296]
+    fnames = ['freezingtemperature','dtfdp','dtfds']
+    argfmt = '({0:5.3f},{1:6g})'
+    header = 'Sea-ice freezing temperature'
+    test_ft = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = [seaice4.densityice,seaice4.densitysea,seaice4.enthalpymelt,
+        seaice4.volumemelt,seaice4.enthalpyice,seaice4.enthalpysea,
+        seaice4.entropyice,seaice4.entropysea]
+    fargs = tuple()
+    fkwargs = {'temp': 270., 'pres': 1e5}
+    refs = [917.181167192,1045.16805918,328249.119579,-9.181869179e-5,
+        -339929.555499,-12742.8664892,-1244.97335506,-53.1667911144]
+    fnames = ['densityice','densitysea','enthalpymelt','volumemelt',
+        'enthalpyice','enthalpysea','entropyice','entropysea']
+    argfmt = '({0:s}={1:3g},{2:s}={3:6g})'
+    header = 'Sea-ice at temperature and pressure'
+    eqfun = seaice4.eq_stp
+    eqkeys = ['salt','temp','pres','dliq']
+    test_tp = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=fargs,eqkwargs=fkwargs,eqkeys=eqkeys)
+    
+    fkwargs = {'salt': 0.035, 'temp': 270.}
+    refs = [918.898527655,1035.73670169,326829.393605,-9.67135426848e-5,
+        -323205.968289,2832.94910407,-1247.71314646,-46.7361169560]
+    argfmt = '({0:s}={1:5.3f},{2:s}={3:3g})'
+    header = 'Sea-ice at salinity and temperature'
+    test_st = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=fargs,eqkwargs=fkwargs,eqkeys=eqkeys)
+    
+    fkwargs = {'salt': 0.035, 'pres': 1e5}
+    refs = [917.000739687,1028.05199645,329942.976285,-9.10140854473e-5,
+        -337351.999358,-7613.19337919,-1235.44872812,-27.9264598103]
+    argfmt = '({0:s}={1:5.3f},{2:s}={3:6g})'
+    header = 'Sea-ice at salinity and pressure'
+    test_sp = Tester(funs,fargs,refs,fnames,argfmt,header=header,
+        fkwargs=fkwargs,eqfun=eqfun,eqargs=fargs,eqkwargs=fkwargs,eqkeys=eqkeys)
+    
+    funs = seaice4.seaice_g
+    args1 = (0.035,270.,1e5)
+    fargs = [(der+args1) for der in _DERS3]
+    refs = [-414.017574547,96363.7730495,500.445444181,1.00689072300e-3,0.,
+        -21272.226025171047,-0.002383040378214491,-232.847783380,
+        1.19590706917e-7,-1.57591932118e-12]
+    refs_alt = [None,None,None,None,None,-1144.02883419,-8.62856321467e-4,None,
+        -1.65866446694e-5,None]
+    fnames = 'seaice_g'
+    argfmt = '({0:5.3f},{1:3g},{2:6g})'
+    header = 'Sea-ice parcel Gibbs function'
+    eqfun = seaice4.eq_seaice
+    eqkeys = ['salt','dliq']
+    test_der = Tester(funs,fargs,refs,fnames,argfmt,header=header,eqfun=eqfun,
+        eqargs=args1,eqkeys=eqkeys,refs_alt=refs_alt)
+    
+    funs = [seaice4.brinefraction,seaice4.cp,seaice4.density,seaice4.enthalpy,
+        seaice4.entropy,seaice4.expansion,seaice4.kappa_t]
+    fargs = args1
+    refs = [0.6247053283,62868.9015126,993.156434117,-135534.287503,
+        -500.445444181,1.18772280035e-4,1.56513441348e-9]
+    refs_alt = [None,None,None,None,None,-1.64731328738e-2,None]
+    fnames = ['brinefraction','cp','density','enthalpy','entropy','expansion',
+        'kappa_t']
+    header = 'Sea-ice parcel functions'
+    test_fun = Tester(funs,fargs,refs,fnames,argfmt,header=header,eqfun=eqfun,
+        eqargs=fargs,eqkeys=eqkeys,refs_alt=refs_alt)
+    return (test_bs,test_mp,test_ft,test_tp,test_st,test_sp,test_der,test_fun)
+
+def genseaicevap4():
+    """Generate seaicevap4 Testers.
+    """
+    CHK_SIV4_1 = {'modname': 'sea_ice_vap_4',
+        'type': 'fun',
+        'args': (),
+        'kwargs': {'salt': 0.035},
+        'geteqvals': sea_ice_vap_4.geteqvals_stp,
+        'eqkws': ('salt','temp','pres','dliq','dvap'),
+        'funs': (sea_ice_vap_4.sea_ice_vap_density_vap,
+            sea_ice_vap_4.sea_ice_vap_temperature,
+            sea_ice_vap_4.sea_ice_vap_pressure),
+        'names': ('density_vap','temperature','pressure'),
+        'refs': (4.17156419318e-3,271.247815057,521.950349225)}
+
+    CHK_SIV4_2 = {'modname': 'sea_ice_vap_4',
+        'type': 'fun',
+        'args': (),
+        'kwargs': {'temp': 270.},
+        'geteqvals': sea_ice_vap_4.geteqvals_stp,
+        'eqkws': ('salt','temp','pres','dliq','dvap'),
+        'funs': (sea_ice_vap_4.sea_ice_vap_salinity,
+            sea_ice_vap_4.sea_ice_vap_density_vap,
+            sea_ice_vap_4.sea_ice_vap_pressure),
+        'names': ('salinity','density_vap','pressure'),
+        'refs': (5.61489288506e-2,3.77406140772e-3,470.059067981)}
+
+    CHK_SIV4_3 = {'modname': 'sea_ice_vap_4',
+        'type': 'fun',
+        'args': (),
+        'kwargs': {'pres': 500.},
+        'geteqvals': sea_ice_vap_4.geteqvals_stp,
+        'eqkws': ('salt','temp','pres','dliq','dvap'),
+        'funs': (sea_ice_vap_4.sea_ice_vap_salinity,
+            sea_ice_vap_4.sea_ice_vap_density_vap,
+            sea_ice_vap_4.sea_ice_vap_temperature),
+        'names': ('salinity','density_vap','temperature'),
+        'refs': (4.38955878828e-2,4.00364833230e-3,270.734430917)}
+    return None
+
 def genseaair4():
     """Generate seaair4 Testers.
     """
@@ -757,310 +1016,15 @@ def genseaair4():
         'refs': (1.45584069071,)}
     return None
 
-def genseaice4():
-    """Generate seaice4 Testers.
-    """
-    CHK_SI4_1 = {'modname': 'sea_ice_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'temp': 270., 'pres': 1e5},
-        'geteqvals': sea_ice_4.geteqvals_stp,
-        'eqkws': ('salt','temp','pres','dliq'),
-        'funs': (sea_ice_4.sea_ice_brinesalinity,sea_ice_4.sea_ice_density_ice,
-            sea_ice_4.sea_ice_density_sea,sea_ice_4.sea_ice_enthalpy_melt,
-            sea_ice_4.sea_ice_volume_melt,sea_ice_4.sea_ice_enthalpy_ice,
-            sea_ice_4.sea_ice_enthalpy_sea,sea_ice_4.sea_ice_entropy_ice,
-            sea_ice_4.sea_ice_entropy_sea,sea_ice_4.sea_ice_salinity),
-        'names': ('brinesalinity','density_ice','density_sea','enthalpy_melt',
-            'volume_melt','enthalpy_ice','enthalpy_sea','entropy_ice','entropy_sea',
-            'salinity'),
-        'refs': (0.0560264150322,917.181167192,1045.16805918,328249.119579,
-            -9.181869179e-5,-339929.555499,-12742.8664892,-1244.97335506,
-            -53.1667911144,0.0560264150322)}
 
-    CHK_SI4_2 = {'modname': 'sea_ice_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'salt': 0.035, 'temp': 270.},
-        'geteqvals': sea_ice_4.geteqvals_stp,
-        'eqkws': ('salt','temp','pres','dliq'),
-        'funs': (sea_ice_4.sea_ice_meltingpressure,sea_ice_4.sea_ice_density_ice,
-            sea_ice_4.sea_ice_density_sea,sea_ice_4.sea_ice_enthalpy_melt,
-            sea_ice_4.sea_ice_volume_melt,sea_ice_4.sea_ice_enthalpy_ice,
-            sea_ice_4.sea_ice_enthalpy_sea,sea_ice_4.sea_ice_entropy_ice,
-            sea_ice_4.sea_ice_entropy_sea,sea_ice_4.sea_ice_pressure),
-        'names': ('meltingpressure','density_ice','density_sea','enthalpy_melt',
-            'volume_melt','enthalpy_ice','enthalpy_sea','entropy_ice','entropy_sea',
-            'pressure'),
-        'refs': (16132047.4385,918.898527655,1035.73670169,326829.393605,
-            -9.67135426848e-5,-323205.968289,2832.94910407,-1247.71314646,
-            -46.7361169560,16132047.4385)}
-
-    CHK_SI4_3 = {'modname': 'sea_ice_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'salt': 0.035, 'pres': 1e5},
-        'geteqvals': sea_ice_4.geteqvals_stp,
-        'eqkws': ('salt','temp','pres','dliq'),
-        'funs': (sea_ice_4.sea_ice_freezingtemperature,sea_ice_4.sea_ice_dtfdp,
-            sea_ice_4.sea_ice_dtfds,sea_ice_4.sea_ice_density_ice,
-            sea_ice_4.sea_ice_density_sea,sea_ice_4.sea_ice_enthalpy_melt,
-            sea_ice_4.sea_ice_volume_melt,sea_ice_4.sea_ice_enthalpy_ice,
-            sea_ice_4.sea_ice_enthalpy_sea,sea_ice_4.sea_ice_entropy_ice,
-            sea_ice_4.sea_ice_entropy_sea,sea_ice_4.sea_ice_temperature),
-        'names': ('freezingtemperature','dtfdp','dtfds','density_ice','density_sea',
-            'enthalpy_melt','volume_melt','enthalpy_ice','enthalpy_sea',
-            'entropy_ice','entropy_sea','temperature'),
-        'refs': (271.240373585,7.48210942879e-8,-56.8751336296,917.000739687,
-            1028.05199645,329942.976285,-9.10140854473e-5,-337351.999358,
-            -7613.19337919,-1235.44872812,-27.9264598103,271.240373585)}
-
-    CHK_SI4_4 = {'modname': 'sea_ice_4',
-        'type': 'fun',
-        'args': (0.035,270.,1e5),
-        'kwargs': {},
-        'geteqvals': sea_ice_4.geteqvals_seaice,
-        'eqkws': ('salt','dliq'),
-        'funs': (sea_ice_4.sea_ice_brinefraction_seaice,sea_ice_4.sea_ice_cp_seaice,
-            sea_ice_4.sea_ice_density_seaice,sea_ice_4.sea_ice_enthalpy_seaice,
-            sea_ice_4.sea_ice_entropy_seaice,sea_ice_4.sea_ice_expansion_seaice,
-            sea_ice_4.sea_ice_kappa_t_seaice),
-        'names': ('brinefraction','cp','density','enthalpy','entropy','expansion',
-            'kappa_t'),
-        'refs': (0.6247053283,62868.9015126,993.156434117,-135534.287503,
-            -500.445444181,-1.64731328738e-2,1.56513441348e-9)}
-
-    CHK_SI4_5 = {'modname': 'sea_ice_4',
-        'type': 'der',
-        'args': (0.035,270.,1e5),
-        'kwargs': {},
-        'geteqvals': sea_ice_4.geteqvals_seaice,
-        'eqkws': ('salt','dliq'),
-        'funs': sea_ice_4.sea_ice_g,
-        'names': 'sea_ice_g',
-        'ders': DERS3,
-        'refs': (-414.017574547,96363.7730495,500.445444181,1.00689072300e-3,0.,
-            -1144.02883419,-8.62856321467e-4,-232.847783380,-1.65866446694e-5,
-            -1.57591932118e-12)}
-
-    CHK_SI4_5_ALT = {'modname': 'sea_ice_4',
-        'type': 'der',
-        'args': (0.035,270.,1e5),
-        'kwargs': {},
-        'geteqvals': sea_ice_4.geteqvals_seaice,
-        'eqkws': ('salt','dliq'),
-        'funs': sea_ice_4.sea_ice_g,
-        'names': 'sea_ice_g',
-        'ders': DERS3,
-        'refs': (-414.017574547,96363.7730495,500.445444181,1.00689072300e-3,0.,
-            -21272.226025171047,-0.002383040378214491,-232.847783380,
-            -1.65866446694e-5,-1.57591932118e-12)}
-    return None
-
-def genseaicevap4():
-    """Generate seaicevap4 Testers.
-    """
-    CHK_SIV4_1 = {'modname': 'sea_ice_vap_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'salt': 0.035},
-        'geteqvals': sea_ice_vap_4.geteqvals_stp,
-        'eqkws': ('salt','temp','pres','dliq','dvap'),
-        'funs': (sea_ice_vap_4.sea_ice_vap_density_vap,
-            sea_ice_vap_4.sea_ice_vap_temperature,
-            sea_ice_vap_4.sea_ice_vap_pressure),
-        'names': ('density_vap','temperature','pressure'),
-        'refs': (4.17156419318e-3,271.247815057,521.950349225)}
-
-    CHK_SIV4_2 = {'modname': 'sea_ice_vap_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'temp': 270.},
-        'geteqvals': sea_ice_vap_4.geteqvals_stp,
-        'eqkws': ('salt','temp','pres','dliq','dvap'),
-        'funs': (sea_ice_vap_4.sea_ice_vap_salinity,
-            sea_ice_vap_4.sea_ice_vap_density_vap,
-            sea_ice_vap_4.sea_ice_vap_pressure),
-        'names': ('salinity','density_vap','pressure'),
-        'refs': (5.61489288506e-2,3.77406140772e-3,470.059067981)}
-
-    CHK_SIV4_3 = {'modname': 'sea_ice_vap_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'pres': 500.},
-        'geteqvals': sea_ice_vap_4.geteqvals_stp,
-        'eqkws': ('salt','temp','pres','dliq','dvap'),
-        'funs': (sea_ice_vap_4.sea_ice_vap_salinity,
-            sea_ice_vap_4.sea_ice_vap_density_vap,
-            sea_ice_vap_4.sea_ice_vap_temperature),
-        'names': ('salinity','density_vap','temperature'),
-        'refs': (4.38955878828e-2,4.00364833230e-3,270.734430917)}
-    return None
-
-def gensealiq4():
-    """Generate sealiq4 Testers.
-    """
-    CHK_SL4 = {'modname': 'sea_liq_4',
-        'type': 'fun',
-        'args': (0.035,300.,1e5),
-        'funs': (sea_liq_4.sea_liq_osmoticpressure,),
-        'names': ('osmoticpressure',),
-        'refs': (2594603.20968,)}
-    return None
-
-def genseavap4():
-    """Generate seavap4 Testers.
-    """
-    CHK_SV4_1 = {'modname': 'sea_vap_4',
-        'type': 'fun',
-        'args': (0.035,640.),
-        'funs': (sea_vap_4.sea_vap_boilingtemperature,),
-        'names': ('boilingtemperature',),
-        'refs': (274.042416829,)}
-
-    CHK_SV4_2 = {'modname': 'sea_vap_4',
-        'type': 'fun',
-        'args': (0.035,274.),
-        'funs': (sea_vap_4.sea_vap_vapourpressure,),
-        'names': ('vapourpressure',),
-        'refs': (638.044692615,)}
-
-    CHK_SV4_3 = {'modname': 'sea_vap_4',
-        'type': 'fun',
-        'args': (274.,640.),
-        'funs': (sea_vap_4.sea_vap_brinesalinity,),
-        'names': ('brinesalinity',),
-        'refs': (2.94396298294e-2,)}
-
-    CHK_SV4_4 = {'modname': 'sea_vap_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'salt': 0.035, 'pres': 640.},
-        'geteqvals': sea_vap_4.geteqvals_stp,
-        'eqkws': ('salt','temp','pres','dlsea','dvap'),
-        'funs': (sea_vap_4.sea_vap_density_sea,sea_vap_4.sea_vap_density_vap,
-            sea_vap_4.sea_vap_enthalpy_evap,sea_vap_4.sea_vap_enthalpy_sea,
-            sea_vap_4.sea_vap_enthalpy_vap,sea_vap_4.sea_vap_entropy_sea,
-            sea_vap_4.sea_vap_entropy_vap,sea_vap_4.sea_vap_volume_evap),
-        'names': ('density_sea','density_vap','enthalpy_evap','enthalpy_sea',
-            'enthalpy_vap','entropy_sea','entropy_vap','volume_evap'),
-        'refs': (1027.87349556,5.06324890264e-3,2498295.32187,3465.11896144,
-            2502546.89358,13.0616891215,9140.56256065,197.500648110)}
-
-    CHK_SV4_4_ALT = {'modname': 'sea_vap_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'salt': 0.035, 'pres': 640.},
-        'geteqvals': sea_vap_4.geteqvals_stp,
-        'eqkws': ('salt','temp','pres','dlsea','dvap'),
-        'funs': (sea_vap_4.sea_vap_density_sea,sea_vap_4.sea_vap_density_vap,
-            sea_vap_4.sea_vap_enthalpy_evap,sea_vap_4.sea_vap_enthalpy_sea,
-            sea_vap_4.sea_vap_enthalpy_vap,sea_vap_4.sea_vap_entropy_sea,
-            sea_vap_4.sea_vap_entropy_vap,sea_vap_4.sea_vap_volume_evap),
-        'names': ('density_sea','density_vap','enthalpy_evap','enthalpy_sea',
-            'enthalpy_vap','entropy_sea','entropy_vap','volume_evap'),
-        'refs': (1027.87349556,5.06324890264e-3,2498295.32187,3465.122066144071,
-            2502546.89358,13.061700450797833,9140.56256065,197.500648110)}
-
-    CHK_SV4_5 = {'modname': 'sea_vap_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'salt': 0.035, 'temp': 274.},
-        'geteqvals': sea_vap_4.geteqvals_stp,
-        'eqkws': ('salt','temp','pres','dlsea','dvap'),
-        'funs': (sea_vap_4.sea_vap_density_sea,sea_vap_4.sea_vap_density_vap,
-            sea_vap_4.sea_vap_enthalpy_evap,sea_vap_4.sea_vap_enthalpy_sea,
-            sea_vap_4.sea_vap_enthalpy_vap,sea_vap_4.sea_vap_entropy_sea,
-            sea_vap_4.sea_vap_entropy_vap,sea_vap_4.sea_vap_pressure,
-            sea_vap_4.sea_vap_volume_evap),
-        'names': ('density_sea','density_vap','enthalpy_evap','enthalpy_sea',
-            'enthalpy_vap','entropy_sea','entropy_vap','pressure','volume_evap'),
-        'refs': (1027.87626132,5.04855547811e-3,2498395.40101,3295.96629299,
-            2502469.07187,12.4443983378,9141.68990452,638.044692615,198.075461154)}
-
-    CHK_SV4_6 = {'modname': 'sea_vap_4',
-        'type': 'fun',
-        'args': (),
-        'kwargs': {'temp': 274., 'pres': 640.},
-        'geteqvals': sea_vap_4.geteqvals_stp,
-        'eqkws': ('salt','temp','pres','dlsea','dvap'),
-        'funs': (sea_vap_4.sea_vap_density_sea,sea_vap_4.sea_vap_density_vap,
-            sea_vap_4.sea_vap_enthalpy_evap,sea_vap_4.sea_vap_enthalpy_sea,
-            sea_vap_4.sea_vap_enthalpy_vap,sea_vap_4.sea_vap_entropy_sea,
-            sea_vap_4.sea_vap_entropy_vap,sea_vap_4.sea_vap_salinity,
-            sea_vap_4.sea_vap_volume_evap),
-        'names': ('density_sea','density_vap','enthalpy_evap','enthalpy_sea',
-            'enthalpy_vap','entropy_sea','entropy_vap','salinity','volume_evap'),
-        'refs': (1023.42713047,5.06403699513e-3,2498551.19875,3405.93353730,
-            2502466.96633,14.0256815112,9140.27087793,2.94396298294e-2,
-            197.469911653)}
-
-    CHK_SV4_7 = {'modname': 'sea_vap_4',
-        'type': 'fun',
-        'args': (0.035,274.,610.),
-        'geteqvals': sea_vap_4.geteqvals_seavap,
-        'eqkws': ('salt','dlsea','dvap'),
-        'funs': (sea_vap_4.sea_vap_cp_seavap,sea_vap_4.sea_vap_density_seavap,
-            sea_vap_4.sea_vap_enthalpy_seavap,sea_vap_4.sea_vap_entropy_seavap,
-            sea_vap_4.sea_vap_expansion_seavap,sea_vap_4.sea_vap_kappa_t_seavap,
-            sea_vap_4.sea_vap_brinefraction_seavap),
-        'names': ('cp','density','enthalpy','entropy','expansion','kappa_t',
-            'brinefraction'),
-        'refs': (756270.431593,7.27092786882e-3,1661118.41089,6072.50817709,
-            0.458863421347,1.19990585451e-2,0.336191581475)}
-
-    CHK_SV4_7_ALT = {'modname': 'sea_vap_4',
-        'type': 'fun',
-        'args': (0.035,274.,610.),
-        'geteqvals': sea_vap_4.geteqvals_seavap,
-        'eqkws': ('salt','dlsea','dvap'),
-        'funs': (sea_vap_4.sea_vap_cp_seavap,sea_vap_4.sea_vap_density_seavap,
-            sea_vap_4.sea_vap_enthalpy_seavap,sea_vap_4.sea_vap_entropy_seavap,
-            sea_vap_4.sea_vap_expansion_seavap,sea_vap_4.sea_vap_kappa_t_seavap,
-            sea_vap_4.sea_vap_brinefraction_seavap),
-        'names': ('cp','density','enthalpy','entropy','expansion','kappa_t',
-            'brinefraction'),
-        'refs': (756270.431593,7.27092786882e-3,1661118.41089,6072.50817709,
-            0.458863421347,1.19990585451e-2,0.3361915894821463)}
-
-    CHK_SV4_8 = {'modname': 'sea_vap_4',
-        'type': 'der',
-        'args': (0.035,274.,610.),
-        'geteqvals': sea_vap_4.geteqvals_seavap,
-        'eqkws': ('salt','dlsea','dvap'),
-        'funs': sea_vap_4.sea_vap_g,
-        'names': 'sea_vap_g',
-        'ders': DERS3,
-        'refs': (-2748.82963245,151028.257424,-6072.50817709,137.534028399,0.,
-            14965.0677011,-321.591932572,-2760.11106421,63.1093348229,
-            -1.65027885871)}
-
-    CHK_SV4_8_ALT = {'modname': 'sea_vap_4',
-        'type': 'der',
-        'args': (0.035,274.,610.),
-        'geteqvals': sea_vap_4.geteqvals_seavap,
-        'eqkws': ('salt','dlsea','dvap'),
-        'funs': sea_vap_4.sea_vap_g,
-        'names': 'sea_vap_g',
-        'ders': DERS3,
-        'refs': (-2748.82963245,151028.257424,-6072.50817709,137.534028399,0.,
-            88286.38618253275,-1990.1384855543138,-2760.11106421,63.1093348229,
-            -1.65027885871)}
-
-    CHK_SV4_9 = {'modname': 'sea_vap_4',
-        'type': 'fun',
-        'args': (0.0035,274.,640.),
-        'funs': (sea_vap_4.sea_vap_brinefraction_seavap,),
-        'names': ('brinefraction',),
-        'refs': (0.118887364425,)}
-    return None
 
 
 ## Dictionary relating modules to functions
 _GENDICT = {'liqvap4': genliqvap4, 'iceliq4': geniceliq4, 'icevap4': genicevap4,
     'iceair4a': geniceair4a, 'iceair4b': geniceair4b, 'iceair4c': geniceair4c,
     'liqair4a': genliqair4a, 'liqair4b': genliqair4b, 'liqair4c': genliqair4c,
-    'liqiceair4': genliqiceair4}
+    'liqiceair4': genliqiceair4, 'sealiq4': gensealiq4, 'seavap4': genseavap4,
+    'seaice4': genseaice4}
 
 
 ## See if all values fall within the given tolerances
@@ -1081,7 +1045,10 @@ if __name__ == "__main__":
                     testlist += list(genfun())
     
     # Run tests
-    for test in testlist:
-        test.run()
-        test.printresults()
+    with warnings.catch_warnings():
+        warnstart = 'Step sizes are smaller than accepted tolerance.'
+        warnings.filterwarnings('ignore',warnstart,RuntimeWarning)
+        for test in testlist:
+            test.run()
+            test.printresults()
 

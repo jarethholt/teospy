@@ -46,7 +46,7 @@ extensions = [
     'sphinx.ext.imgmath'
 ]
 intersphinx_mapping = {
-    'numpy': ('http://docs.scipy.org/doc/numpy', None),
+    'numpy': ('https://docs.scipy.org/doc/numpy', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/reference',None)
 }
 

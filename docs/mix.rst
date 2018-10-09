@@ -80,6 +80,27 @@ The basic contents of the modules are as follows:
     :members: eq_atp, eq_wefli, eq_all, pressure, temperature, density, dryairfraction, enthalpy, entropy, liquidfraction, solidfraction, vapourfraction, iml, ifl
 
 
+`sealiq4`
+---------
+
+.. automodule:: sealiq4
+    :members: eq_stp, osmoticpressure
+
+
+`seavap4`
+---------
+
+.. automodule:: seavap4
+    :members: eq_stp, pressure, salinity, temperature, densitysea, densityvap, enthalpysea, enthalpyvap, entropysea, entropyvap, enthalpyevap, volumeevap, boilingtemperature, brinesalinity, vapourpressure, eq_seavap, seavap_g, cp, density, enthalpy, entropy, expansion, kappa_t, brinefraction
+
+
+`seaice4`
+---------
+
+.. automodule:: seaice4
+    :members: eq_stp, densityice, densitysea, enthalpyice, enthalpysea, entropyice, entropysea, pressure, temperature, salinity, enthalpymelt, volumemelt, brinesalinity, meltingpressure, freezingtemperature, dtfdp, dtfds, eq_seaice, seaice_g, brinefraction, cp, density, enthalpy, entropy, expansion, kappa_t
+
+
 
 
 

@@ -16,8 +16,10 @@
 \newcommand{\vap}{\text{vap}}
 \newcommand{\dry}{\text{dry}}
 \newcommand{\ice}{\text{ice}}
+\newcommand{\sea}{\text{sea}}
 \newcommand{\tp}{\text{tp}}
 \newcommand{\epsw}{\epsilon_w}
+\newcommand{\epss}{\epsilon_s}
 
 \title{Approximation derivations}
 \author{Jareth Holt}
@@ -297,6 +299,30 @@ I tested a number of total dry fraction, wet fraction of condensate, and tempera
 \end{equation*}
 Using only the first term in the expansion is equivalent to ignoring the pressure term in the dry air entropy, and seemed too inaccurate. Using the first two terms has the risk that the resulting function value is negative. Using three terms seems to me to be both safe and accurate enough for an initial condition. From here, the method given above to approximate the parameters from the pressure is used.
 
+
+\subsection{\texttt{sealiq4}}
+
+In the seawater equilibrium modules, an approximation is needed for the effect of salt on the chemical potential of liquid water. The simplest approach is to use Raoult's law for ideal solutions, so that the chemical potential of the liquid water is
+\begin{equation*}
+    g_{\liq}(S,T,p) = g^0_{\liq}(T,p) + R_w T \ln(x_w(S))
+\end{equation*}
+where $g^0_{\liq}$ is the potential of pure liquid water and $x_w$ is the mole fraction of water in the solution. In terms of the absolute salinity $S$, the mole fraction is $x_w = (1-S)/(1-S + S M_w/M_s)$. Since absolute salinity is $\ll 1$, the effect of salinity on the liquid potential in the ideal case is approximately $-R_s T S$, where $R_s = R/M_s$ is the `specific gas constant' of salt in seawater.
+
+This module in particular provides the osmotic pressure, a property of seawater in equilibrium with pure liquid water. The seawater has salinity, temperature, and pressure $(S,T,p_s)$, and is separated by a semipermeable membrane from pure water with temperature and pressure $(T,p_p)$. Pure water can flow through the membrane but salt cannot. The osmotic pressure is the excess $\phi = p_s-p_p$, the additional pressure required in the seawater to stop the flow of pure water. Equating the idealized chemical potentials for the two liquid water phases,
+\begin{align*}
+    g_{\liq,\sea}(S,T,p_s) &= g^0_{\liq}(T,\phi+p_p) - R_s T S = g^0_{\liq}(T,p_p) + \phi v_{\liq} - R_s T S \\
+    &= g^0_{\liq}(T,p_p) \quad \Rightarrow \quad \phi = \rho_{\liq} R_s T S
+\end{align*}
+where $v_{\liq}, \rho_{\liq}$ are the (relatively constant) specific volume and density of pure liquid water. This is the approximation I use for the seawater pressure; the initial seawater and pure water densities are approximated using the \texttt{flu3a} default function.
+
+
+\subsection{\texttt{seavap4}}
+
+This module is for seawater in equilibrium with pure water vapour. In the first set of equilibrium functions, any two of the seawater salinity, temperature, and pressure may be given and the third must be approximated. Since pure water vapour is present, the total pressure should be low enough that the pressure term in the liquid Gibbs energy can be ignored. Equating the idealized liquid and vapour potentials:
+\begin{equation*}
+    \frac{L_{\vap}}{R_w T_t} (1 - T_t/T) + \frac{c_{\liq}-c_{\vap}}{R_w} (1 - T_t/T + \ln(T_t/T)) = \epss S + \ln(p/p_t)
+\end{equation*}
+where $\epss = M_w/M_s$. This equation readily gives the salinity or pressure as long as the temperature is given. If the salinity and pressure are given, this has the form of equation \ref{eqn:lamb3}.
 
 
 
