@@ -25,10 +25,12 @@ summary.
 * :mod:`air3a`
 * :mod:`air3b`
 * :mod:`air3c`
+* :mod:`air5`
 
 """
 
-__all__ = ['gencnv0','genair1','genair2','genair3a','genair3b','genair3c']
+__all__ = ['gencnv0','genair1','genair2','genair3a','genair3b','genair3c',
+    'genair5']
 from tester import Tester
 _DERS2 = ((0,0),(1,0),(0,1),(2,0),(1,1),(0,2))
 _DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
@@ -197,10 +199,10 @@ def genair5():
     """Generate air5 Testers.
     """
     import air5
-    funs = air5.lapseratemoist
+    funs = air5.lapserate_c100m
     fargs = (50.,20.,1e3)
     refs = 0.971588085046
-    fnames = 'lapseratemoist'
+    fnames = 'lapserate_c100m'
     argfmt = '({0:2g},{1:2g},{2:4g})'
     header = 'air5 lapse rate function'
     testair5 = Tester(funs,fargs,refs,fnames,argfmt,header=header)
@@ -209,7 +211,7 @@ def genair5():
 
 ## Dictionary relating modules to functions
 _GENDICT = {'convert0': gencnv0, 'air1': genair1, 'air2': genair2,
-    'air3a': genair3a, 'air3b': genair3b, 'air3c': genair3c}
+    'air3a': genair3a, 'air3b': genair3b, 'air3c': genair3c, 'air5': genair5}
 
 
 ## See if all values fall within the given tolerances

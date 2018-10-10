@@ -3,15 +3,26 @@
 Air modules
 ===========
 
-The `air` modules provide thermodynamic properties of both dry and humid air. (It does not provide properties for saturated air; for those, see the level 4 modules.) For pure dry air, the primary variables are the temperature and dry air density. For humid air, the primary variables are the dry air mass fraction, temperature, and humid air density. For converting between mass fraction and relative humidity, see `liqair4a` and `iceair4a`.
+The `air` modules provide thermodynamic properties of both dry and humid air.
+(It does not provide properties for saturated air; for those, see the level 4
+modules.) For pure dry air, the primary variables are the temperature and dry
+air density. For humid air, the primary variables are the dry air mass fraction,
+temperature, and humid air density. For converting between mass fraction and
+relative humidity, see `liqair4a` and `iceair4a`.
 
 The basic contents of the modules are as follows:
 
-* :mod:`air1` provides the Helmholtz free energy of pure dry air and the virial coefficients between dry air and water vapour.
-* :mod:`air2` provides the Helmholtz free energy of humid air and thermodynamic properties derived therefrom.
-* :mod:`air3a` and :mod:`air3b` provide properties calculated from dry air mass fraction, temperature, and pressure.
-* :mod:`air3c` provides properties calculated from dry air mass fraction, entropy, and pressure. It also provides dry adiabatic ascent functions (e.g. potential temperature).
-* `air5` provides a single function for calculating the moist adiabatic lapse rate in the more conventional units of degrees C per 100 m.
+* :mod:`air1` provides the Helmholtz free energy of pure dry air and the virial
+  coefficients between dry air and water vapour.
+* :mod:`air2` provides the Helmholtz free energy of humid air and thermodynamic
+  properties derived therefrom.
+* :mod:`air3a` and :mod:`air3b` provide properties calculated from dry air mass
+  fraction, temperature, and pressure.
+* :mod:`air3c` provides properties calculated from dry air mass fraction,
+  entropy, and pressure. It also provides dry adiabatic ascent functions (e.g.
+  potential temperature).
+* :mod:`air5` provides a single function for calculating the moist adiabatic
+  lapse rate in the more conventional units of degrees C per 100 m.
 
 
 `air1`
@@ -25,7 +36,10 @@ The basic contents of the modules are as follows:
 ------
 
 .. automodule:: air2
-    :members: air_f, cp, cv, enthalpy, entropy, expansion, gibbsenergy, internalenergy, kappa_s, kappa_t, lapserate, pressure, soundspeed, vappot, eq_entropy, eq_pressure, eq_vappot, chkiapws10table, chkiapws10table13, chkiapws10table14, chkiapws10table15
+    :members: air_f, cp, cv, enthalpy, entropy, expansion, gibbsenergy,
+        internalenergy, kappa_s, kappa_t, lapserate, pressure, soundspeed,
+        vappot, eq_entropy, eq_pressure, eq_vappot, chkiapws10table,
+        chkiapws10table13, chkiapws10table14, chkiapws10table15
 
 
 `air3a`
@@ -39,7 +53,9 @@ The basic contents of the modules are as follows:
 -------
 
 .. automodule:: air3b
-    :members: compressibility, compressibility_lemmon, contraction, cp, cv, density, enthalpy, entropy, expansion, gibbsenergy, internalenergy, kappa_s, kappa_t, lapserate, soundspeed, vappot, chklemmon2000
+    :members: compressibility, compressibility_lemmon, contraction, cp, cv,
+        density, enthalpy, entropy, expansion, gibbsenergy, internalenergy,
+        kappa_s, kappa_t, lapserate, soundspeed, vappot, chklemmon2000
 
 
 `air3c`
@@ -49,32 +65,9 @@ The basic contents of the modules are as follows:
     :members: air_h, pottemp, potdensity, potenthalpy
 
 
+`air5`
+------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.. automodule:: air5
+    :members: lapserate_c100m
 
