@@ -97,6 +97,10 @@ class Tester(object):
         any (default None). These are used to keep track of older
         reference values before new results are vetted.
     :type refs_alt: list[float or None] or None
+    :arg chktol: A tolerance to default to for the `printresults`
+        method that will be used if an explicit value is not passed to
+        the method. If None, _CHKTOL is used.
+    :type chktol: float or None
     :raises RuntimeWarning: If the shape of the reference values does
         not match the shape of the functions and arguments lists.
     
@@ -125,7 +129,7 @@ class Tester(object):
     
     def __init__(self,funs,fargs,refs,fnames,argfmt,header=None,
         fkwargs=None,eqfun=None,eqargs=None,eqkwargs=None,eqkeys=None,
-        keepkeys=None,refs_alt=None):
+        keepkeys=None,refs_alt=None,chktol=None):
         if isinstance(funs,list):
             self.funs = funs
             nfun = len(funs)
@@ -176,6 +180,7 @@ class Tester(object):
         self.nfmt = len(argfmt.format(*args))
         self.header = header
         self.fkwargs = fkwargs
+        self.chktol = chktol
         
         # Include equilibrium function and keywords
         self.eqfun = eqfun
@@ -222,13 +227,18 @@ class Tester(object):
         self.errs = _geterr(self.refs,results,zerotol=zerotol)
         return None
     
-    def printresults(self,chktol=_CHKTOL):
+    def printresults(self,chktol=None):
         """Print results outside of a tolerance.
         """
         if self.results is None:
             errmsg = ('Results have not been calculated yet. Use '
                 'Tester.run to get function results.')
             raise ValueError(errmsg)
+        if chktol is None:
+            if self.chktol is not None:
+                chktol = self.chktol
+            else:
+                chktol = _CHKTOL
         if numpy.max(numpy.abs(self.errs)) <= chktol:
             okmsg = 'All results within tolerance {0}'.format(chktol)
             if self.header is not None:

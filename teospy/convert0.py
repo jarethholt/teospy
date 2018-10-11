@@ -278,7 +278,7 @@ def _check_baltic(lon0,lat0):
     # Is it within the widest limits?
     XBL, YBL = _BALTIC[0]
     XBR, YBR = _BALTIC[1]
-    if (lon0<XBL[-1] or lon0>XBR[0] or lat0<YBL[0] or lat0>YBL[-1]):
+    if (lon0<min(XBL) or lon0>max(XBR) or lat0<min(YBL) or lat0>max(YBR)):
         return False
     
     # Is it within the narrow limits?
@@ -307,7 +307,6 @@ def _gsw_safromspbaltic(spsu,lon0,lat0):
     if not isbaltic:
         warnmsg = ('Location ({0} E, {1} N) appears to be outside the Baltic '
             'sea').format(lon0,lat0)
-        warnmsg = BALTICMSG.format(lon0,lat0)
         warnings.warn(warnmsg,RuntimeWarning)
         return GSW_ERRVAL
     
@@ -510,7 +509,7 @@ def _gsw_saar(pdbar,lon0,lat0):
         saars = _gsw_addbarrier(saars,lon0,lat0,GSW_LONS[indx],GSW_LATS[indy],
             dlon,dlat)
     elif max(saars) >= _ERRVAL:
-        saars = gsw_addmean(saars,lon0,lat0)
+        saars = _gsw_addmean(saars,lon0,lat0)
     saar_lower = ((1-s1)*((1-r1)*saars[0] + r1*saars[1])
         + s1*((1-r1)*saars[3] + r1*saars[2]))
     if saar_lower >= _ERRVAL:
@@ -542,7 +541,7 @@ def gsw_safromsp(spsu,pdbar,lon0,lat0):
     # Handle Baltic sea locations first
     isbaltic = _check_baltic(lon0,lat0)
     if isbaltic:
-        sgkg = gsw_safromspbaltic(spsu,lon0,lat0)
+        sgkg = _gsw_safromspbaltic(spsu,lon0,lat0)
         if sgkg < _ERRVAL:
             return sgkg
     

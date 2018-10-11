@@ -1,6 +1,7 @@
 """Test accuracy of the flu modules.
 
-This module provides tests of the accuracy of the fluid water thermodynamic functions. This module can be called from the command line as
+This module provides tests of the fluid water thermodynamic functions.
+This module can be called from the command line as
 
     python testflu.py mod1 mod2 ...
 

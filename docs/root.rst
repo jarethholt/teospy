@@ -52,6 +52,11 @@ This function is an approximation for the value of :math:`x` in the equation :ma
 .. [LWRef] I. Chatzigeorgiou, "Bounds on the Lambert Function and Their Application to the Outage Analysis of User Cooperation," in IEEE Communications Letters, vol. 17, no. 8, pp. 1505-1508, August 2013. doi: 10.1109/LCOMM.2013.070113.130972.
 
 
+`convert5`
+----------
+
+.. automodule:: convert5
+    :members: swpres, swdepth, cnvpressure, cnvtemperature, sal78fromcnd, cndfromsal78, cnvsalinity
 
 
 
