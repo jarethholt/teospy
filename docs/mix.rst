@@ -3,7 +3,7 @@
 Mixture modules
 ===============
 
-The level 4 modules involve mixtures of multiple phases and substances, such as humid air with liquid water or seawater with ice. As such, they provide functions for calculating vapour pressure, enthalpy of evaporation/melting, etc. Because they involve equilibrium between different components, all of the mixture modules require the root-finder :func:`maths3.newton`. The modules may also rely on functions from level 3 modules to calculate quantities more easily. Thus the mixture modules are all level 4.
+The level 4 modules involve mixtures of multiple phases and substances, such as humid air with liquid water or seawater with ice. As such, they provide functions for calculating vapour pressure, enthalpy of evaporation/melting, etc. Because they involve equilibrium between different components, all of the mixture modules require the root-finder :func:`maths3.newton`. The modules may also rely on functions from level 3 modules to calculate quantities more easily. Thus the mixture modules are all level 4. There is one level 5 mixture module, `iceflu5`, that contains approximate fits for the melting and sublimation curves of ice.
 
 The basic contents of the modules are as follows:
 
@@ -115,7 +115,11 @@ The basic contents of the modules are as follows:
     :members: eq_satp, densityair, densityvap, entropyair, enthalpyevap, massfractionair, vapourpressure, condensetemp, chempotevap
 
 
+`iceflu5`
+---------
 
+.. automodule:: iceflu5
+    :members: liqpressure, liqtemperature, vappressure
 
 
 

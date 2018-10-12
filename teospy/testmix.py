@@ -1,6 +1,6 @@
 """Test accuracy of the level 4 mixture modules.
 
-This module provides tests of the accuracy of the level 4 mixture modules. The prefixes of these modules list the substances in equilibrium; `liqvap4` is for pure liquid water and pure water vapour, whereas `iceair4b` is for ice and humid air.
+This module provides tests of the accuracy of the level 4 mixture modules. The prefixes of these modules list the substances in equilibrium; `liqvap4` is for pure liquid water and pure water vapour, whereas `iceair4b` is for ice and humid air. It also includes one level 5 module, `iceflu5`.
 
 This module can also be called from the command line as
 
@@ -32,12 +32,15 @@ summary.
 * :mod:`seaice4`
 * :mod:`seaicevap4`
 * :mod:`seaair4`
+* :mod:`iceflu5`
 
 """
 
 __all__ = ['genliqvap4','geniceliq4','genicevap4','geniceair4a','geniceair4b',
     'geniceair4c','genliqair4a','genliqair4b','genliqair4c','genliqiceair4',
-    'gensealiq4','genseavap4','genseaice4','genseaicevap4','genseaair4']
+    'gensealiq4','genseavap4','genseaice4','genseaicevap4','genseaair4',
+    'geniceflu5']
+
 import warnings
 from tester import Tester
 _DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
@@ -1005,13 +1008,43 @@ def genseaair4():
     test_pd = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     return (test_ma,test_ct,test_stp,test_sap,test_pd)
 
+def geniceflu5():
+    """Generate iceflu5 Testers.
+    """
+    import iceflu5
+    funs = iceflu5.liqpressure
+    fargs = (272.4,)
+    refs = 1.00213724736e7
+    fnames = 'liqpressure'
+    argfmt = '({0:5.1f})'
+    header = 'Approximate melting pressure of ice'
+    test_lp = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = iceflu5.liqtemperature
+    fargs = (1e7,)
+    refs = 272.401569225
+    fnames = 'liqtemperature'
+    argfmt = '({0:4g})'
+    header = 'Approximate melting temperature of ice'
+    test_lt = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = iceflu5.vappressure
+    fargs = (270.,)
+    refs = 470.061877574
+    fnames = 'vappressure'
+    argfmt = '({0:3g})'
+    header = 'Approximate vapour pressure over ice'
+    test_vp = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    return (test_lp, test_lt, test_vp)
+
 
 ## Dictionary relating modules to functions
 _GENDICT = {'liqvap4': genliqvap4, 'iceliq4': geniceliq4, 'icevap4': genicevap4,
     'iceair4a': geniceair4a, 'iceair4b': geniceair4b, 'iceair4c': geniceair4c,
     'liqair4a': genliqair4a, 'liqair4b': genliqair4b, 'liqair4c': genliqair4c,
     'liqiceair4': genliqiceair4, 'sealiq4': gensealiq4, 'seavap4': genseavap4,
-    'seaice4': genseaice4, 'seaicevap4': genseaicevap4, 'seaair4': genseaair4}
+    'seaice4': genseaice4, 'seaicevap4': genseaicevap4, 'seaair4': genseaair4,
+    'iceflu5': geniceflu5}
 
 
 ## See if all values fall within the given tolerances
