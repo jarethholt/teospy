@@ -423,6 +423,8 @@ def temperature(salt,pres,ppot=None,enth=None,temp=None,dliq=None,
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
+    :arg bool useext: If False (default) then the salt contribution is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
     :arg mathargs: Keyword arguments to the root-finder
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
@@ -509,6 +511,8 @@ def density(salt,pres,ppot=None,enth=None,temp=None,dliq=None,hpot=None,
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
+    :arg bool useext: If False (default) then the salt contribution is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
     :arg mathargs: Keyword arguments to the root-finder
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
@@ -596,6 +600,8 @@ def entropy(salt,pres,ppot=None,enth=None,temp=None,dliq=None,hpot=None,
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
+    :arg bool useext: If False (default) then the salt contribution is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
     :arg mathargs: Keyword arguments to the root-finder
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
@@ -681,6 +687,8 @@ def contraction_t(salt,pres,ppot=None,enth=None,temp=None,dliq=None,
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
+    :arg bool useext: If False (default) then the salt contribution is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
     :arg mathargs: Keyword arguments to the root-finder
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
@@ -772,6 +780,8 @@ def expansion_t(salt,pres,ppot=None,enth=None,temp=None,dliq=None,
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
+    :arg bool useext: If False (default) then the salt contribution is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
     :arg mathargs: Keyword arguments to the root-finder
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
@@ -863,6 +873,8 @@ def pottemp(salt,pres,ppot,enth=None,temp=None,dliq=None,hpot=None,
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
+    :arg bool useext: If False (default) then the salt contribution is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
     :arg mathargs: Keyword arguments to the root-finder
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
@@ -937,6 +949,8 @@ def potdensity(salt,pres,ppot,enth=None,temp=None,dliq=None,hpot=None,
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
+    :arg bool useext: If False (default) then the salt contribution is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
     :arg mathargs: Keyword arguments to the root-finder
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
@@ -1012,6 +1026,8 @@ def contraction_h(salt,pres,ppot,enth=None,temp=None,dliq=None,
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
+    :arg bool useext: If False (default) then the salt contribution is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
     :arg mathargs: Keyword arguments to the root-finder
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
@@ -1092,6 +1108,8 @@ def contraction_theta(salt,pres,ppot,enth=None,temp=None,dliq=None,
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
+    :arg bool useext: If False (default) then the salt contribution is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
     :arg mathargs: Keyword arguments to the root-finder
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
@@ -1172,6 +1190,8 @@ def expansion_h(salt,pres,ppot,enth=None,temp=None,dliq=None,hpot=None,
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
+    :arg bool useext: If False (default) then the salt contribution is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
     :arg mathargs: Keyword arguments to the root-finder
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters
@@ -1253,6 +1273,8 @@ def expansion_theta(salt,pres,ppot,enth=None,temp=None,dliq=None,
     :arg bool chkbnd: If True then warnings are raised when the given
         values are valid but outside the recommended bounds (default
         False).
+    :arg bool useext: If False (default) then the salt contribution is
+        calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
     :arg mathargs: Keyword arguments to the root-finder
         :func:`_newton <maths3.newton>` (e.g. maxiter, rtol). If None
         (default) then no arguments are passed and default parameters

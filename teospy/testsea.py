@@ -23,10 +23,12 @@ summary.
 * :mod:`sea3b`
 * :mod:`sea3c`
 * :mod:`sea3d`
+* :mod:`sea5`
 
 """
 
-__all__ = ['gensea3a','gensea3b','gensea3c','gensea3d']
+__all__ = ['gensea3a','gensea3b','gensea3c','gensea3d','gensea5']
+
 from tester import Tester
 _DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
     (0,2,0),(0,1,1),(0,0,2))
@@ -250,45 +252,61 @@ def gensea5():
     """Generate sea5 Testers.
     """
     import sea5
-    CHK_SEA5A_1 = {'modname': 'sea_5a',
-        'type': 'fun',
-        'args': (0.035,300.,1e8),
-        'funs': (sea_5a.sea_alpha_tcon,sea_5a.sea_alpha_tpot,
-            sea_5a.sea_alpha_t,sea_5a.sea_beta_tcon,sea_5a.sea_beta_tpot,
-            sea_5a.sea_beta_t),
-        'names': ('alpha_tcon','alpha_tpot','alpha_t','beta_tcon',
-            'beta_tpot','beta_t'),
-        'refs': (3.91772847589e-4,3.92515634064e-4,3.73608885178e-4,
-            0.649596383654,0.663973579411,0.666238827368)}
-
-    CHK_SEA5A_2 = {'modname': 'sea_5a',
-        'type': 'fun',
-        'args': (0.035,300.,1e5),
-        'funs': (sea_5a.sea_cabb_tcon,sea_5a.sea_cabb_tpot,
-            sea_5a.sea_thrmb_tcon,sea_5a.sea_thrmb_tpot),
-        'names': ('cabb_tcon','cabb_tpot','thrmb_tcon','thrmb_tpot'),
-        'refs': (8.61252567438267e-6,8.33874537690444e-6,
-            1.48109271668362e-12,1.45941010702991e-12,)}
-
-    CHK_SEA5A_3 = {'modname': 'sea_5a',
-        'type': 'fun',
-        'args': (0.035,300.),
-        'funs': (sea_5a.sea_tconfromtpot,),
-        'names': ('tconfromtpot',),
-        'refs': (300.010069445,)}
-
-    CHK_SEA5A_4 = {'modname': 'sea_5a',
-        'type': 'fun',
-        'args': (0.035,300.010069445),
-        'funs': (sea_5a.sea_tpotfromtcon,),
-        'names': ('tpotfromtcon',),
-        'refs': (300.,)}
-    return None
+    funs = sea5.tconfromtpot
+    fargs = (0.035,300.)
+    refs = 300.010069445
+    fnames = 'tconfromtpot'
+    argfmt = '({0:5.3f},{1:3g})'
+    header = 'Conservative from potential temp'
+    test_tc = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = sea5.tpotfromtcon
+    fargs = (0.035,300.010069445)
+    refs = 300.
+    fnames = 'tpotfromtcon'
+    argfmt = '({0:5.3f},{1:13.9f})'
+    header = 'Potential from conservative temp'
+    test_tp = Tester(funs,fargs,refs,fnames,argfmt,header=header)
+    
+    funs = [sea5.expansion_tcon,sea5.expansion_tpot,sea5.expansion_t,
+        sea5.contraction_tcon,sea5.contraction_tpot,sea5.contraction_t]
+    fargs = (0.035,300.,1e8)
+    refs = [3.91772847589e-4,3.92515634064e-4,3.73608885178e-4,0.649596383654,
+        0.663973579411,0.666238827368]
+    fnames = ['expansion_tcon','expansion_tpot','expansion_t',
+        'contraction_tcon','contraction_tpot','contraction_t']
+    argfmt = '({0:5.3f},{1:3g},{2:3g})'
+    header = 'Expansion/contraction coefficients'
+    eqfun = sea5._eq_pot
+    eqargs = (0.035,1e8,sea5._PATM)
+    eqkwargs = {'temp': 300.}
+    eqkeys = ['enth','temp','dliq','hpot','tpot','dlpot']
+    keepkeys = ['dliq','tpot','dlpot']
+    test_ec = Tester(funs,fargs,refs,fnames,argfmt,header=header,eqfun=eqfun,
+        eqargs=eqargs,eqkwargs=eqkwargs,eqkeys=eqkeys,keepkeys=keepkeys)
+    
+    funs = [sea5.cabb_tcon,sea5.cabb_tpot,sea5.thrmb_tcon,sea5.thrmb_tpot]
+    fargs = (0.035,300.,1e5)
+    refs = [8.87852779114e-6,8.33874458992e-6,1.48109265005e-12,
+        1.45941002500e-12]
+    refs_alt = [8.61252567438267e-6,8.33874537690444e-6,1.48109271668362e-12,
+        1.45941010702991e-12]
+    fnames = ['cabb_tcon','cabb_tpot','thrmb_tcon','thrmb_tpot']
+    argfmt = '({0:5.3f},{1:3g},{2:6g})'
+    header = 'Cabbeling/thermobaric coefficients'
+    eqfun = sea5._eq_pot
+    eqargs = (0.035,1e5,sea5._PATM)
+    eqkwargs = {'temp': 300.}
+    chktol = 1e-7  # Because finite differences are inaccurate
+    test_ct = Tester(funs,fargs,refs,fnames,argfmt,header=header,eqfun=eqfun,
+        eqargs=eqargs,eqkwargs=eqkwargs,eqkeys=eqkeys,keepkeys=keepkeys,
+        refs_alt=refs_alt,chktol=chktol)
+    return (test_tc, test_tp, test_ec, test_ct)
 
 
 ## Dictionary relating modules to functions
 _GENDICT = {'sea3a': gensea3a, 'sea3b': gensea3b, 'sea3c': gensea3c,
-    'sea3d': gensea3d}
+    'sea3d': gensea3d, 'sea5': gensea5}
 
 
 ## See if all values fall within the given tolerances

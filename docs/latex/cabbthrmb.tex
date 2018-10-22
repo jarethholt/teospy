@@ -1,0 +1,190 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[left=1in,right=1in,bottom=.5in,top=.5in]{geometry}
+
+\hypersetup
+{
+  pdftitle   = {Cabbeling and thermobaric coefficients},
+  pdfauthor  = {Jareth Holt}
+}
+
+\title{Cabbeling and thermobaric coefficients}
+\author{Jareth Holt}
+
+\begin{document}
+
+\maketitle
+
+The thermobaric and cabbeling coefficients are thermodynamic quantities related to the dianeutral velocity of seawater. They reflect the fact that the expansion and contraction coefficients of seawater vary with salinity, (potential or conservative) temperature, and pressure. As such, they require third-order derivatives of the free energy functions, which are not currently available. The module \texttt{sea5} thus uses finite differences to calculate these coefficients.
+
+However, the module \texttt{gsw5} (the Gibbs SeaWater toolbox, GSW) uses the polynomial expansion for the Gibbs free energy of liquid water (from \texttt{liq5\_f03}). A polynomial expansion supports derivatives of arbitrary order, so these coefficients can be calculated directly. This document serves mainly to record how to calculate these coefficients directly, so that others may verify the implementation in \texttt{gsw5}. The functions using finite difference (e.g. \texttt{thrmb\_tpot\_alt}) have also been provided, and show a relative difference of $\sim 2\cdot 10^{-10}$ compared to the functions with exact derivatives, so I believe the expressions shown below are correct.
+
+The thermobaric and cabbeling coefficients can be defined with respect to potential temperature or conservative temperature (potential enthalpy). I will show the derivation for potential temperature first. In the following, the Gibbs free energy of seawater is denoted as $g(S,T,p)$. Derivatives with respect to primary variables are denoted by underscores, e.g. $g_s$ for the salinity derivative or $g_{tp}$ for a mixed temperature-pressure derivative. Lower-case subscripts are used to make the subscripts more pronounced, since lower-case letters with upper-case subscripts can be visually confusing. The GSW toolbox uses salinity in g/kg, temperature in degrees Celsius, and seawater (gauge) pressure in decibars as the primary variables. The absolute temperature and pressure are then $T_0 + T$ and $p_0 + p$, with $T_0$ = 273.15 K and $p_0$ = 1 atm = 101325 Pa. The potential temperature is denoted $\theta$ and the conservative temperature by $\Theta$.
+
+
+
+\section{Potential temperature}
+
+The potential temperature $\theta$ of a seawater parcel is the temperature it would have if adiabatically lifted to the surface. This means that its in-situ and potential entropy must be the same. Its governing equation is thus
+\begin{equation}\label{eqn:pottemp}
+    -g_t(S,T,p) = -g_t(S,\theta,0).
+\end{equation}
+Since there will be many derivatives evaluated at the surface value $(S,\theta,0)$, I will denote the right-hand side by $-g^0_t$.
+
+Now consider the in-situ temperature as a function of the other three variables, $T = T(S,\theta,p)$. Applying the chain rule to equation \ref{eqn:pottemp} gives
+\begin{equation}\label{eqn:tpotderivs}
+    \frac{\partial T}{\partial S} = \frac{g_{st}-g^0_{st}}{-g_{tt}}, \quad \frac{\partial T}{\partial \theta} = \frac{g^0_{tt}}{g_{tt}}, \quad \frac{\partial T}{\partial p} = \frac{g_{tp}}{-g_{tt}}.
+\end{equation}
+
+The expansion and contraction coefficients are scaled derivatives of the specific volume $v = g_p$. They can be calculated using any of the in-situ, potential, or conservative temperature as the thermal variable. That is,
+\begin{equation*}
+    \alpha^x = \left. \frac{1}{v} \frac{\partial v}{\partial x} \right|_{S,p}, \qquad \beta^x = \left. \frac{-1}{v} \frac{\partial v}{\partial S} \right|_{x,p}
+\end{equation*}
+for $x = (T,\theta,\Theta)$. For potential and conservative temperature, these quantities pick up terms such as $\frac{\partial v}{\partial T} \frac{\partial T}{\partial S}$ that depend on the derivatives of temperature. The potential temperature coefficients are
+\begin{equation*}
+    \alpha^{\theta} = \frac{1}{v} \frac{\partial v}{\partial T} \frac{\partial T}{\partial \theta} = \frac{g_{tp}}{g_p} \frac{g^0_{tt}}{g_{tt}} = g^0_{tt}(S,\theta,0) \cdot \left( \frac{g_{tp}}{g_p g_{tt}} \right) (S,T,p)
+\end{equation*}
+\begin{align*}
+    \beta^{\theta} &= \frac{-1}{v} \left( \left. \frac{\partial v}{\partial S} \right|_{T,p} + \left. \frac{\partial v}{\partial T} \right|_{S,p} \cdot \frac{\partial T}{\partial S} \right) = \frac{-g_{sp}}{g_p} - \frac{g_{tp}}{g_p} \frac{g_{st}-g^0_{st}}{-g_{tt}} \\
+    &= \left( \frac{-g_{sp}}{g_p} + \frac{g_{st} g_{tp}}{g_p g_{tt}} \right)(S,T,p) - g^0_{st}(S,\theta,0) \cdot \left( \frac{g_{tp}}{g_p g_{tt}} \right)(S,T,p).
+\end{align*}
+On the far right-hand side I show which variables the parts of the function depend on. Derivatives of these quantities, as used below, are the straightforward derivatives with respect to $(S,\theta,p)$ plus the derivatives with respect to $T$, so the functional dependence is important.
+
+Because $g_p$ and $g_{tt}$ often appear in the denominators, I will denote the derivatives by
+\begin{equation*}
+    \Lambda_x = \frac{g_{xp}}{g_p}, \quad \Sigma_x = \frac{g_{xtt}}{g_{tt}}, \qquad x = (S,T,p)
+\end{equation*}
+to make some expressions shorter. (Note that $\Lambda_s = -\beta^T$ and $\Lambda_t = \alpha^T$. This notation avoids potentially mixing up, for example, $\alpha^T$ and $\alpha^{\theta}$.) In addition, the salinity or pressure dependence can be combined with the temperature to give `total' derivatives
+\begin{equation*}
+    \Lambda'_x = \Lambda_x + \frac{\partial T}{\partial x} \Lambda_t, \quad \Sigma'_x = \Sigma_x + \frac{\partial T}{\partial x} \Sigma_t, \qquad x = (S,p).
+\end{equation*}
+
+The thermobaric coefficient captures the dependence of $\alpha$ and $\beta$ on pressure:
+\begin{equation*}
+    T_b^{\theta} = \beta^{\theta} \left. \frac{\partial (\alpha^{\theta}/\beta^{\theta})}{\partial p} \right|_{S,\theta} = \frac{\partial \alpha}{\partial p} - \frac{\alpha}{\beta} \frac{\partial \beta}{\partial p}.
+\end{equation*}
+Applying the chain rule to the expansion and contraction coefficients:
+\begin{align*}
+    \frac{\partial \alpha^{\theta}}{\partial p} &= \frac{g^0_{tt}}{g_p g_{tt}} \left( g_{tpp} + T_p g_{ttp} - g_{tp} (\Lambda'_p + \Sigma'_p) \right) \\
+    \frac{\partial \beta^{\theta}}{\partial p} &= \frac{-1}{g_p} \left( g_{spp} + T_p g_{stp} - g_{sp} \Lambda'_p \right) \\
+    &\qquad + \frac{1}{g_p g_{tt}} \left[ g_{stp} g_{tp} + g_{st} g_{tpp} + T_p (g_{stt} g_{tp} + g_{st} g_{ttp}) - g_{st} g_{tp} (\Lambda'_p + \Sigma'_p) \right] \\
+    &\qquad - \frac{g^0_{st}}{g_p g_{tt}} \left[ g_{tpp} + T_p g_{ttp} - g_{tp} (\Lambda'_p + \Sigma'_p) \right].
+\end{align*}
+These expressions can be rearranged to group together a few similar terms, and the derivatives of $T$ can be used to compress some terms:
+\begin{gather*}
+    k_{tpp} \equiv g_{tpp} + T_p g_{ttp} - g_{tp} (\Lambda'_p + \Sigma'_p), \qquad \frac{\partial \alpha^{\theta}}{\partial p} = \frac{g^0_{tt}}{g_p g_{tt}} k_{tpp} \\
+    \frac{\partial \beta^{\theta}}{\partial p} = \frac{-1}{g_p} \left( g_{spp} + 2 T_p g_{stp} + T_p^2 g_{stt} - g_{sp} \Lambda'_p + T_S k_{tpp} \right).
+\end{gather*}
+I think these forms more readily show how each term contributes to the derivative, and that the units of the various terms match. Note that the leading term $g_{spp}$ has one $S$- and two $p$-derivatives. The term $g_{sp} \Lambda'_p$ has one $S$- and one $p$-derivative on $g$, plus a $p$-derivative from $\Lambda$. The other terms have either one or two $T$-derivatives, multiplied by either $T_p$ or $T_S$, which effectively results in that number of $S$- or $p$-derivatives.
+
+The cabbeling coefficient relates to the temperature and salinity dependence of $\alpha$ and $\beta$, which are themselves temperature and salinity derivatives of specific volume. The form of the cabbeling coefficient given in the TEOS-10 manual is
+\begin{equation*}
+    C_b^{\theta} = \frac{\partial \alpha^{\theta}}{\partial \theta} + 2 \frac{\alpha^{\theta}}{\beta^{\theta}} \frac{\partial \alpha^{\theta}}{\partial S} - \left( \frac{\alpha^{\theta}}{\beta^{\theta}} \right)^2 \frac{\partial \beta^{\theta}}{\partial S}.
+\end{equation*}
+Going through each of these derivatives:
+\begin{align*}
+    \frac{\partial \alpha^{\theta}}{\partial \theta} &= g^0_{ttt} \frac{g_{tp}}{g_p g_{tt}} + \frac{g^0_{tt}}{g_p g_{tt}} T_{\theta} \left[ g_{ttp} - g_{tp} (\Lambda_t + \Sigma_t) \right] \\
+    \frac{\partial \alpha^{\theta}}{\partial S} &= g^0_{stt} \frac{g_{tp}}{g_p g_{tt}} + \frac{g^0_{tt}}{g_p g_{tt}} \left[ g_{stp} + T_S g_{ttp} - g_{tp} (\Lambda'_s + \Sigma'_s) \right] \\
+    \frac{\partial \beta^{\theta}}{\partial S} &= \frac{-1}{g_p} \left( g_{ssp} + T_S g_{stp} - g_{sp} \Lambda'_s \right) \\
+    &\qquad + \frac{1}{g_p g_{tt}} \left[ g_{sst} g_{tp} + g_{st} g_{stp} + T_S \left( g_{stt} g_{tp} + g_{st} g_{ttp} \right) - g_{st} g_{tp} (\Lambda'_s + \Sigma'_s) \right] \\
+    &\qquad - g^0_{sst} \frac{g_{tp}}{g_p g_{tt}} - \frac{g^0_{st}}{g_p g_{tt}} \left[ g_{stp} + T_S g_{ttp} - g_{tp} \left( \Lambda'_s + \Sigma'_s \right) \right].
+\end{align*}
+Here, terms can be gathered in a variety of ways. The way I have chosen is:
+\begin{gather*}
+    k_{ttp} \equiv g_{ttp} - g_{tp} (\Lambda_t + \Sigma_t), \qquad \frac{\partial \alpha^{\theta}}{\partial \theta} = \frac{1}{g_p} \left( T_{\theta}^2 k_{ttp} - T_p g^0_{ttt} \right) \\
+    k_{stp} \equiv g_{stp} - g_{tp} (\Lambda_s + \Sigma_s) + T_S k_{ttp}, \qquad \frac{\partial \alpha^{\theta}}{\partial S} = \frac{1}{g_p} \left( T_{\theta} k_{stp} - T_p g^0_{stt} \right) \\
+    \frac{\partial \beta^{\theta}}{\partial S} = \frac{-1}{g_p} \left[ g_{ssp} - g_{sp} \Lambda_s + T_S (g_{stp} - g_{sp} \Lambda_t + k_{stp}) + T_p (g_{sst} + T_S g_{stt} - g^0_{sst}) \right].
+\end{gather*}
+
+
+
+\section{Conservative temperature}
+
+The conservative temperature is a quantity with units of temperature that is suggested to be more accurately conserved during advection and mixing than potential temperature. It is defined as the potential enthalpy (the enthalpy a parcel would have if brought adiabatically to the surface) divided by a fixed reference heat capacity of $c_0$ = 3991.86795711963 J/kg/(deg C). (Remember that temperature in the GSW toolbox is in degrees Celsius; $T_0$ must be added to this value to get absolute temperature.) Expressing this definition in terms of the Gibbs energy,
+\begin{equation}\label{eqn:contemp}
+    \Theta = \frac{1}{c_0} \left( g - (T_0 + \theta) g_t \right)(S,\theta,0)
+\end{equation}
+where $\theta$ is the potential temperature, as above.
+
+To calculate derivatives, we now treat both $T$ and $\theta$ as functions of $(S,\Theta,p)$. First, from the definition of conservative temperature,
+\begin{equation*}
+    \frac{\partial \theta}{\partial S} = \frac{g^0_s - (T_0 + \theta) g^0_{st}}{(T_0 + \theta) g^0_{tt}}, \qquad \frac{\partial \theta}{\partial \Theta} = \frac{-c_0}{(T_0 + \theta) g^0_{tt}}, \qquad \frac{\partial \theta}{\partial p} = 0.
+\end{equation*}
+The last equation is a reflection of the fact that potential temperature and enthalpy both depend intrinsically on the salinity and entropy, not the initial pressure. From the definition of potential temperature,
+\begin{align*}
+    \frac{\partial T}{\partial S} &= \frac{g_{st}-g^0_{st}}{-g_{tt}} + \frac{g^0_{tt}}{g_{tt}} \frac{\partial \theta}{\partial S} = \frac{-g_{st}}{g_{tt}} + \frac{g^0_s}{T_0 + \theta} \frac{1}{g_{tt}} \\
+    \frac{\partial T}{\partial \Theta} &= \frac{g^0_{tt}}{g_{tt}} \frac{\partial \theta}{\partial \Theta} = \frac{-c_0}{T_0 + \theta} \frac{1}{g_{tt}} \\
+    \frac{\partial T}{\partial p} &= \frac{-g_{tp}}{g_{tt}}.
+\end{align*}
+
+The thermal expansion and haline contraction coefficients for conservative temperature are
+\begin{gather*}
+    \alpha^{\Theta} = \frac{1}{v} \frac{\partial v}{\partial T} \frac{\partial T}{\partial \Theta} = \frac{-c_0}{T_0 + \theta} \cdot \frac{g_{tp}}{g_p g_{tt}} \\
+    \beta^{\Theta} = \frac{-1}{v} \left( \left. \frac{\partial v}{\partial S} \right|_{T,p} + \left. \frac{\partial v}{\partial T} \right|_{S,p} \cdot \frac{\partial T}{\partial S} \right) = \frac{-g_{sp}}{g_p} + \frac{g_{st} g_{tp}}{g_p g_{tt}} - \frac{g^0_s}{T_0 + \theta} \cdot \frac{g_{tp}}{g_p g_{tt}}.
+\end{gather*}
+As before, it is useful to keep track of which terms are evaluated at the surface $(S,\theta)$ as opposed to in-situ at $(S,T,p)$. Now when taking derivatives, we have terms involving $\theta_s$ and $\theta_{\Theta}$ as well as $T_s, T_{\Theta}, T_p$. As a result, the cabbeling and thermobaric coefficients for conservative temperature have third-order derivatives evaluated at the surface (e.g. $g^0_{stp}$), compared to the potential temperature coefficients whose high-order derivatives are all in-situ.
+
+The following pressure derivatives are needed for the thermobaric coefficient:
+\begin{align*}
+    \frac{\partial \alpha^{\Theta}}{\partial p} &= \frac{-c_0}{T_0 + \theta} \frac{1}{g_p g_{tt}} \left[ g_{tpp} + T_p g_{ttp} - g_{tp} (\Lambda'_p + \Lambda'_s) \right] \\
+    \frac{\partial \beta^{\Theta}}{\partial p} &= \frac{-1}{g_p} \left[ g_{spp} + T_p g_{stp} - g_{sp} \Lambda'_p \right] \\
+    &\qquad + \frac{1}{g_p g_{tt}} \left[ g_{stp} g_{tp} + g_{st} g_{tpp} + T_p \left( g_{stt} g_{tp} + g_{st} g_{ttp} \right) - g_{st} g_{tp} (\Lambda'_p + \Sigma'_p) \right] \\
+    &\qquad - \frac{g^0_s}{T_0 + \theta} \frac{1}{g_p g_{tt}} \left[ g_{tpp} + T_p g_{ttp} - g_{tp} (\Lambda'_p + \Sigma'_p) \right].
+\end{align*}
+The pressure derivatives are relatively simple because the potential temperature does not depend on pressure, so the various $g^0$ terms stay the same. Collecting terms as before:
+\begin{align*}
+    k_{tpp} &\equiv g_{tpp} + T_p g_{ttp} - g_{tp} (\Lambda'_p + \Sigma'_p), \qquad \frac{\partial \alpha^{\Theta}}{\partial p} = \frac{-c_0}{T_0 + \theta} \frac{1}{g_p g_{tt}} k_{tpp} \\
+    \frac{\partial \beta^{\Theta}}{\partial p} &= \frac{-1}{g_p} \left[ g_{spp} + 2 T_p g_{stp} + T_p^2 g_{stt} - g_{sp} \Lambda'_p + T_S k_{tpp} \right].
+\end{align*}
+These expressions are nearly the same as those for potential temperature, but with the heat capacity-related term $g^0_{tt}$ replaced with the conservative temperature version $-c_0/(T_0 + \theta)$. The quantity $\partial \beta/\partial p$ looks the same for both conservative and potential temperature; their only difference is in the definition of $T_S$.
+
+The following conservative temperature and salinity derivatives are needed for the cabbeling coefficient:
+\begin{align*}
+    \frac{\partial \alpha^{\Theta}}{\partial \Theta} &= \frac{c_0}{(T_0 + \theta)^2} \theta_{\Theta} \frac{g_{tp}}{g_p g_{tt}} - \frac{c_0}{T_0 + \theta} \frac{1}{g_p g_{tt}} T_{\Theta} \left[ g_{ttp} - g_{tp} (\Lambda_t + \Sigma_t) \right] \\
+    \frac{\partial \alpha^{\Theta}}{\partial S} &= \frac{c_0}{(T_0 + \theta)^2} \theta_S \frac{g_{tp}}{g_p g_{tt}} - \frac{c_0}{T_0 + \theta} \frac{1}{g_p g_{tt}} \left[ g_{stp} + T_s g_{ttp} - g_{tp} (\Lambda'_s + \Sigma'_s) \right] \\
+    \frac{\beta^{\Theta}}{\partial S} &= \frac{-1}{g_p} \left[ g_{ssp} + T_S g_{stp} - g_{sp} \Lambda'_s \right] \\
+    &\qquad + \frac{1}{g_p g_{tt}} \left[ g_{sst} g_{tp} + g_{st} g_{stp} + T_S \left( g_{stt} g_{tp} + g_{st} g_{ttp} \right) - g_{st} g_{tp} (\Lambda'_s + \Sigma'_s) \right] \\
+    &\qquad - \frac{g^0_{ss}}{T_0 + \theta} \frac{g_{tp}}{g_p g_{tt}} - \frac{(T_0 + \theta) g^0_{st} - g^0_s}{(T_0 + \theta)^2} \theta_S \frac{g_{tp}}{g_p g_{tt}} - \frac{g^0_s}{T_0 + \theta} \frac{1}{g_p g_{tt}} \left[ g_{stp} + T_S g_{ttp} - g_{tp} (\Lambda'_s + \Sigma'_s) \right].
+\end{align*}
+The additional derivatives of surface quantities primarily add complexity to $\partial \beta^{\Theta}/\partial S$, in part because $\beta^{\Theta}$ is already more complex than $\beta^{\theta}$. Collecting terms again:
+\begin{gather*}
+    k_{ttp} \equiv g_{ttp} - g_{tp} (\Lambda_t + \Sigma_t), \qquad \frac{\partial \alpha^{\Theta}}{\partial \Theta} = \frac{1}{g_p} T_{\Theta} \left( T_{\Theta} k_{ttp} - \frac{\theta_{\Theta}}{T_0 + \theta} g_{tp} \right) \\
+    k_{stp} \equiv g_{stp} - g_{tp} (\Lambda_s + \Sigma_s) + T_S k_{ttp}, \qquad \frac{\partial \alpha^{\Theta}}{\partial S} = \frac{T_{\Theta}}{g_p} \left( k_{stp} - \frac{\theta_S}{T_0 + \theta} g_{tp} \right) \\
+    \frac{\beta^{\Theta}}{\partial S} = \frac{-1}{g_p} \left[ g_{ssp} - g_{sp} \Lambda_s + T_S \left( g_{stp} - g_{sp} \Lambda_t + k_{stp} \right) + T_p \left( g_{sst} + T_S g_{stt} - \frac{g^0_{ss} - \theta_S^2 g^0_{tt}}{T_0 + \theta} \right) \right].
+\end{gather*}
+Once again, these expressions are very similar to those for potential temperature, but with different `heat capacity'-like terms (the denominator of $T_0 + \theta$).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
