@@ -109,6 +109,7 @@ import sal2
 import maths3
 import flu3a
 import sea3a
+import maths4
 
 _CHKTOL = constants0.CHKTOL
 _MSAL = constants0.MSAL
@@ -125,6 +126,8 @@ _SAL0 = constants0.SAL0
 _RSAL = _RUNIV / _MSAL
 _VLTP = _DLTP**(-1)
 _VITP = _DITP**(-1)
+_C_SP = 0.396166676603
+_E = numpy.exp(1)
 _chkflubnds = constants0.chkflubnds
 _chkicebnds = constants0.chkicebnds
 _chksalbnds = constants0.chksalbnds
@@ -166,9 +169,28 @@ def _approx_sp(salt,pres):
     :arg float pres: Pressure in Pa.
     :returns: Temperature and liquid water density (both in SI units).
     """
-    dt = _RSAL*_TTP*salt + (pres-_PTPE)*(_VITP-_VLTP)
-    dt /= _LILTP/_TTP + _RSAL*_SAL0
-    temp = _TTP - dt
+    CDIF = _CLIQ-_CICE
+    R0 = _LILTP/_TTP / CDIF
+    r1 = (pres-_PTPE) * (_VITP-_VLTP)/_TTP / CDIF
+    r2 = _RSAL*salt / CDIF
+    w = -(1 - R0 + r1) * numpy.exp(-(1 - R0 - r2))
+    negz = 1 - (1 + _E*w)**_C_SP
+    temp = (1 - R0 + r1)*_TTP/negz
+    dliq = _dliq_default(temp,pres)
+    return temp, dliq
+
+def _approx_sp2(salt,pres):
+    """Approximate TDl at SP.
+    
+    Approximate the temperature and liquid water density of sea-ice with
+    the given salinity and pressure.
+    
+    :arg float salt: Salinity in kg/kg.
+    :arg float pres: Pressure in Pa.
+    :returns: Temperature and liquid water density (both in SI units).
+    """
+    x = (_RSAL*_TTP*salt + (pres-_PTPE)*(_VITP-_VLTP)) / _LILTP
+    temp = _TTP * (1-x)
     dliq = _dliq_default(temp,pres)
     return temp, dliq
 

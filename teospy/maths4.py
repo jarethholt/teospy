@@ -49,7 +49,11 @@ def lamb1(u,alpha=.5):
 def lamb2(v,r):
     """Approximate the Lambert W function.
     
-    Approximate the Lambert W function from its upper and lower bounds. The result replicates the triple point of the (idealized) system exactly. The first argument is proportional to the pressure. The second argument is the ratio of latent heat to the heat capacity difference.
+    Approximate the Lambert W function from its upper and lower bounds.
+    The result replicates the triple point of the (idealized) system
+    exactly. The first argument is proportional to the pressure. The
+    second argument is the ratio of latent heat to the heat capacity
+    difference.
     """
     u0 = r - numpy.log(1+r)
     negz = 1 + (2*(u0-v))**.5 + (r - (2*u0)**.5)/u0*(u0-v)
