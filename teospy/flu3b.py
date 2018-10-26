@@ -500,7 +500,7 @@ def liq_internalenergy(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     
     :Examples:
     
-    >>> liq_internal_energy(300.,1e5)
+    >>> liq_internalenergy(300.,1e5)
     112553.334133
     """
     dliq = _eq_tp_liq(temp,pres,dliq=dliq,chkvals=chkvals,chktol=chktol,

@@ -97,7 +97,7 @@ def compressibility(airf,temp,pres,dhum=None,chkvals=False,
     :Examples:
     
     >>> compressibility(0.9,300.,1e5)
-    0.997830231485
+    0.997830231398
     """
     dhum = _eq_atp(airf,temp,pres,dhum=dhum,chkvals=chkvals,chktol=chktol,
         dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)

@@ -1,17 +1,19 @@
 """Dry air Helmholtz potential and air-water virial coefficients.
 
-This module implements the Helmholtz free energy of dry air and its derivatives with respect to temperature and density. This module also includes the virial coefficients for dry air-water vapour mixtures.
+This module implements the Helmholtz free energy of dry air and its
+derivatives with respect to temperature and density. This module also
+includes the virial coefficients for dry air-water vapour mixtures.
 
 :Examples:
 
->>> air1.dry_f(0,0,300.,0.001)
+>>> dry_f(0,0,300.,1e-3)
 -696239.965190
->>> air1.air_baw(0,300.)
--0.295672747e-4
->>> air1.air_caaw_m6mol2(0,300.)
-0.801977741e-9
->>> air1.air_caww(0,300.)
--0.115552784e-6
+>>> air_baw(0,300.)
+-2.95672747e-05
+>>> air_caaw(0,300.)
+8.01977741e-10
+>>> air_caww(0,300.)
+-1.15552784e-07
 
 :Functions:
 
@@ -234,18 +236,16 @@ def dry_f(drvt,drvd,temp,ddry,chkbnd=False):
     
     >>> dry_f(0,0,300.,1e-3)
     -696239.965190
-    >>> dry_f(0,0,300.,1e-3)
-    -696239.965190
     >>> dry_f(1,0,300.,1e-3)
     -2124.55145456
     >>> dry_f(0,1,300.,1e-3)
-    86114714.9596
+    8.61147149596e+07
     >>> dry_f(2,0,300.,1e-3)
     -2.39242390806
     >>> dry_f(1,1,300.,1e-3)
-     287049.624545
+    287049.624545
     >>> dry_f(0,2,300.,1e-3)
-    -86114738036.1
+    -8.61147380361e+10
     """
     constants0.chkdrybnds(temp,ddry,chkbnd=chkbnd)
     tau = _TRED_DRY / temp
@@ -297,11 +297,11 @@ def air_baw(drvt,temp):
     :Examples:
     
     >>> air_baw(0,300.)
-    -0.295672747e-4
+    -2.95672747e-05
     >>> air_baw(1,300.)
-    0.280097360e-6
+    2.80097360e-07
     >>> air_baw(2,300.)
-    -0.242599241e-8
+    -2.42599241e-09
     """
     baw = 0.0
     tau = temp / _TRED_AW
@@ -332,11 +332,11 @@ def air_caaw(drvt,temp):
     :Examples:
     
     >>> air_caaw(0,300.)
-    0.801977741e-9 
+    8.01977741e-10 
     >>> air_caaw(1,300.)
-    -0.196103457e-11
+    -1.96103457e-12
     >>> air_caaw(2,300.)
-    0.170055638e-13
+    1.70055638e-14
     """
     caaw = 0.0
     tau = temp / _TRED_AAW
@@ -367,11 +367,11 @@ def air_caww(drvt,temp):
     :Examples:
     
     >>> air_caww(0,300.)
-    -0.115552784e-6 
+    -1.15552784e-07
     >>> air_caww(1,300.)
-    0.261363278e-8 
+    2.61363278e-09 
     >>> air_caww(2,300.)
-    -0.751334582e-10
+    -7.51334582e-11
     """
     caww = 0.0
     tau = temp / _TRED_AWW

@@ -16,15 +16,15 @@ and contraction coefficients.
 >>> sea_h(0,2,0,0.035,500.,1e5)
 7.72873234085e-2
 >>> contraction_t(0.035,500.,1e5)
-0.717342103505
->>> pottemp(0.035,300.,1e7,1e5)
+0.725209049049
+>>> pottemp(0.035,1e7,1e5,temp=300.)
 299.771869405
->>> potenthalpy(0.035,300.,1e7,1e5)
+>>> potenthalpy(0.035,1e7,1e5,temp=300.)
 106307.996083
->>> contraction_h(0.035,500.,1e7,1e5)
+>>> contraction_h(0.035,1e7,1e5,entr=500.)
 0.697779873590
->>> contraction_theta(0.035,500.,1e7,1e5)
-0.697779873590
+>>> contraction_theta(0.035,1e7,1e5,entr=500.)
+0.717342103505
 
 :Functions:
 
@@ -446,7 +446,7 @@ def contraction_t(salt,entr,pres,temp=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> contraction_t(0.035,500.,1e5)
-    0.717342103505
+    0.725209049049
     """
     temp, dliq = eq_sep(salt,entr,pres,temp=temp,dliq=dliq,chkvals=chkvals,
         chktol=chktol,temp0=temp0,dliq0=dliq0,chkbnd=chkbnd,useext=useext,
@@ -498,12 +498,10 @@ def expansion_t(salt,entr,pres,temp=None,dliq=None,chkvals=False,
     :raises RuntimeWarning: If the relative disequilibrium is more than
         chktol, if chkvals is True and all values are given.
     
-    Returns:
-        alpha (float): Expansion coefficient in 1/K.
+    :Examples:
     
-    Examples:
-        >>> sea_h_expansion_t(0.035,500.,1e5)
-        3.77581809091e-4
+    >>> expansion_t(0.035,500.,1e5)
+    3.77581809091e-4
     """
     temp, dliq = eq_sep(salt,entr,pres,temp=temp,dliq=dliq,chkvals=chkvals,
         chktol=chktol,temp0=temp0,dliq0=dliq0,chkbnd=chkbnd,useext=useext,
@@ -812,7 +810,7 @@ def potenthalpy(salt,pres,ppot,entr=None,temp=None,dliq=None,tpot=None,
     
     :Examples:
     
-    >>> potenthalpy(0.035,300.,1e7,1e5)
+    >>> potenthalpy(0.035,1e7,1e5,temp=300.)
     106307.996083
     """
     entr, temp, dliq, tpot, dlpot = eq_pot(salt,pres,ppot,entr=entr,temp=temp,
@@ -960,7 +958,7 @@ def contraction_theta(salt,pres,ppot,entr=None,temp=None,dliq=None,
     :Examples:
     
     >>> contraction_theta(0.035,1e7,1e5,entr=500.)
-    0.697779873590
+    0.717342103505
     """
     entr, temp, dliq, tpot, dlpot = eq_pot(salt,pres,ppot,entr=entr,temp=temp,
         dliq=dliq,tpot=tpot,dlpot=dlpot,chkvals=chkvals,chktol=chktol,

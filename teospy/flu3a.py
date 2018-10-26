@@ -4,7 +4,7 @@ This module implements the Gibbs free energies of both liquid water and water va
 
 :Examples:
 
->>> _eq_tp_liq(300.,1e5)
+>>> eq_tp_liq(300.,1e5)
 996.556340389
 >>> liq_g(0,0,300.,1e5)
 -5265.05045577
@@ -12,7 +12,7 @@ This module implements the Gibbs free energies of both liquid water and water va
 1.00345555938e-03
 >>> liq_g(2,0,300.,1e5)
 -13.9354650734
->>> _eq_tp_vap(300.,1e3)
+>>> eq_tp_vap(300.,1e3)
 7.22603510025e-03
 >>> vap_g(0,0,300.,1e3)
 -180090.341338

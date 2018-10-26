@@ -18,7 +18,7 @@ IAPWS 1997 tables 5 and 15.
 >>> liq_soundspeed(300.,3e6)
 1.50773921e3
 >>> vap_volume(300.,3.5e3)
-39.4913866e2
+39.4913866
 >>> vap_cp(300.,3.5e3)
 1.91300162e3
 >>> vap_soundspeed(300.,3.5e3)

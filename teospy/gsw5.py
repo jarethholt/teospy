@@ -344,7 +344,7 @@ def density(s_gkg,t_cels,p_dbar,chkbnd=False,useext=False):
     
     :Examples:
     
-    >>> dens(35.7,25.5,1023.)
+    >>> density(35.7,25.5,1023.)
     1027.95249316
     """
     g_p = gsw_g(0,0,1,s_gkg,t_cels,p_dbar,chkbnd=chkbnd,useext=useext)

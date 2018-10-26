@@ -20,9 +20,9 @@ used throughout this library, and other common measurement scales.
 >>> cnvtemperature(300.,'k(t48)','degf(t48)')
 80.33
 >>> cnvtemperature(300.,'k(t48)','degc(t68)')
-26.8411082312
+26.8411099988
 >>> cnvtemperature(300.,'k(t48)','k(t90)')
-299.984373917
+299.984373916
 >>> cnvtemperature(299.991108231,'k(t68)','k(t90)')
 299.984372149
 >>> sal78fromcnd(1.8880911555787682,40.,1e4)
@@ -33,17 +33,17 @@ used throughout this library, and other common measurement scales.
 >>> unitin = 'kg/kg(abs)'
 >>> kwargs = {'p0': 101325. + 1023e4, 'lon0': 201., 'lat0': -21.}
 >>> cnvsalinity(0.0357,unitin,'cl',**kwargs)
-19.6660177563
+19.6659461767
 >>> cnvsalinity(0.0357,unitin,'kn',**kwargs)
-35.5271620502
+35.5270328489
 >>> cnvsalinity(0.0357,unitin,'cnd',t0=t0,**kwargs)
-1.27556680822
+1.27556269128
 >>> cnvsalinity(0.0357,unitin,'pss',**kwargs)
-35.5276443777
+35.5275150654
 >>> cnvsalinity(0.0357,unitin,'kg/kg(ref)',**kwargs)
-0.0356951724471
+0.0356950425250
 >>> cnvsalinity(8.,'pss',unitin,lon0=20.,lat0=57.)
-8.13338057142857e-03
+0.008104837714285714
 
 :Functions:
 
@@ -220,9 +220,9 @@ def cnvpressure(presin,unitin,unitout,lat=_LAT0):
     >>> cnvpressure(1.05350196040e5,'kgf','pa')
     1.03313250000e7
     >>> cnvpressure(1.0331325e7,'pa','atm')
-    1.05350196040e5
+    101.9622501850481
     >>> cnvpressure(1.05350196040e5,'atm','pa')
-    1.03313250000e7
+    10674608613.753
     >>> cnvpressure(1.0331325e7,'pa','lbf/in2')
     1498.42272437
     >>> cnvpressure(1.49842272437e3,'lbf/in2','pa')
@@ -412,25 +412,25 @@ def cnvtemperature(tempin,unitin,unitout,tol=_T48TOL,itmax=_ITMAX):
     >>> cnvtemperature(300.,'k(t48)','degf(t48)')
     80.33
     >>> cnvtemperature(300.,'k(t48)','degf(t68)')
-    80.3139948158
+    80.3139979978
     >>> cnvtemperature(300.,'k(t48)','degf(t90)')
     80.3018730496
     >>> cnvtemperature(300.,'k(t48)','degc(t48)')
     26.8500000000
     >>> cnvtemperature(300.,'k(t48)','degc(t68)')
-    26.8411082312
+    26.8411099988
     >>> cnvtemperature(300.,'k(t48)','degc(t90)')
-    26.8343739167
+    26.8343739165
     >>> cnvtemperature(300.,'k(t48)','k(t68)')
-    299.991108231
+    299.991109999
     >>> cnvtemperature(300.,'k(t48)','k(t90)')
-    299.984373917
+    299.984373916
     >>> cnvtemperature(299.991108231,'k(t68)','degf(t68)')
-    80.3139916338
+    80.3139948158
     >>> cnvtemperature(299.991108231,'k(t68)','degf(t90)')
     80.3018698685
     >>> cnvtemperature(299.991108231,'k(t68)','degc(t68)')
-    26.8411064632
+    26.8411082310
     >>> cnvtemperature(299.991108231,'k(t68)','degc(t90)')
     26.8343721491
     >>> cnvtemperature(299.991108231,'k(t68)','k(t90)')
@@ -689,15 +689,15 @@ def cnvsalinity(saltin,unitin,unitout,t0=_TSAL1,p0=_PATM,lon0=_LON0,
     >>> lon0, lat0 = 201., -21.
     >>> kwargs = {'p0': p0, 'lon0': lon0, 'lat0': lat0}
     >>> cnvsalinity(0.0357,unitin,'cl',**kwargs)
-    19.6660177563
+    19.6659461767
     >>> cnvsalinity(0.0357,unitin,'kn',**kwargs)
-    35.5271620502
+    35.5270328489
     >>> cnvsalinity(0.0357,unitin,'cnd',t0=t0,**kwargs)
-    1.27556680822
+    1.27556269128
     >>> cnvsalinity(0.0357,unitin,'pss',**kwargs)
-    35.5276443777
+    35.5275150654
     >>> cnvsalinity(0.0357,unitin,'kg/kg(ref)',**kwargs)
-    0.0356951724471
+    0.0356950425250
     >>> cnvsalinity(0.0356951724471,'kg/kg(ref)',unitin,**kwargs)
     0.0357
     >>> cnvsalinity(35.52764437773386,'pss','cl')
@@ -711,15 +711,15 @@ def cnvsalinity(saltin,unitin,unitout,t0=_TSAL1,p0=_PATM,lon0=_LON0,
     >>> cnvsalinity(35.52764437773386,'pss','kg/kg(abs)',**kwargs)
     0.0357
     >>> cnvsalinity(35.,'pss',unitin,p0=101325+2e7,lon0=179.,lat0=40.)
-    0.0351888478029404
-    >>> cnvsalinity(8.,'pss','kg/kg(abs)',lon0=20.,lat0=57.)
-    8.13338057142857e-03
+    0.0351890192696528
+    >>> cnvsalinity(8.,'pss',unitin,lon0=20.,lat0=57.)
+    0.008104837714285714
     >>> cnvsalinity(35.5271620502,'kn','pss')
     35.5276443777
     >>> cnvsalinity(35.5271620502,'kn','kg/kg(abs)',**kwargs)
     0.0357
     >>> cnvsalinity(1.27556680822,'cnd','pss',t0=t0,p0=p0)
-    35.5226965418
+    35.5276443779
     >>> cnvsalinity(1.27556680822,'cnd',unitin,t0=t0,**kwargs)
     0.0357
     """

@@ -13,7 +13,7 @@ which will compare results from this module to reference values in IAPWS
 :Examples:
 
 >>> sea_g(0,0,0,0.035,300.,1e5)
--5114.99619857
+-5114.99619856
 >>> sea_g(0,0,1,0.035,300.,1e5)
 9.77858615182e-04
 >>> sea_g(0,2,0,0.035,300.,1e5)
@@ -23,7 +23,7 @@ which will compare results from this module to reference values in IAPWS
 >>> lapserate(0.035,300.,1e5)
 2.28411342567e-08
 >>> temp_maxdensity(0.01,1e5)
-274.950121503
+274.950121498
 
 :Functions:
 
@@ -125,7 +125,7 @@ def sea_g(drvs,drvt,drvp,salt,temp,pres,dliq=None,chkvals=False,
     :Examples:
     
     >>> sea_g(0,0,0,0.035,300.,1e5)
-    -5114.99619857
+    -5114.99619856
     >>> sea_g(0,0,1,0.035,300.,1e5)
     9.77858615182e-04
     >>> sea_g(0,2,0,0.035,300.,1e5)
@@ -187,7 +187,7 @@ def liqpot(salt,temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     :Examples:
     
     >>> liqpot(0.035,300.,1e5)
-    -7865.77834937
+    -7865.77834936
     """
     dliq = _eq_tp_liq(temp,pres,dliq=dliq,chkvals=chkvals,chktol=chktol,
         dliq0=dliq0,mathargs=mathargs)
@@ -628,7 +628,7 @@ def gibbsenergy(salt,temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     :Examples:
     
     >>> gibbsenergy(0.035,300.,1e5)
-    -5114.99619857
+    -5114.99619856
     """
     dliq = _eq_tp_liq(temp,pres,dliq=dliq,chkvals=chkvals,chktol=chktol,
         dliq0=dliq0,mathargs=mathargs)
@@ -1153,7 +1153,7 @@ def temp_maxdensity(salt,pres,temp0=_MDT,dliq0=_MDD,chkbnd=False,
     :Examples:
     
     >>> temp_maxdensity(0.01,1e5)
-    274.950121503
+    274.950121498
     """
     try:
         import scipy.optimize

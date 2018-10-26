@@ -214,7 +214,7 @@ def sal_g_term(term,drvt,drvp,temp,pres,chkbnd=False,useext=False):
     >>> sal_g_term(1,0,0,300.,1e6,useext=True)
     79427.9694846
     >>> sal_g_term(2,1,0,300.,1e6,useext=True)
-    1558.10730392553
+    1558.00684228239
     >>> sal_g_term(4,0,2,300.,1e6,useext=True)
     -6.06204383305e-13
     """

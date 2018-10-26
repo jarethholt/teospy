@@ -20,7 +20,7 @@ The potential temperature, enthalpy, etc. functions are also provided in `sea3a`
 0.726349317428
 >>> contraction_t(0.035,1e7,temp=300.)
 0.724913833446
->>> contraction_t(0.035,1e7,ppot=15,tpot=300.)
+>>> contraction_t(0.035,1e7,ppot=1e5,tpot=300.)
 0.724714253918
 >>> contraction_h(0.035,1e7,1e5,enth=1e5)
 0.718452125957
@@ -327,7 +327,7 @@ def eq_pot(salt,pres,ppot,enth=None,temp=None,dliq=None,hpot=None,
         enth = sea3a.enthalpy(salt,temp,pres,dliq=dliq,useext=useext)
     else:
         if temp is None:
-            temp, dliq = eq_shp(salt,enth,pres,temp0=temp0,dliq0=dliq0,
+            __, temp, dliq = eq_shp(salt,pres,enth=enth,temp0=temp0,dliq0=dliq0,
                 useext=useext,mathargs=mathargs)
         else:
             if dliq is None:
@@ -707,7 +707,7 @@ def contraction_t(salt,pres,ppot=None,enth=None,temp=None,dliq=None,
     0.726349317428
     >>> contraction_t(0.035,1e7,temp=300.)
     0.724913833446
-    >>> contraction_t(0.035,1e7,ppot=15,tpot=300.)
+    >>> contraction_t(0.035,1e7,ppot=1e5,tpot=300.)
     0.724714253918
     """
     if any(val is not None for val in (enth,temp)):
@@ -800,7 +800,7 @@ def expansion_t(salt,pres,ppot=None,enth=None,temp=None,dliq=None,
     3.07242256461e-4
     >>> expansion_t(0.035,1e7,temp=300.)
     3.18513471410e-4
-    >>> expansion_t(0.035,1e7,ppot=15,tpot=300.)
+    >>> expansion_t(0.035,1e7,ppot=1e5,tpot=300.)
     3.20122324740e-4
     """
     if any(val is not None for val in (enth,temp)):
@@ -1288,13 +1288,13 @@ def expansion_theta(salt,pres,ppot,enth=None,temp=None,dliq=None,
     :Examples:
     
     >>> expansion_h(0.035,1e7,1e5,enth=1e5)
-    2.91293979902e-4
+    7.28514646021e-08
     >>> expansion_h(0.035,1e7,1e5,hpot=1e5)
-    3.09134848554e-4
+    7.72876772245e-08
     >>> expansion_h(0.035,1e7,1e5,temp=300.)
-    3.20454167783e-4
+    8.01009066333e-08
     >>> expansion_h(0.035,1e7,1e5,tpot=300.)
-    3.22069710839e-4
+    8.05023387611e-08
     """
     enth, temp, dliq, hpot, tpot, dlpot = eq_pot(salt,pres,ppot,enth=enth,
         temp=temp,dliq=dliq,hpot=hpot,tpot=tpot,dlpot=dlpot,chkvals=chkvals,

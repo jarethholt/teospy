@@ -149,7 +149,7 @@ def air_massfractiondry(airx):
     
     :Example:
     
-    >>> air_massfractionair(0.5)
+    >>> air_massfractiondry(0.5)
     0.6165391902824494
     """
     mtot = airx*_MDRY + (1-airx)*_MWAT
@@ -602,9 +602,9 @@ def sal_asalfrompsal(spsu,lon0,lat0,pres):
     >>> sal_asalfrompsal(35.7,201.,-21.,patm+1023e4)
     0.035873322343341174
     >>> sal_asalfrompsal(35.,180.,40.,patm+2e7)
-    0.03518867406301395
+    0.035189093288995804
     >>> sal_asalfrompsal(8.,20.,57.,patm)
-    0.008104837714285716
+    0.008104837714285714
     """
     pdbar = (pres - _PATM)/_DBAR2PA
     sgkg = gsw_safromsp(spsu,pdbar,lon0,lat0)

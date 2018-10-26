@@ -214,7 +214,7 @@ def gibbsenergy(temp,dflu,chkbnd=False):
     :Examples:
     
     >>> gibbsenergy(300.,1000.)
-    2481.26020392
+    2481.2602039
     """
     _chkflubnds(temp,dflu,chkbnd=chkbnd)
     f = _flu_f(0,0,temp,dflu)
@@ -325,7 +325,7 @@ def lapserate(temp,dflu,chkbnd=False):
     
     :Examples:
     
-    >>> lapsrate(300.,1000.)
+    >>> lapserate(300.,1000.)
     2.03694039833e-08
     """
     _chkflubnds(temp,dflu,chkbnd=chkbnd)
