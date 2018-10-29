@@ -15,13 +15,13 @@ and ice.
 >>> pressure(airf=.997,entr=100.)
 72721.4579415
 >>> enthalpysubl(temp=270.,pres=1e5)
-2833359.27614
+2833397.5
 >>> enthalpysubl(airf=.997,temp=270.)
-2833386.54980
+2833421.4
 >>> enthalpysubl(airf=.997,pres=1e5)
-2833296.51317
+2833334.5
 >>> enthalpysubl(airf=.997,entr=100.)
-2834612.42351
+2834605.6
 >>> icl(0.997,300.,1e5)
 64988.3931838
 >>> airffromrh_wmo(0.8,270.,1e5)
@@ -825,13 +825,13 @@ def enthalpysubl(airf=None,temp=None,pres=None,entr=None,dhum=None,
     :Examples:
     
     >>> enthalpysubl(temp=270.,pres=1e5)
-    2833359.27614
+    2833397.47207
     >>> enthalpysubl(airf=.997,temp=270.)
-    2833386.54980
+    2833421.40534
     >>> enthalpysubl(airf=.997,pres=1e5)
-    2833296.51317
+    2833334.534
     >>> enthalpysubl(airf=.997,entr=100.)
-    2834612.42351
+    2834605.61525
     """
     airf, temp, pres, dhum = eq_atpe(airf=airf,temp=temp,pres=pres,entr=entr,
         dhum=dhum,chkvals=chkvals,chktol=chktol,airf0=airf0,temp0=temp0,
@@ -892,7 +892,7 @@ def condensationpressure(airf,temp,pres=None,dhum=None,chkvals=False,
     
     :Examples:
     
-    >>> ice_air_condensationpressure(0.997,270.)
+    >>> condensationpressure(0.997,270.)
     98034.4511233
     """
     __, __, pres, dhum = eq_atpe(airf=airf,temp=temp,pres=pres,dhum=dhum,
@@ -1065,9 +1065,11 @@ def _approx_icl(airf,temp,pres,dhum):
     reff = airf*_RDRY + (1-airf)*_RWAT
     ceff = airf*_CDRY + (1-airf)*_CVAP
     ginv = ceff/reff
-    r = (_AVI+_BVI)/(_BVI+ginv) - 1
-    v = (numpy.log((1-airf)/(_EPSW*airf+1-airf)*pres/_PATM)
-        + ginv*numpy.log(_TTP/temp)) / (_BVI+ginv)
+    a = _AVI + _BVI
+    b = _BVI + ginv
+    y = numpy.log((1-airf)/(_EPSW*airf+1-airf)*pres/_PTPE*(_TTP/temp)**ginv)
+    r = a/b - 1
+    v = y/b
     x = maths4.lamb2(v,r)
     ticl = _TTP/x
     ticl = min(ticl,_TTP)

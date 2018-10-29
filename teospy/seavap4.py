@@ -12,17 +12,17 @@ temperature, and pressure.
 >>> vapourpressure(0.035,274.)
 638.044692615
 >>> boilingtemperature(0.035,640.)
-274.042416829
+274.042417608
 >>> brinesalinity(274.,640.)
-2.94396298294e-2
+2.94396298289e-02
 >>> enthalpyevap(salt=0.035,temp=274.)
 2498395.40101
 >>> volumeevap(salt=0.035,temp=274.)
 198.075461154
 >>> enthalpyevap(salt=0.035,pres=640.)
-2498295.32187
+2498295.32717
 >>> volumeevap(salt=0.035,pres=640.)
-197.500648110
+197.500648674
 >>> enthalpyevap(temp=274.,pres=640.)
 2498551.19875
 >>> volumeevap(temp=274.,pres=640.)
@@ -32,12 +32,12 @@ temperature, and pressure.
 >>> seavap_g(0,0,1,0.035,274.,610.)
 137.534028399
 >>> seavap_g(0,1,1,0.035,274.,610.)
-63.1093348229
->>> cp(0.035,274.,600.)
-756270.431593
->>> expansion(0.035,274.,600.)
-0.458863421347
->>> kappa_t(0.035,274.,600.)
+63.10933482
+>>> cp(0.035,274.,610.)
+756270.4316
+>>> expansion(0.035,274.,610.)
+0.4588634213
+>>> kappa_t(0.035,274.,610.)
 1.19990585451e-2
 >>> brinefraction(0.0035,274.,640.)
 0.118887364425
@@ -542,7 +542,7 @@ def salinity(salt=None,temp=None,pres=None,dliq=None,dvap=None,
     :Examples:
     
     >>> salinity(temp=274.,pres=640.)
-    2.94396298294e-2
+    2.94396298289e-02
     """
     salt, temp, pres, dliq, dvap = eq_stp(salt=salt,temp=temp,pres=pres,
         dliq=dliq,dvap=dvap,chkvals=chkvals,chktol=chktol,salt0=salt0,
@@ -611,7 +611,7 @@ def temperature(salt=None,temp=None,pres=None,dliq=None,dvap=None,
     :Examples:
     
     >>> temperature(salt=0.035,pres=640.)
-    274.042416829
+    274.042417608
     """
     salt, temp, pres, dliq, dvap = eq_stp(salt=salt,temp=temp,pres=pres,
         dliq=dliq,dvap=dvap,chkvals=chkvals,chktol=chktol,salt0=salt0,
@@ -680,7 +680,7 @@ def densitysea(salt=None,temp=None,pres=None,dliq=None,dvap=None,
     :Examples:
     
     >>> densitysea(salt=0.035,pres=640.)
-    1027.87349556
+    1027.87349551
     >>> densitysea(salt=0.035,temp=274.)
     1027.87626132
     >>> densitysea(temp=274.,pres=640.)
@@ -753,7 +753,7 @@ def densityvap(salt=None,temp=None,pres=None,dliq=None,dvap=None,
     :Examples:
     
     >>> densityvap(salt=0.035,pres=640.)
-    5.06324890264e-3
+    5.06324888818e-03
     >>> densityvap(salt=0.035,temp=274.)
     5.04855547811e-3
     >>> densityvap(temp=274.,pres=640.)
@@ -826,11 +826,11 @@ def enthalpysea(salt=None,temp=None,pres=None,dliq=None,dvap=None,
     :Examples:
     
     >>> enthalpysea(salt=0.035,pres=640.)
-    3465.11896144
+    3465.122066
     >>> enthalpysea(salt=0.035,temp=274.)
-    3295.96629299
+    3295.966293
     >>> enthalpysea(temp=274.,pres=640.)
-    3405.93353730
+    3405.933537
     """
     salt, temp, pres, dliq, dvap = eq_stp(salt=salt,temp=temp,pres=pres,
         dliq=dliq,dvap=dvap,chkvals=chkvals,chktol=chktol,salt0=salt0,
@@ -900,7 +900,7 @@ def enthalpyvap(salt=None,temp=None,pres=None,dliq=None,dvap=None,
     :Examples:
     
     >>> enthalpyvap(salt=0.035,pres=640.)
-    2502546.89358
+    2502546.89505
     >>> enthalpyvap(salt=0.035,temp=274.)
     2502469.07187
     >>> enthalpyvap(temp=274.,pres=640.)
@@ -974,11 +974,11 @@ def entropysea(salt=None,temp=None,pres=None,dliq=None,dvap=None,
     :Examples:
     
     >>> entropysea(salt=0.035,pres=640.)
-    13.0616891215
+    13.06170045
     >>> entropysea(salt=0.035,temp=274.)
     12.4443983378
     >>> entropysea(temp=274.,pres=640.)
-    14.0256815112
+    14.0256815113
     """
     salt, temp, pres, dliq, dvap = eq_stp(salt=salt,temp=temp,pres=pres,
         dliq=dliq,dvap=dvap,chkvals=chkvals,chktol=chktol,salt0=salt0,
@@ -1048,7 +1048,7 @@ def entropyvap(salt=None,temp=None,pres=None,dliq=None,dvap=None,
     :Examples:
     
     >>> entropyvap(salt=0.035,pres=640.)
-    9140.56256065
+    9140.56256600
     >>> entropyvap(salt=0.035,temp=274.)
     9141.68990452
     >>> entropyvap(temp=274.,pres=640.)
@@ -1121,7 +1121,7 @@ def enthalpyevap(salt=None,temp=None,pres=None,dliq=None,dvap=None,
     :Examples:
     
     >>> enthalpyevap(salt=0.035,pres=640.)
-    2498295.32187
+    2498295.32717
     >>> enthalpyevap(salt=0.035,temp=274.)
     2498395.40101
     >>> enthalpyevap(temp=274.,pres=640.)
@@ -1200,7 +1200,7 @@ def volumeevap(salt=None,temp=None,pres=None,dliq=None,dvap=None,
     :Examples:
     
     >>> volumeevap(salt=0.035,pres=640.)
-    197.500648110
+    197.500648674
     >>> volumeevap(salt=0.035,temp=274.)
     198.075461154
     >>> volumeevap(temp=274.,pres=640.)
@@ -1269,7 +1269,7 @@ def boilingtemperature(salt,pres,temp=None,dliq=None,dvap=None,
     :Examples:
     
     >>> boilingtemperature(0.035,640.)
-    274.042416829
+    274.042417608
     """
     __, temp, __, dliq, dvap = eq_stp(salt=salt,pres=pres,temp=temp,
         dliq=dliq,dvap=dvap,chkvals=chkvals,chktol=chktol,temp0=temp0,
@@ -1325,7 +1325,7 @@ def brinesalinity(temp,pres,salt=None,dliq=None,dvap=None,
     :Examples:
     
     >>> brinesalinity(274.,640.)
-    2.94396298294e-2
+    2.94396298289e-02
     """
     salt, __, __, dliq, dvap = eq_stp(temp=temp,pres=pres,salt=salt,
         dliq=dliq,dvap=dvap,chkvals=chkvals,chktol=chktol,salt0=salt0,
@@ -1527,13 +1527,13 @@ def seavap_g(drvs,drvt,drvp,svsal,temp,pres,salt=None,dliq=None,
     >>> seavap_g(2,0,0,0.035,274.,610.)
     0.
     >>> seavap_g(1,1,0,0.035,274.,610.)
-    14965.0677011
+    88286.3861825
     >>> seavap_g(1,0,1,0.035,274.,610.)
-    -321.591932572
+    -1990.13848555
     >>> seavap_g(0,2,0,0.035,274.,610.)
     -2760.11106421
     >>> seavap_g(0,1,1,0.035,274.,610.)
-    63.1093348229
+    63.10933482
     >>> seavap_g(0,0,2,0.035,274.,610.)
     -1.65027885871
     """
@@ -1681,8 +1681,8 @@ def cp(svsal,temp,pres,salt=None,dliq=None,dvap=None,chkvals=False,
     
     :Examples:
     
-    >>> cp(0.035,274.,600.)
-    756270.431593
+    >>> cp(0.035,274.,610.)
+    756270.4316
     """
     g_tt = seavap_g(0,2,0,svsal,temp,pres,salt=salt,dliq=dliq,dvap=dvap,
         chkvals=chkvals,chktol=chktol,salt0=salt0,dliq0=dliq0,dvap0=dvap0,
@@ -1740,7 +1740,7 @@ def density(svsal,temp,pres,salt=None,dliq=None,dvap=None,
     
     :Examples:
     
-    >>> density(0.035,274.,600.)
+    >>> density(0.035,274.,610.)
     7.27092786882e-3
     """
     g_p = seavap_g(0,0,1,svsal,temp,pres,salt=salt,dliq=dliq,dvap=dvap,
@@ -1799,7 +1799,7 @@ def enthalpy(svsal,temp,pres,salt=None,dliq=None,dvap=None,
     
     :Examples:
     
-    >>> enthalpy(0.035,274.,600.)
+    >>> enthalpy(0.035,274.,610.)
     1661118.41089
     """
     salt, dliq, dvap = eq_seavap(svsal,temp,pres,salt=salt,dliq=dliq,
@@ -1862,7 +1862,7 @@ def entropy(svsal,temp,pres,salt=None,dliq=None,dvap=None,
     
     :Examples:
     
-    >>> entropy(0.035,274.,600.)
+    >>> entropy(0.035,274.,610.)
     6072.50817709
     """
     g_t = seavap_g(0,1,0,svsal,temp,pres,salt=salt,dliq=dliq,dvap=dvap,
@@ -1922,8 +1922,8 @@ def expansion(svsal,temp,pres,salt=None,dliq=None,dvap=None,
     
     :Examples:
     
-    >>> expansion(0.035,274.,600.)
-    0.458863421347
+    >>> expansion(0.035,274.,610.)
+    0.4588634213
     """
     salt, dliq, dvap = eq_seavap(svsal,temp,pres,salt=salt,dliq=dliq,
         dvap=dvap,chkvals=chkvals,chktol=chktol,salt0=salt0,dliq0=dliq0,
@@ -1986,7 +1986,7 @@ def kappa_t(svsal,temp,pres,salt=None,dliq=None,dvap=None,
     
     :Examples:
     
-    >>> kappa_t(0.035,274.,600.)
+    >>> kappa_t(0.035,274.,610.)
     1.19990585451e-2
     """
     salt, dliq, dvap = eq_seavap(svsal,temp,pres,salt=salt,dliq=dliq,

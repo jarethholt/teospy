@@ -16,15 +16,15 @@ equilibrium, e.g. the enthalpy of melting.
 >>> volumemelt(temp=270.)
 -1.04052121182e-4
 >>> temperature(pres=1e7)
-272.401648869
+272.401648868
 >>> densityliq(pres=1e7)
 1004.79353660
 >>> enthalpymelt(pres=1e7)
-331548.910817
+331548.910815
 >>> entropymelt(pres=1e7)
-1217.13254011
+1217.13254010
 >>> volumemelt(pres=1e7)
--9.42178903288e-5
+-9.4217890326e-05
 
 :Functions:
 
@@ -309,7 +309,7 @@ def temperature(temp=None,pres=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> temperature(pres=1e7)
-    272.401648869
+    272.40164887
     """
     temp, pres, dliq = eq_tp(temp=temp,pres=pres,dliq=dliq,chkvals=chkvals,
         chktol=chktol,temp0=temp0,pres0=pres0,dliq0=dliq0,chkbnd=chkbnd,
@@ -462,7 +462,7 @@ def chempot(temp=None,pres=None,dliq=None,chkvals=False,chktol=_CHKTOL,
     :Examples:
     
     >>> chempot(pres=1e7)
-    9972.88171381
+    9972.8817069
     >>> chempot(temp=270.)
     38870.0605192
     """
@@ -516,7 +516,7 @@ def densityice(temp=None,pres=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> densityice(pres=1e7)
-    917.896690831
+    917.896690830
     >>> densityice(temp=270.)
     921.359428514
     """
@@ -570,7 +570,7 @@ def enthalpyice(temp=None,pres=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> enthalpyice(pres=1e7)
-    -324602.983812
+    -324602.983822
     >>> enthalpyice(temp=270.)
     -299055.938629
     """
@@ -624,7 +624,7 @@ def enthalpyliq(temp=None,pres=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> enthalpyliq(pres=1e7)
-    6945.92700483
+    6945.9269937
     >>> enthalpyliq(temp=270.)
     26110.7481094
     """
@@ -677,7 +677,7 @@ def enthalpymelt(temp=None,pres=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> enthalpymelt(pres=1e7)
-    331548.910817
+    331548.910815
     >>> enthalpymelt(temp=270.)
     325166.686739
     """
@@ -787,7 +787,7 @@ def entropyliq(temp=None,pres=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> entropyliq(pres=1e7)
-    -11.1121012723
+    -11.11210129
     >>> entropyliq(temp=270.)
     -47.2567126291
     """
@@ -840,7 +840,7 @@ def entropymelt(temp=None,pres=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> entropymelt(pres=1e7)
-    1217.13254011
+    1217.13254010
     >>> entropymelt(temp=270.)
     1204.32106199
     """
@@ -895,7 +895,7 @@ def volumemelt(temp=None,pres=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> volumemelt(pres=1e7)
-    -9.42178903288e-5
+    -9.4217890326e-05
     >>> volumemelt(temp=270.)
     -1.04052121182e-4
     """

@@ -8,24 +8,24 @@ the ratio of dry air mass to total parcel mass, including ice.
 
 :Examples:
 
->>> iceair_h(0,0,0,0.5,-600.,1e5)
--164588.106002
->>> iceair_h(0,1,0,0.5,-600.,1e5)
-271.449994437
->>> iceair_h(0,1,1,0.5,-600.,1e5)
-2.26912930199e-4
+>>> iceair_h(0,0,0,0.5,1e5,entr=-600.)
+-164588.1060
+>>> iceair_h(0,1,0,0.5,1e5,entr=-600.)
+271.4499944
+>>> iceair_h(0,1,1,0.5,1e5,entr=-600.)
+2.268401085e-04
 >>> temperature(0.9,1e5,entr=-100.)
-270.383680119
+270.3836801
 >>> cp(0.9,1e5,entr=-100.)
-1766.52051488
+1768.514397
 >>> lapserate(0.9,1e5,entr=-100.)
-4.42457786755e-4
+4.420925682e-04
 >>> potdensity(0.9,230.,5e4,1e5)
-1.45048110422
+1.450481104
 >>> potenthalpy(0.9,230.,5e4,1e5)
--35781.2564451
+-35781.25645
 >>> pottemp(0.9,230.,5e4,1e5)
-266.105208871
+266.1052089
 
 :Functions:
 
@@ -57,6 +57,7 @@ import air2
 import ice2
 import maths3
 import air3c
+import maths4
 import iceair4a
 import iceair4b
 
@@ -110,7 +111,7 @@ def _approx_wep(wair,entr,pres):
     else:
         # Get approximate saturation temperature
         v = numpy.log(pres*(1-wair)/(_PTPE*(_EPSW*wair + 1-wair)))/_BVI
-        r = _AVI/BVI
+        r = _AVI/_BVI
         x = maths4.lamb2(v,r)
         tsat = _TTP/x
         ssat = (wair * (_CDRY*numpy.log(tsat/_TCELS)
@@ -332,26 +333,25 @@ def iceair_h(drvw,drve,drvp,wair,pres,entr=None,temp=None,airf=None,
     :Examples:
     
     >>> iceair_h(0,0,0,0.5,1e5,entr=-600.)
-    -164588.106002
+    -164588.1060
     >>> iceair_h(1,0,0,0.5,1e5,entr=-600.)
-    543.016638396
+    543.0166476
     >>> iceair_h(0,1,0,0.5,1e5,entr=-600.)
-    271.449994437
+    271.4499944
     >>> iceair_h(0,0,1,0.5,1e5,entr=-600.)
-    0.391981878510
+    0.3919818785
     >>> iceair_h(2,0,0,0.5,1e5,entr=-600.)
-    224958.525864
+    224806.0619
     >>> iceair_h(1,1,0,0.5,1e5,entr=-600.)
-    -177.457078495
+    -177.3368083
     >>> iceair_h(1,0,1,0.5,1e5,entr=-600.)
-    0.781782661019
+    0.4942223289
     >>> iceair_h(0,2,0,0.5,1e5,entr=-600.)
-    0.139985868894
+    0.1398909945
     >>> iceair_h(0,1,1,0.5,1e5,entr=-600.)
-    2.26912930199e-4
+    2.268401085e-04
     >>> iceair_h(0,0,2,0.5,1e5,entr=-600.)
-    -3.56976697603e-6
-    
+    -3.569822871e-06
     """
     if any(drv < 0 for drv in (drvw,drve,drvp)) or (drvw+drve+drvp) > 2:
         errmsg = 'Derivatives {0} not recognized'.format((drvw,drve,drvp))
@@ -512,7 +512,7 @@ def cp(wair,pres,entr=None,temp=None,airf=None,dhum=None,chkvals=False,
     :Examples:
     
     >>> cp(0.9,1e5,entr=-100.)
-    1766.52051488
+    1768.514397
     """
     airf, temp, dhum = eq_wpte(wair,pres,entr=entr,temp=temp,airf=airf,
         dhum=dhum,chkvals=chkvals,chktol=chktol,airf0=airf0,temp0=temp0,
@@ -629,12 +629,10 @@ def kappa_s(wair,pres,entr=None,temp=None,airf=None,dhum=None,
     :raises RuntimeWarning: If the relative disequilibrium is more than
         chktol, if chkvals is True and all values are given.
     
-    Returns:
-        kappa (float): Compressibility in 1/Pa.
+    :Examples:
     
-    Examples:
-        >>> iceair_h_kappa_s(0.9,1e5,entr=-100.)
-        8.23031581047e-6
+    >>> kappa_s(0.9,1e5,entr=-100.)
+    8.231417515e-06
     """
     airf, temp, dhum = eq_wpte(wair,pres,entr=entr,temp=temp,airf=airf,
         dhum=dhum,chkvals=chkvals,chktol=chktol,airf0=airf0,temp0=temp0,
@@ -693,8 +691,9 @@ def lapserate(wair,pres,entr=None,temp=None,airf=None,dhum=None,
         chktol, if chkvals is True and all values are given.
     
     :Examples:
-        >>> lapserate(0.9,1e5,entr=-100.)
-        4.42457786755e-4
+    
+    >>> lapserate(0.9,1e5,entr=-100.)
+    4.420925682e-04
     """
     h_sp = iceair_h(0,1,1,wair,pres,entr=entr,airf=airf,temp=temp,dhum=dhum,
         chkvals=chkvals,chktol=chktol,airf0=airf0,temp0=temp0,dhum0=dhum0,
@@ -752,7 +751,7 @@ def temperature(wair,pres,entr=None,temp=None,airf=None,dhum=None,
     :Examples:
     
     >>> temperature(0.9,1e5,entr=-100.)
-    270.383680119
+    270.3836801
     """
     airf, temp, dhum = eq_wpte(wair,pres,entr=entr,temp=temp,airf=airf,
         dhum=dhum,chkvals=chkvals,chktol=chktol,airf0=airf0,temp0=temp0,
@@ -1135,7 +1134,7 @@ def potenthalpy(wair,temp,pres,ppot,airf=None,dhum=None,apot=None,
     :Examples:
     
     >>> potenthalpy(0.9,230.,5e4,1e5)
-    -35781.2564451
+    -35781.25645
     """
     airf, dhum, apot, tpot, dhpot = eq_pot(wair,temp,pres,ppot,airf=airf,
         dhum=dhum,apot=apot,tpot=tpot,dhpot=dhpot,chkvals=chkvals,chktol=chktol,
@@ -1204,7 +1203,7 @@ def pottemp(wair,temp,pres,ppot,airf=None,dhum=None,apot=None,tpot=None,
     :Examples:
     
     >>> pottemp(0.9,230.,5e4,1e5)
-    266.105208871
+    266.1052089
     """
     airf, dhum, apot, tpot, dhpot = eq_pot(wair,temp,pres,ppot,airf=airf,
         dhum=dhum,apot=apot,tpot=tpot,dhpot=dhpot,chkvals=chkvals,chktol=chktol,

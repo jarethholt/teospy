@@ -11,23 +11,23 @@ vapour, and liquid water.
 >>> entropy(airf=.99,temp=300.)
 -41.9991507402
 >>> enthalpyevap(airf=.99,temp=300.)
-2433111.29696
+2433303.92095
 >>> temperature(airf=.99,pres=1e5)
-287.078299795
+287.078299425
 >>> entropy(airf=.99,pres=1e5)
-145.863545194
+145.863543885
 >>> enthalpyevap(airf=.99,pres=1e5)
-2465656.38630
+2465683.44608
 >>> enthalpyevap(temp=300.,pres=1e5)
-2434585.53919
+2434606.28954
 >>> temperature(airf=.99,entr=100.)
 290.107386673
 >>> pressure(airf=.99,entr=100.)
 121546.373652
 >>> enthalpyevap(airf=.99,entr=100.)
-2458121.74961
+2458179.89837
 >>> icl(0.99,300.,1e5)
-82723.6047631
+82723.604763
 >>> airffromrh_wmo(0.8,300.,1e5)
 0.982004037135
 >>> rhfromairf_wmo(0.99,300.,1e5)
@@ -534,7 +534,7 @@ def temperature(airf=None,temp=None,pres=None,entr=None,dhum=None,
     :Examples:
     
     >>> temperature(airf=.99,pres=1e5)
-    287.078299795
+    287.078299425
     >>> temperature(airf=.99,entr=100.)
     290.107386673
     """
@@ -674,7 +674,7 @@ def densityair(airf=None,temp=None,pres=None,entr=None,dhum=None,
     >>> densityair(airf=.99,temp=300.)
     2.57657653270
     >>> densityair(airf=.99,pres=1e5)
-    1.20675806022
+    1.20675806178
     >>> densityair(airf=.99,entr=100.)
     1.45154665083
     """
@@ -746,7 +746,7 @@ def densityliq(airf=None,temp=None,pres=None,entr=None,dhum=None,
     >>> densityliq(airf=.99,temp=300.)
     996.611581662
     >>> densityliq(airf=.99,pres=1e5)
-    999.256685197
+    999.256680315
     >>> densityliq(airf=.99,entr=100.)
     998.794738784
     """
@@ -818,7 +818,7 @@ def entropy(airf=None,temp=None,pres=None,entr=None,dhum=None,dliq=None,
     >>> entropy(airf=.99,temp=300.)
     -41.9991507402
     >>> entropy(airf=.99,pres=1e5)
-    145.863545194
+    145.863543885
     """
     airf, temp, pres, dhum, dliq = eq_atpe(airf=airf,temp=temp,pres=pres,
         entr=entr,dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
@@ -889,7 +889,7 @@ def densityvap(airf=None,temp=None,pres=None,entr=None,dhum=None,
     >>> densityvap(airf=.99,temp=300.)
     2.57657653270e-2
     >>> densityvap(airf=.99,pres=1e5)
-    1.206758060e-2
+    1.20675806178e-02
     >>> densityvap(airf=.99,entr=100.)
     1.45154665083e-2
     """
@@ -958,13 +958,13 @@ def enthalpyevap(airf=None,temp=None,pres=None,entr=None,dhum=None,
     :Examples:
     
     >>> enthalpyevap(temp=300.,pres=1e5)
-    2434585.53919
+    2434606.28954
     >>> enthalpyevap(airf=.99,temp=300.)
-    2433111.29696
+    2433303.92095
     >>> enthalpyevap(airf=.99,pres=1e5)
-    2465656.38630
+    2465683.44608
     >>> enthalpyevap(airf=.99,entr=100.)
-    2458121.74961
+    2458179.89837
     """
     airf, temp, pres, dhum, dliq = eq_atpe(airf=airf,temp=temp,pres=pres,
         entr=entr,dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
@@ -1134,7 +1134,7 @@ def dewpoint(airf,pres,temp=None,dhum=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> dewpoint(0.99,1e5)
-    287.078299795
+    287.078299425
     """
     __, temp, __, dhum, dliq = eq_atpe(airf=airf,pres=pres,temp=temp,dhum=dhum,
         dliq=dliq,chkvals=chkvals,chktol=chktol,temp0=temp0,dhum0=dhum0,
@@ -1162,7 +1162,7 @@ def _approx_icl(airf,temp,pres,dhum):
     ceff = airf*_CDRY + (1-airf)*_CVAP
     ginv = ceff/reff
     r = (_AVL+_BVL)/(_BVL+ginv) - 1
-    v = (numpy.log((1-airf)/(_EPSW*airf+1-airf)*pres/_PATM)
+    v = (numpy.log((1-airf)/(_EPSW*airf+1-airf)*pres/_PTPE)
         + ginv*numpy.log(_TTP/temp)) / (_BVL+ginv)
     x = maths4.lamb2(v,r)
     ticl = _TTP/x
@@ -1360,7 +1360,7 @@ def icl(airf,temp,pres,dhum=None,ticl=None,dhicl=None,dlicl=None,
     :Examples:
     
     >>> icl(0.99,300.,1e5)
-    82723.6047631
+    82723.604763
     """
     dhum, ticl, dhicl, dlicl = eq_icl(airf,temp,pres,dhum=dhum,ticl=ticl,
         dhicl=dhicl,dlicl=dlicl,chkvals=chkvals,chktol=chktol,dhum0=dhum0,

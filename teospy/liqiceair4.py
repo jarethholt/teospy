@@ -16,7 +16,7 @@ entropy, and wet fraction of the condensates.
 >>> airfraction(temp=273.155)
 0.994366063923
 >>> pressure(temp=273.155)
-67931.6010764
+67931.60108
 >>> airfraction(pres=1e4)
 0.961024307544
 >>> temperature(pres=1e4)
@@ -26,7 +26,7 @@ entropy, and wet fraction of the condensates.
 >>> temperature(wair=.1,wliq=.2,wice=.3)
 273.159992933
 >>> density(.1,wliq=.2,wice=.3)
-474.974398769
+0.0121364037568
 >>> enthalpy(.1,wliq=.2,wice=.3)
 900361.135280
 >>> entropy(.1,wliq=.2,wice=.3)
@@ -38,7 +38,7 @@ entropy, and wet fraction of the condensates.
 >>> temperature(wair=.99,entr=0.,wetf=.5)
 273.151724970
 >>> density(.99,entr=0.,wetf=.5)
-7.74757979404
+1.43611528680
 >>> enthalpy(.99,entr=0.,wetf=.5)
 7356.12943724
 >>> liquidfraction(.99,entr=0.,wetf=.5)
@@ -48,9 +48,9 @@ entropy, and wet fraction of the condensates.
 >>> vapourfraction(.99,entr=0.,wetf=.5)
 3.39407694837e-3
 >>> iml(.99,100.)
-81605.5557728
+81605.5557729
 >>> ifl(.99,100.)
-83234.7314360
+83234.7314358
 
 :Functions:
 
@@ -892,7 +892,7 @@ def pressure(wair=None,entr=None,wetf=None,wliq=None,wice=None,
     >>> pressure(airf=.99)
     38338.9622424
     >>> pressure(temp=273.155)
-    67931.6010764
+    67931.60108
     >>> pressure(wair=.99,entr=0.,wetf=.5)
     112016.075795
     >>> pressure(wair=.1,wliq=.2,wice=.3)
@@ -1059,9 +1059,9 @@ def density(wair,entr=None,wetf=None,wliq=None,wice=None,airf=None,
     :Examples:
     
     >>> density(0.99,entr=0.,wetf=.5)
-    7.74757979404
+    1.43611528680
     >>> density(.1,wliq=.2,wice=.3)
-    474.974398769
+    0.0121364037568
     """
     airf, temp, pres, dhum, dliq = eq_wefli(wair,entr=entr,wetf=wetf,wliq=wliq,
         wice=wice,airf=airf,temp=temp,pres=pres,dhum=dhum,dliq=dliq,
@@ -1313,9 +1313,10 @@ def entropy(wair,entr=None,wetf=None,wliq=None,wice=None,airf=None,
     :raises RuntimeWarning: If the relative disequilibrium is more than
         chktol, if chkvals is True and all values are given.
     
-    Examples:
-        >>> liq_ice_air_entropy(.1,wliq=.2,wice=.3)
-        3496.16306903
+    :Examples:
+    
+    >>> entropy(.1,wliq=.2,wice=.3)
+    3496.16306903
     """
     if entr is not None:
         return entr
@@ -1636,7 +1637,7 @@ def iml(wair,entr,airf0=None,temp0=None,pres0=None,dhum0=None,
     :Examples:
     
     >>> iml(.99,100.)
-    81605.5557728
+    81605.5557729
     """
     wetf = 0.
     airf, temp, pres, dhum, dliq = eq_wefli(wair,entr=entr,wetf=wetf,
@@ -1680,7 +1681,7 @@ def ifl(wair,entr,airf0=None,temp0=None,pres0=None,dhum0=None,
     :Examples:
     
     >>> ifl(.99,100.)
-    83234.7314360
+    83234.7314358
     """
     wetf = 1.
     airf, temp, pres, dhum, dliq = eq_wefli(wair,entr=entr,wetf=wetf,

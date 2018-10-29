@@ -16,11 +16,11 @@ water vapour (sea-ice-vapour).
 >>> pressure(temp=270.)
 470.059067981
 >>> salinity(temp=270.)
-5.61489288506e-2
+0.05614892885
 >>> densityvap(pres=500.)
 4.00364833230e-3
 >>> salinity(pres=500.)
-4.38955878828e-2
+0.0438955766482
 >>> temperature(pres=500.)
 270.734430917
 
@@ -594,9 +594,9 @@ def salinity(salt=None,temp=None,pres=None,dliq=None,dvap=None,
     :Examples:
     
     >>> salinity(temp=270.)
-    5.61489288506e-2
+    0.05614892885
     >>> salinity(pres=500.)
-    4.38955878828e-2
+    0.0438955766482
     """
     salt, temp, pres, dliq, dvap = eq_stp(salt=salt,temp=temp,pres=pres,
         dliq=dliq,dvap=dvap,chkvals=chkvals,chktol=chktol,salt0=salt0,

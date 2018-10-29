@@ -34,7 +34,7 @@ def _extractsigfmt(numstr):
     representation.
     """
     # Simple necessary exception: some zeroes are really zero
-    if numstr == '0.0\n':
+    if numstr == '0.0\n' or numstr == '0.\n':
         fmt = '{:3.1f}'
         return fmt
     
@@ -78,9 +78,14 @@ class FltOutputChecker(doctest.OutputChecker):
         # Exception: Sometimes empty strings are passed
         if want == '' or got == '':
             return True
-        fmt = _extractsigfmt(want)
-        want_std = fmt.format(float(want))
-        got_std = fmt.format(float(got))
+        try:
+            fmt = _extractsigfmt(want)
+            want_std = fmt.format(float(want))
+            got_std = fmt.format(float(got))
+        except:
+            errmsg = ('Something went wrong. fmt={0:s}, want={1:s}, '
+                'got={2:s}').format(fmt,want,got)
+            raise ValueError(errmsg)
         return (want_std == got_std)
 
 def testmod_flt(mod,verbose=False):

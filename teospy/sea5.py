@@ -29,13 +29,13 @@ thermobaric and cabbeling effects than potential temperature.
 >>> contraction_tpot(0.035,300.,1e8)
 0.663973579411
 >>> cabb_tcon(0.035,300.,1e5)
-8.61252567438267e-6
+8.8785278e-06
 >>> cabb_tpot(0.035,300.,1e5)
-8.33874537690444e-6
+8.338745e-06
 >>> thrmb_tcon(0.035,300.,1e5)
-1.48109271668362e-12
+1.481093e-12
 >>> thrmb_tpot(0.035,300.,1e5)
-1.45941010702991e-12
+1.4594100e-12
 
 :Functions:
 
@@ -603,7 +603,7 @@ def cabb_tcon(salt,temp,pres,dtemp=_DTEMP,dsalt=_DSALT,dliq=None,
     :Examples:
     
     >>> cabb_tcon(0.035,300.,1e5)
-    8.61252567438267e-6
+    8.8785278e-06
     """
     __, __, dliq, hpot, tpot, dlpot = _eq_pot(salt,pres,_PATM,temp=temp,
         dliq=dliq,tpot=tpot,dlpot=dlpot,chkvals=chkvals,chktol=chktol,
@@ -617,8 +617,8 @@ def cabb_tcon(salt,temp,pres,dtemp=_DTEMP,dsalt=_DSALT,dliq=None,
     ratio = alpha0/beta0
     
     # Calculate finite differences wrt temperature
-    tcon_l = tcon - dtcon
-    tcon_u = tcon + dtcon
+    tcon_l = tcon - dtemp
+    tcon_u = tcon + dtemp
     hpot_l = _CSEA*(tcon_l - _TCELS)
     hpot_u = _CSEA*(tcon_u - _TCELS)
     __, t_l, d_l, __, tp_l, dp_l = _eq_pot(salt,pres,_PATM,hpot=hpot_l,
@@ -717,7 +717,7 @@ def cabb_tpot(salt,temp,pres,dtemp=_DTEMP,dsalt=_DSALT,dliq=None,
     :Examples:
     
     >>> cabb_tpot(0.035,300.,1e5)
-    8.33874537690444e-6
+    8.338745e-06
     """
     __, __, dliq, __, tpot, dlpot = _eq_pot(salt,pres,_PATM,temp=temp,
         dliq=dliq,tpot=tpot,dlpot=dlpot,chkvals=chkvals,chktol=chktol,
@@ -730,8 +730,8 @@ def cabb_tpot(salt,temp,pres,dtemp=_DTEMP,dsalt=_DSALT,dliq=None,
     ratio = alpha0/beta0
     
     # Calculate finite differences wrt temperature
-    tpot_l = tpot - dtpot
-    tpot_u = tpot + dtpot
+    tpot_l = tpot - dtemp
+    tpot_u = tpot + dtemp
     __, t_l, d_l, __, __, dp_l = _eq_pot(salt,pres,_PATM,tpot=tpot_l,
         useext=useext,mathargs=mathargs)
     __, t_u, d_u, __, __, dp_u = _eq_pot(salt,pres,_PATM,tpot=tpot_u,
@@ -826,7 +826,7 @@ def thrmb_tcon(salt,temp,pres,dpres=_DPRES,dliq=None,tpot=None,
     :Examples:
     
     >>> thrmb_tcon(0.035,300.,1e5)
-    1.48109271668362e-12
+    1.481093e-12
     """
     __, __, dliq, hpot, tpot, dlpot = _eq_pot(salt,pres,_PATM,temp=temp,
         dliq=dliq,tpot=tpot,dlpot=dlpot,chkvals=chkvals,chktol=chktol,
@@ -918,7 +918,7 @@ def thrmb_tpot(salt,temp,pres,dpres=_DPRES,dliq=None,tpot=None,
     :Examples:
     
     >>> thrmb_tpot(0.035,300.,1e5)
-    1.45941010702991e-12
+    1.4594100e-12
     """
     __, __, dliq, __, tpot, dlpot = _eq_pot(salt,pres,_PATM,temp=temp,
         dliq=dliq,tpot=tpot,dlpot=dlpot,chkvals=chkvals,chktol=chktol,

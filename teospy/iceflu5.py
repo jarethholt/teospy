@@ -4,6 +4,15 @@ This module provides approximation functions (low-order polynomial and
 power-law fits) for properties of ice and fluid water, e.g. the melting
 and sublimation curves of ice.
 
+:Examples:
+
+>>> liqpressure(270.)
+39312972.1954
+>>> liqtemperature(1e7)
+272.401569225
+>>> vappressure(270.)
+470.061877574
+
 :Functions:
 
 * :func:`liqpressure`: Approximate the pressure at which ice at the
@@ -38,6 +47,11 @@ def liqpressure(temp):
     
     :arg float temp: Temperature in K.
     :returns: Melting pressure in Pa.
+    
+    :Examples:
+    
+    >>> liqpressure(270.)
+    39312972.1954
     """
     tau = temp/_TTP
     pres = 1.
@@ -54,6 +68,11 @@ def liqtemperature(pres):
     
     :arg float pres: Pressure in Pa.
     :arg float temp: Melting temperature in K.
+    
+    :Examples:
+    
+    >>> liqtemperature(1e7)
+    272.401569225
     """
     psi = pres/_PTPE - 1
     temp = 0.
@@ -69,6 +88,11 @@ def vappressure(temp):
     
     :arg float temp: Temperature in K.
     :returns: Vapour pressure in Pa.
+    
+    :Examples:
+    
+    >>> vappressure(270.)
+    470.061877574
     """
     tau = temp/_TTP
     earg = 0.

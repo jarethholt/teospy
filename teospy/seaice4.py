@@ -21,13 +21,13 @@ ice), temperature, and pressure.
 >>> volumemelt(salt=0.035,temp=270.)
 -9.67135426848e-5
 >>> salinity(temp=270.,pres=1e5)
-0.0560264150322
+0.05602641503
 >>> enthalpymelt(temp=270.,pres=1e5)
 328249.119579
 >>> volumemelt(temp=270.,pres=1e5)
 -9.18186917900e-5
 >>> brinesalinity(270.,1e5)
-0.0560264150322
+0.05602641503
 >>> meltingpressure(0.035,270.)
 16132047.4385
 >>> freezingtemperature(0.035,1e5)
@@ -36,24 +36,24 @@ ice), temperature, and pressure.
 7.48210942879e-8
 >>> dtfds(0.035,1e5)
 -56.8751336296
->>> sea_ice_g(0,0,0,0.035,270.,1e5)
--414.017574547
->>> sea_ice_g(0,1,0,0.035,270.,1e5)
+>>> seaice_g(0,0,0,0.035,270.,1e5)
+-414.0175745
+>>> seaice_g(0,1,0,0.035,270.,1e5)
 500.445444181
->>> sea_ice_g(0,1,1,0.035,270.,1e5)
--1.65866446694e-5
+>>> seaice_g(0,1,1,0.035,270.,1e5)
+-1.658664467e-05
 >>> brinefraction(0.035,270.,1e5)
-0.624705328368
+0.6247053284
 >>> cp(0.035,270.,1e5)
-62868.9015126
+62868.90151
 >>> density(0.035,270.,1e5)
 993.156434117
 >>> enthalpy(0.035,270.,1e5)
--135534.287503
+-135534.287504
 >>> entropy(0.035,270.,1e5)
 -500.445444181
 >>> expansion(0.035,270.,1e5)
--1.64731328738
+-1.647313287e-02
 >>> kappa_t(0.035,270.,1e5)
 1.56513441348e-9
 
@@ -677,11 +677,11 @@ def enthalpysea(salt=None,temp=None,pres=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> enthalpysea(salt=0.035,pres=1e5)
-    -7613.19337919
+    -7613.193379
     >>> enthalpysea(salt=0.035,temp=270.)
-    2832.94910407
+    2832.949104
     >>> enthalpysea(temp=270.,pres=1e5)
-    -12742.8664892
+    -12742.86649
     """
     salt, temp, pres, dliq = eq_stp(salt=salt,temp=temp,pres=pres,dliq=dliq,
         chkvals=chkvals,chktol=chktol,salt0=salt0,temp0=temp0,pres0=pres0,
@@ -997,7 +997,7 @@ def salinity(salt=None,temp=None,pres=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> salinity(temp=270.,pres=1e5)
-    0.0560264150322
+    0.05602641503
     """
     salt, temp, pres, dliq = eq_stp(salt=salt,temp=temp,pres=pres,dliq=dliq,
         chkvals=chkvals,chktol=chktol,salt0=salt0,temp0=temp0,pres0=pres0,
@@ -1188,7 +1188,7 @@ def brinesalinity(temp,pres,salt=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> brinesalinity(270.,1e5)
-    0.0560264150322
+    0.05602641503
     """
     salt, __, __, dliq = eq_stp(temp=temp,pres=pres,salt=salt,dliq=dliq,
         chkvals=chkvals,chktol=chktol,salt0=salt0,dliq0=dliq0,chkbnd=chkbnd,
@@ -1532,9 +1532,9 @@ def seaice_g(drvs,drvt,drvp,sisal,temp,pres,salt=None,dliq=None,
     :Examples:
     
     >>> seaice_g(0,0,0,0.035,270.,1e5)
-    -414.017574547
+    -414.0175745
     >>> seaice_g(1,0,0,0.035,270.,1e5)
-    96363.7730495
+    96363.77305
     >>> seaice_g(0,1,0,0.035,270.,1e5)
     500.445444181
     >>> seaice_g(0,0,1,0.035,270.,1e5)
@@ -1542,13 +1542,13 @@ def seaice_g(drvs,drvt,drvp,sisal,temp,pres,salt=None,dliq=None,
     >>> seaice_g(2,0,0,0.035,270.,1e5)
     0.
     >>> seaice_g(1,1,0,0.035,270.,1e5)
-    -1144.02883419
+    -21272.2260252
     >>> seaice_g(1,0,1,0.035,270.,1e5)
-    -8.62856321467e-4
+    -2.383040378e-03
     >>> seaice_g(0,2,0,0.035,270.,1e5)
     -232.847783380
     >>> seaice_g(0,1,1,0.035,270.,1e5)
-    -1.65866446694e-5
+    -1.658664467e-05
     >>> seaice_g(0,0,2,0.035,270.,1e5)
     -1.57591932118e-12
     """
@@ -1631,7 +1631,7 @@ def seaice_g(drvs,drvt,drvp,sisal,temp,pres,salt=None,dliq=None,
         gs_tp = _sal_g(0,1,1,salt,temp,pres,useext=useext)
         gi_tp = _ice_g(1,1,temp,pres)
         gb_tp = fl_td*dl_p + gs_tp
-        g_tp = -seaf/salt*s_p + seaf*gb_tp + (1-seaf)*gi_tp
+        g_tp = -seaf/salt*dentr*s_p + seaf*gb_tp + (1-seaf)*gi_tp
         return g_tp
     elif (drvs,drvt,drvp) == (0,0,2):
         gs_pp = _sal_g(0,0,2,salt,temp,pres,useext=useext)
@@ -1694,7 +1694,7 @@ def brinefraction(sisal,temp,pres,salt=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> brinefraction(0.035,270.,1e5)
-    0.624705328368
+    0.6247053284
     """
     salt, dliq = eq_seaice(sisal,temp,pres,salt=salt,dliq=dliq,chkvals=chkvals,
         chktol=chktol,salt0=salt0,dliq0=dliq0,chkbnd=chkbnd,useext=useext,
@@ -1749,7 +1749,7 @@ def cp(sisal,temp,pres,salt=None,dliq=None,chkvals=False,chktol=_CHKTOL,
     :Examples:
     
     >>> cp(0.035,270.,1e5)
-    62868.9015126
+    62868.90151
     """
     g_tt = seaice_g(0,2,0,sisal,temp,pres,salt=salt,dliq=dliq,chkvals=chkvals,
         chktol=chktol,salt0=salt0,dliq0=dliq0,chkbnd=chkbnd,useext=useext,
@@ -1861,7 +1861,7 @@ def enthalpy(sisal,temp,pres,salt=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> enthalpy(0.035,270.,1e5)
-    -135534.287503
+    -135534.287504
     """
     salt, dliq = eq_seaice(sisal,temp,pres,salt=salt,dliq=dliq,chkvals=chkvals,
         chktol=chktol,salt0=salt0,dliq0=dliq0,chkbnd=chkbnd,useext=useext,
@@ -1975,7 +1975,7 @@ def expansion(sisal,temp,pres,salt=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> expansion(0.035,270.,1e5)
-    -1.64731328738
+    -1.647313287e-02
     """
     salt, dliq = eq_seaice(sisal,temp,pres,salt=salt,dliq=dliq,chkvals=chkvals,
         chktol=chktol,salt0=salt0,dliq0=dliq0,chkbnd=chkbnd,useext=useext,

@@ -15,7 +15,7 @@ equilibrium, e.g. the enthalpy of sublimation.
 11225.8717816
 >>> enthalpysubl(pres=100.)
 2838101.44416
->>> pressurevap(temp=270.)
+>>> pressure(temp=270.)
 470.059067981
 >>> densityvap(temp=270.)
 3.77406140772e-3

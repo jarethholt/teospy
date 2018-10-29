@@ -14,13 +14,13 @@ air uses the variable 'airf'.
 >>> liqair_g(0,0,1,0.5,300.,1e5)
 0.446729465555
 >>> liqair_g(0,1,1,0.5,300.,1e5)
-2.43183979422e-3
+2.45335972867e-03
 >>> cp(0.5,300.,1e5)
-4229.87866191
+4267.95671050
 >>> expansion(0.5,300.,1e5)
-5.44365210207e-3
+5.49182428703e-03
 >>> lapserate(0.5,300.,1e5)
-1.72475854884e-4
+1.72449715057e-04
 
 :Functions:
 
@@ -122,7 +122,7 @@ def liqair_g(drvw,drvt,drvp,wair,temp,pres,airf=None,dhum=None,
     >>> liqair_g(0,0,0,0.5,300.,1e5)
     -5396.77820137
     >>> liqair_g(1,0,0,0.5,300.,1e5)
-    -263.455491203
+    -263.4554912
     >>> liqair_g(0,1,0,0.5,300.,1e5)
     -343.783393872
     >>> liqair_g(0,0,1,0.5,300.,1e5)
@@ -134,11 +134,11 @@ def liqair_g(drvw,drvt,drvp,wair,temp,pres,airf=None,dhum=None,
     >>> liqair_g(1,0,1,0.5,300.,1e5)
     0.891452019991
     >>> liqair_g(0,2,0,0.5,300.,1e5)
-    -14.0995955397
+    -14.2265223683
     >>> liqair_g(0,1,1,0.5,300.,1e5)
-    2.43183979422e-3
+    2.45335972867e-03
     >>> liqair_g(0,0,2,0.5,300.,1e5)
-    -4.62360294023e-6
+    -4.62725155875e-06
     """
     airf, __, __, dhum, dliq = _eq_atpe(temp=temp,pres=pres,airf=airf,
         dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
@@ -287,7 +287,7 @@ def cp(wair,temp,pres,airf=None,dhum=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> cp(0.5,300.,1e5)
-    4229.87866191
+    4267.95671050
     """
     g_tt = liqair_g(0,2,0,wair,temp,pres,airf=airf,dhum=dhum,dliq=dliq,
         chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,dliq0=dliq0,
@@ -518,7 +518,7 @@ def expansion(wair,temp,pres,airf=None,dhum=None,dliq=None,
     :Examples:
     
     >>> expansion(0.5,300.,1e5)
-    5.44365210207e-3
+    5.49182428703e-03
     """
     airf, __, __, dhum, dliq = _eq_atpe(temp=temp,pres=pres,airf=airf,
         dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
@@ -581,7 +581,7 @@ def kappa_t(wair,temp,pres,airf=None,dhum=None,dliq=None,chkvals=False,
     :Examples:
     
     >>> kappa_t(0.5,300.,1e5)
-    1.03498947276e-5
+    1.03580621283e-05
     """
     airf, __, __, dhum, dliq = _eq_atpe(temp=temp,pres=pres,airf=airf,
         dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
@@ -644,7 +644,7 @@ def lapserate(wair,temp,pres,airf=None,dhum=None,dliq=None,
     :Examples:
     
     >>> lapserate(0.5,300.,1e5)
-    1.72475854884e-4
+    1.72449715057e-04
     """
     airf, __, __, dhum, dliq = _eq_atpe(temp=temp,pres=pres,airf=airf,
         dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,

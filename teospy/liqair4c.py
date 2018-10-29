@@ -9,16 +9,16 @@ including liquid.
 
 :Examples:
 
->>> liqair_h(0,0,0,0.5,100.,1e5)
+>>> liqair_h(0,0,0,0.5,1e5,entr=100.)
 26898.5215492
->>> liqair_h(0,1,0,0.5,100.,1e5)
+>>> liqair_h(0,1,0,0.5,1e5,entr=100.)
 280.393544899
->>> liqair_h(0,1,1,0.5,100.,1e5)
-1.55067379031e-4
+>>> liqair_h(0,1,1,0.5,1e5,entr=100.)
+1.55056640703e-04
 >>> cp(0.5,1e5,entr=100.)
-3144.21265404
+3147.74000558
 >>> lapserate(0.5,1e5,entr=100.)
-1.55067379031e-4
+1.55056640703e-04
 >>> temperature(0.5,1e5,entr=100.)
 280.393544899
 >>> potdensity(0.5,300.,1e4,1e5)
@@ -116,7 +116,7 @@ def _approx_wep(wair,entr,pres):
     else:
         # Get approximate saturation temperature
         v = numpy.log(pres*(1-wair)/(_PTPE*(_EPSW*wair + 1-wair)))/_BVL
-        r = _AVL/BVL
+        r = _AVL/_BVL
         x = maths4.lamb2(v,r)
         tsat = _TTP/x
         ssat = (wair * (_CDRY*numpy.log(tsat/_TCELS)
@@ -358,26 +358,26 @@ def liqair_h(drvw,drve,drvp,wair,pres,entr=None,temp=None,airf=None,
     
     :Examples:
     
-    >>> liqair_h(0,0,0,0.5,100.,1e5)
+    >>> liqair_h(0,0,0,0.5,1e5,entr=100.)
     26898.5215492
-    >>> liqair_h(1,0,0,0.5,100.,1e5)
-    -1681.79366113
-    >>> liqair_h(0,1,0,0.5,100.,1e5)
+    >>> liqair_h(1,0,0,0.5,1e5,entr=100.)
+    -1681.793661
+    >>> liqair_h(0,1,0,0.5,1e5,entr=100.)
     280.393544899
-    >>> liqair_h(0,0,1,0.5,100.,1e5)
+    >>> liqair_h(0,0,1,0.5,1e5,entr=100.)
     0.40687293002
-    >>> liqair_h(2,0,0,0.5,100.,1e5)
-    35.7689708915
-    >>> liqair_h(1,1,0,0.5,100.,1e5)
-    1.78599925196
-    >>> liqair_h(1,0,1,0.5,100.,1e5)
-    0.811745643965
-    >>> liqair_h(0,2,0,0.5,100.,1e5)
-    8.91776656830e-2
-    >>> liqair_h(0,1,1,0.5,100.,1e5)
-    1.55067379031e-4
-    >>> liqair_h(0,0,2,0.5,100.,1e5)
-    -3.83770118470e-6
+    >>> liqair_h(2,0,0,0.5,1e5,entr=100.)
+    35.72888825
+    >>> liqair_h(1,1,0,0.5,1e5,entr=100.)
+    1.78399786455
+    >>> liqair_h(1,0,1,0.5,1e5,entr=100.)
+    0.814851029626
+    >>> liqair_h(0,2,0,0.5,1e5,entr=100.)
+    8.90777333582e-02
+    >>> liqair_h(0,1,1,0.5,1e5,entr=100.)
+    1.55056640703e-04
+    >>> liqair_h(0,0,2,0.5,1e5,entr=100.)
+    -3.83770233859e-06
     """
     if any(drv < 0 for drv in (drvw,drve,drvp)) or (drvw+drve+drvp) > 2:
         errmsg = 'Derivatives {0} not recognized'.format((drvw,drve,drvp))
@@ -545,7 +545,7 @@ def cp(wair,pres,entr=None,temp=None,airf=None,dhum=None,dliq=None,
     :Examples:
     
     >>> cp(0.5,1e5,entr=100.)
-    3144.21265404
+    3147.74000558
     """
     airf, temp, dhum, dliq = eq_wpte(wair,pres,entr=entr,temp=temp,airf=airf,
         dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
@@ -674,7 +674,7 @@ def kappa_s(wair,pres,entr=None,temp=None,airf=None,dhum=None,dliq=None,
     :Examples:
     
     >>> kappa_s(0.5,1e5,entr=100.)
-    9.43218607469e-6
+    9.43218891071e-06
     """
     airf, temp, dhum, dliq = eq_wpte(wair,pres,entr=entr,temp=temp,airf=airf,
         dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,
@@ -740,7 +740,7 @@ def lapserate(wair,pres,entr=None,temp=None,airf=None,dhum=None,
     :Examples:
     
     >>> lapserate(0.5,1e5,entr=100.)
-    1.55067379031e-4
+    1.55056640703e-04
     """
     h_ep = liqair_h(0,1,1,wair,pres,entr=entr,airf=airf,temp=temp,dhum=dhum,
         dliq=dliq,chkvals=chkvals,chktol=chktol,airf0=airf0,temp0=temp0,

@@ -32,9 +32,9 @@ decibars (absolute pressure minus 1 atm).
 >>> tconfromtpot(35.7,25.5)
 25.4805463842
 >>> cabb_tcon(35.,20.,1e3)
-8.96907383083e-6
+9.16324749728e-06
 >>> thrmb_tcon(35.,20.,1e3)
-1.72708365652e-8
+1.72728502693e-08
 >>> asalfrompsal(35.,180.,40.,2e3)
 35.1890932889958041
 >>> psalfromasal(35.7,201.,-21.,1023.)
@@ -157,7 +157,7 @@ def asalfrompsal(s_psu,lon0,lat0,p_dbar):
     >>> asalfrompsal(35.,180.,40.,2e3)
     35.1890932889958041
     >>> asalfrompsal(8.,20.,57.,0.)
-    8.10483771428571406
+    8.104837714285714
     """
     pres = _PATM + p_dbar*_DBAR2PA
     asal = convert0.sal_asalfrompsal(s_psu,lon0,lat0,pres)
@@ -262,13 +262,12 @@ def alpha_t(s_gkg,t_cels,p_dbar,chkbnd=False,useext=False):
         False).
     :arg bool useext: If False (default) then the salt contribution is
         calculated from _GSCOEFFS; if True, from _GSCOEFFS_EXT.
+    :returns: Expansion coefficient in 1/(deg C).
     
-    Returns:
-        alpha (float): Expansion coefficient in 1/(deg C).
+    :Examples:
     
-    Examples:
-        >>> gsw_alpha_t(35.7,25.5,1023.)
-        3.09837839319e-4
+    >>> alpha_t(35.7,25.5,1023.)
+    3.09837839319e-4
     """
     
     g_p = gsw_g(0,0,1,s_gkg,t_cels,p_dbar,chkbnd=chkbnd,useext=useext)
@@ -707,7 +706,7 @@ def alpha_tpot(s_gkg,t_cels,p_dbar,tp_cels=None,chkvals=False,
     :Examples:
     
     >>> alpha_tpot(35.,20.,1e3)
-    2.69753733317e-04
+    2.69750083750e-04
     """
     tp_cels = pottemp(s_gkg,t_cels,p_dbar,0.,tp_cels=tp_cels,chkvals=chkvals,
         chktol=chktol,tp_cels0=tp_cels0,chkbnd=chkbnd,useext=useext,
@@ -759,7 +758,7 @@ def beta_tpot(s_gkg,t_cels,p_dbar,tp_cels=None,chkvals=False,
     :Examples:
     
     >>> beta_tpot(35.,20.,1e3)
-    7.31582583383e-4
+    7.31582585561e-04
     """
     tp_cels = pottemp(s_gkg,t_cels,p_dbar,0.,tp_cels=tp_cels,chkvals=chkvals,
         chktol=chktol,tp_cels0=tp_cels0,chkbnd=chkbnd,useext=useext,
@@ -909,7 +908,7 @@ def cabb_tpot_alt(s_gkg,t_cels,p_dbar,dtemp=_DTEMP,dsalt=_DSALT,
     :Examples:
     
     >>> cabb_tpot_alt(35.,20.,1e3)
-    8.75963154048e-6
+    8.76597878464e-06
     """
     tp_cels = pottemp(s_gkg,t_cels,p_dbar,0.,tp_cels=tp_cels,chkvals=chkvals,
         chktol=chktol,tp_cels0=tp_cels0,chkbnd=chkbnd,useext=useext,
@@ -1062,7 +1061,7 @@ def thrmb_tpot_alt(s_gkg,t_cels,p_dbar,dpres=_DPRES,tp_cels=None,
     :Examples:
     
     >>> thrmb_tpot_alt(35.,20.,1e3)
-    1.70945045984e-8
+    1.70965495606e-08
     """
     tp_cels = pottemp(s_gkg,t_cels,p_dbar,0.,tp_cels=tp_cels,chkvals=chkvals,
         chktol=chktol,tp_cels0=tp_cels0,chkbnd=chkbnd,useext=useext,
@@ -1261,7 +1260,7 @@ def alpha_tcon(s_gkg,t_cels,p_dbar,tp_cels=None,chkvals=False,
     :Examples:
     
     >>> alpha_tcon(35.,20.,1e3)
-    2.69418609861e-4
+    2.69414197935e-04
     """
     tp_cels = pottemp(s_gkg,t_cels,p_dbar,0.,tp_cels=tp_cels,chkvals=chkvals,
         chktol=chktol,tp_cels0=tp_cels0,chkbnd=chkbnd,useext=useext,
@@ -1314,7 +1313,7 @@ def beta_tcon(s_gkg,t_cels,p_dbar,tp_cels=None,chkvals=False,
     :Examples:
     
     >>> beta_tcon(35.,20.,1e3)
-    7.23213672954e-4
+    7.23213810967e-04
     """
     tp_cels = pottemp(s_gkg,t_cels,p_dbar,0.,tp_cels=tp_cels,chkvals=chkvals,
         chktol=chktol,tp_cels0=tp_cels0,chkbnd=chkbnd,useext=useext,
@@ -1462,7 +1461,7 @@ def cabb_tcon_alt(s_gkg,t_cels,p_dbar,dtemp=_DTEMP,dsalt=_DSALT,
     :Examples:
     
     >>> cabb_tcon_alt(35.,20.,1e3)
-    8.96907383083e-6
+    9.16324749728e-06
     """
     tp_cels = pottemp(s_gkg,t_cels,p_dbar,0.,tp_cels=tp_cels,chkvals=chkvals,
         chktol=chktol,tp_cels0=tp_cels0,chkbnd=chkbnd,useext=useext,
@@ -1620,7 +1619,7 @@ def thrmb_tcon_alt(s_gkg,t_cels,p_dbar,dpres=_DPRES,tp_cels=None,
     :Examples:
     
     >>> thrmb_tcon_alt(35.,20.,1e3)
-    1.72708365652e-8
+    1.72728502693e-08
     """
     tp_cels = pottemp(s_gkg,t_cels,p_dbar,0.,tp_cels=tp_cels,chkvals=chkvals,
         chktol=chktol,tp_cels0=tp_cels0,chkbnd=chkbnd,useext=useext,

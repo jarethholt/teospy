@@ -18,11 +18,11 @@ the variable `airf`.
 >>> iceair_g(1,1,0,.5,270.,1e5)
 -1269.41767949
 >>> cp(0.5,270.,1e5)
-1892.18951300
+1893.230554
 >>> enthalpy(0.5,270.,1e5)
 -167366.990802
 >>> lapserate(0.5,270.,1e5)
-2.28443875629e-4
+2.283832444e-04
 >>> solidfraction(0.5,270.,1e5)
 0.498525089434
 
@@ -122,17 +122,17 @@ def iceair_g(drvw,drvt,drvp,wair,temp,pres,airf=None,dhum=None,
     >>> iceair_g(0,0,1,.5,270.,1e5)
     0.389645501224
     >>> iceair_g(2,0,0,.5,270.,1e5)
-    0.
+    0.0
     >>> iceair_g(1,1,0,.5,270.,1e5)
     -1269.41767949
     >>> iceair_g(1,0,1,.5,270.,1e5)
     0.777110408175
     >>> iceair_g(0,2,0,.5,270.,1e5)
-    -7.00810930740
+    -7.011965016
     >>> iceair_g(0,1,1,.5,270.,1e5)
-    1.60095965101e-3
+    1.601415320e-03
     >>> iceair_g(0,0,2,.5,270.,1e5)
-    -3.91178603885e-6
+    -3.911839890e-06
     """
     airf, __, __, dhum = _eq_atpe(temp=temp,pres=pres,airf=airf,dhum=dhum,
         chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,
@@ -272,7 +272,7 @@ def cp(wair,temp,pres,airf=None,dhum=None,chkvals=False,chktol=_CHKTOL,
     :Examples:
     
     >>> cp(0.5,270.,1e5)
-    1892.18951300
+    1893.230554
     """
     g_tt = iceair_g(0,2,0,wair,temp,pres,airf=airf,dhum=dhum,chkvals=chkvals,
         chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,mathargs=mathargs)
@@ -473,7 +473,7 @@ def expansion(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     :Examples:
     
     >>> expansion(0.5,270.,1e5)
-    4.10875949031e-3
+    4.109928935e-03
     """
     airf, __, __, dhum = _eq_atpe(temp=temp,pres=pres,airf=airf,dhum=dhum,
         chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,
@@ -529,7 +529,7 @@ def kappa_t(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     :Examples:
     
     >>> kappa_t(0.5,270.,1e5)
-    1.00393460891e-5
+    1.003948429e-05
     """
     airf, __, __, dhum = _eq_atpe(temp=temp,pres=pres,airf=airf,dhum=dhum,
         chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,
@@ -585,7 +585,7 @@ def lapserate(wair,temp,pres,airf=None,dhum=None,chkvals=False,
     :Examples:
     
     >>> lapserate(0.5,270.,1e5)
-    2.28443875629e-4
+    2.283832444e-04
     """
     airf, __, __, dhum = _eq_atpe(temp=temp,pres=pres,airf=airf,dhum=dhum,
         chkvals=chkvals,chktol=chktol,airf0=airf0,dhum0=dhum0,chkbnd=chkbnd,

@@ -5,10 +5,12 @@ equilibrium with seawater (sea-air).
 
 :Examples:
 
->>> massfractionair(salt=0.035,temp=300.,pres=1e5)
+>>> massfractionair(0.035,300.,1e5)
 0.978029483888
->>> vapourpressure(salt=0.035,temp=300.,pres=1e5)
+>>> vapourpressure(0.035,300.,1e5)
 3485.92986681
+>>> condensetemp(0.035,0.99,1e5)
+287.367451766
 >>> densityair(salt=0.035,temp=300.,pres=1e5)
 1.14642944448
 >>> densityvap(salt=0.035,temp=300.,pres=1e5)
@@ -16,15 +18,13 @@ equilibrium with seawater (sea-air).
 >>> entropyair(salt=0.035,temp=300.,pres=1e5)
 293.150672957
 >>> enthalpyevap(salt=0.035,temp=300.,pres=1e5)
-2434549.89770
->>> condensetemp(salt=0.035,airf=0.99,pres=1e5)
-287.367456468
+2434570.55229
 >>> densityair(salt=0.035,airf=0.99,pres=1e5)
-1.20553988598
+1.20553990576
 >>> densityvap(salt=0.035,airf=0.99,pres=1e5)
-1.20553988598e-2
+1.20553990576e-02
 >>> enthalpyevap(salt=0.035,airf=0.99,pres=1e5)
-2464738.79136
+2464765.77588
 >>> chempotevap(0.9,0.035,300.,1e5)
 1.45584069071
 
@@ -537,7 +537,7 @@ def densityair(salt=None,airf=None,temp=None,pres=None,dhum=None,
     :Examples:
     
     >>> densityair(salt=0.035,airf=0.99,pres=1e5)
-    1.20553988598
+    1.20553990576
     >>> densityair(salt=0.035,temp=300.,pres=1e5)
     1.14642944448
     """
@@ -614,9 +614,9 @@ def densityvap(salt=None,airf=None,temp=None,pres=None,dhum=None,
     :Examples:
     
     >>> densityvap(salt=0.035,airf=0.99,pres=1e5)
-    1.20553988598e-2
+    1.20553990576e-02
     >>> densityvap(salt=0.035,temp=300.,pres=1e5)
-    2.51876465812e-2
+    2.51876465812e-02
     """
     salt, airf, temp, pres, dhum, dliq = eq_satp(salt=salt,airf=airf,temp=temp,
         pres=pres,dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,salt0=salt0,
@@ -768,9 +768,9 @@ def enthalpyevap(salt=None,airf=None,temp=None,pres=None,dhum=None,
     :Examples:
     
     >>> enthalpyevap(salt=0.035,airf=0.99,pres=1e5)
-    2464738.79136
+    2464765.77588
     >>> enthalpyevap(salt=0.035,temp=300.,pres=1e5)
-    2434549.89770
+    2434570.55229
     """
     salt, airf, temp, pres, dhum, dliq = eq_satp(salt=salt,airf=airf,temp=temp,
         pres=pres,dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,salt0=salt0,
@@ -985,7 +985,7 @@ def condensetemp(salt,airf,pres,temp=None,dhum=None,dliq=None,
     :Examples:
     
     >>> condensetemp(0.035,0.99,1e5)
-    287.367456468
+    287.367451766
     """
     __, __, temp, __, dhum, dliq = eq_satp(salt=salt,airf=airf,pres=pres,
         temp=temp,dhum=dhum,dliq=dliq,chkvals=chkvals,chktol=chktol,temp0=temp0,
