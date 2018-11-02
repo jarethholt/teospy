@@ -1,19 +1,19 @@
 """Test accuracy of the convert modules.
 
 This module provides tests of the conversion modules. This module can be
-called from the command line as
+called from the command line as::
 
     python testcnv.py mod ...
 
-which will run all tests on the module `mod`. There are only two
-conversion modules - convert0 and convert5. If called with no arguments,
-then both modules are checked.
+which will run all tests on the module ``mod``. There are only two
+conversion modules - ``convert0`` and ``convert5``. If called with no
+arguments, then both modules are checked.
 
 The functions provided by this module generate the tests for the
-`convert` module of the same name. Each function returns a tuple of
+``convert`` module of the same name. Each function returns a tuple of
 :class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the `run`
-method of a Tester to run the test, and `printresults` to print a
+values of the arguments, and tables of reference values. Use the ``run``
+method of a Tester to run the test, and ``printresults`` to print a
 summary.
 
 :Available modules to test:

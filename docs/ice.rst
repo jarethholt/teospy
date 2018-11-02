@@ -1,25 +1,23 @@
 .. teospy ice modules documentation
 
-Ice modules
-===========
+``ice`` modules
+===============
 
-The `ice` modules provide thermodynamic properties of ice, specifically
-hexagonal ice 1 (Ih) which is most relevant to geophysical applications. The
-primary variables are temperature and pressure. The only modules dealing with
-ice are :mod:`ice1` that provides the Gibbs energy function and :mod:`ice2` that
-provides all other thermodynamic properties.
-
+The ``ice`` modules provide thermodynamic properties of ice, specifically
+hexagonal ice 1 which is most relevant to geophysical applications. The primary
+variables are temperature and pressure. The module :mod:`ice1` provides the Gibbs
+energy function and :mod:`ice2` provides all other thermodynamic properties.
 
 
-`ice1`
-------
+``ice1``
+--------
 
 .. automodule:: ice1
     :members: ice_g
 
 
-`ice2`
-------
+``ice2``
+--------
 
 .. automodule:: ice2
     :members: chempot, cp, density, enthalpy, entropy, expansion,

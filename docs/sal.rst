@@ -1,21 +1,21 @@
 .. teospy sal modules documentation
 
-Sal modules
-===========
+``sal`` modules
+===============
 
-The `sal` modules provide thermodynamic properties of salt in seawater. The
-primary variables are salinity, temperature, and pressure. These properties
-are combined with liquid water to form seawater in the `sea` modules. The
+The ``sal`` modules provide thermodynamic properties of salt in seawater. The
+primary variables are salinity, temperature, and pressure. These properties are
+combined with liquid water to form seawater in the ``sea`` modules. The
 contribution of salt to the Gibbs free energy is formulated as an expansion in
 terms of salinity:
 
 .. math:: g(S,T,p) = g_1(T,p) \cdot S \ln(S) + \sum_{i=2}^N g_i(T,p) S^{i/2}
 
 where :math:`S` is the absolute salinity and :math:`N=7` is a constant in
-`sal1` named `NSALTERMS`.
+``sal1`` named ``NSALTERMS``.
 
 All functions derived from these modules include the optional boolean keyword
-`useext`. When set to True, the Gibbs energy function uses extended
+``useext``. When set to True, the Gibbs energy function uses extended
 coefficients modified for high temperature and high salinity applications. The
 default (False) is recommended for most applications.
 

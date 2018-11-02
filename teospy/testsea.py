@@ -1,20 +1,20 @@
 """Test accuracy of the sea modules.
 
 This module provides tests of the accuracy of the seawater thermodynamic
-functions. This module can be called from the command line as
+functions. This module can be called from the command line as::
 
     python testsea.py mod1 mod2 ...
 
-which will run all tests whose modules match one of mod1, mod2, etc. For
-example, one can use 'sea3' to check all of the level 3 modules (sea3a,
-sea3b, sea3c, sea3d). If no arguments are given, all available tests are
-run.
+which will run all tests whose modules match one of ``mod1``, ``mod2``,
+etc. For example, one can use ``sea3`` to check all of the level 3
+modules (``sea3a``,``sea3b``,``sea3c``,``sea3d``). If no arguments are
+given, all available tests are run.
 
-The functions provided by this module generate the tests for the `air`
+The functions provided by this module generate the tests for the ``sea``
 module of the same name. Each function returns a tuple of
 :class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the `run`
-method of a Tester to run the test, and `printresults` to print a
+values of the arguments, and tables of reference values. Use the ``run``
+method of a Tester to run the test, and ``printresults`` to print a
 summary.
 
 :Available modules to test:

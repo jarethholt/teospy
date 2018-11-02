@@ -2,19 +2,20 @@
 
 This module provides tests of the accuracy of the dry and humid air
 thermodynamic functions. This module can be called from the command
-line as
+line as::
 
     python testair.py mod1 mod2 ...
 
-which will run all tests whose modules match one of mod1, mod2, etc. For
-example, one can use 'air3' to check all of the level 3 modules (air3a,
-air3b, air3c). If no arguments are given, all available tests are run.
+which will run all tests whose modules match one of ``mod1``, ``mod2``,
+etc. For example, one can use ``air3`` to check all of the level 3
+modules (``air3a``, ``air3b``, ``air3c``). If no arguments are given,
+all available tests are run.
 
-The functions provided by this module generate the tests for the `air`
+The functions provided by this module generate the tests for the ``air``
 module of the same name. Each function returns a tuple of
 :class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the `run`
-method of a Tester to run the test, and `printresults` to print a
+values of the arguments, and tables of reference values. Use the ``run``
+method of a Tester to run the test, and ``printresults`` to print a
 summary.
 
 :Available modules to test:

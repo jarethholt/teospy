@@ -4,8 +4,8 @@ This module provides the Gibbs function for ice-saturated (icy) air and
 related thermodynamic properties. The primary variables are the total
 dry air fraction, temperature, and pressure. The 'total' fraction here
 is the mass fraction of dry air in the total parcel (including ice), and
-uses the variable `wair`. The dry air mass fraction in humid air uses
-the variable `airf`.
+uses the variable ``wair``. The dry air mass fraction in humid air uses
+the variable ``airf``.
 
 :Examples:
 

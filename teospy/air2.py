@@ -4,7 +4,7 @@ This module implements the Helmholtz free energy for humid air (dry air
 and water vapour) as a function of dry air mass fraction, temperature,
 and humid air density. It also provides functions for thermodynamic
 properties calculated directly from the free energy. This module can
-also be called as a function,
+also be called as a function::
 
     python air_2.py
 

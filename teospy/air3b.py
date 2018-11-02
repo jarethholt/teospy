@@ -3,7 +3,7 @@
 This module provides thermodynamic properties (e.g. heat capacity) of
 humid air based on the Gibbs free energy, with dry air mass fraction,
 temperature, and pressure as primary variables. This module can also be
-called as a function,
+called as a function::
 
     python air_3b.py
 

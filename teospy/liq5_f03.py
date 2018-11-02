@@ -2,7 +2,7 @@
 
 This module provides the Gibbs free energy of liquid water and related
 properties using the Feistel (2003) formulation. This module can also be
-called as a function,
+called as a function::
 
     python liq5_f03.py
 

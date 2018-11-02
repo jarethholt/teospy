@@ -1,25 +1,25 @@
 """Test floating-point values in docstrings.
 
-This module aids in using `doctest` on this library. The docstrings of
-many functions contain reference values with a limited number of
-significant digits, an amount that should be replicated regardless of
-implementation (Python, Fortran, VB, etc.). In addition, the reference
-values have a variety of formats.
+This module aids in using Python's standard ``doctest`` on this library.
+The docstrings of many functions contain reference values with a limited
+number of significant digits, an amount that should be replicated
+regardless of implementation (Python, Fortran, VB, etc.). In addition,
+the reference values have a variety of formats.
 
-This module provides a custom OutputChecker, a class used by `doctest`
-to evaluate whether the expected and actual outputs match. This new
-checker, :class:`fltOutputChecker`, standardizes the formatting of the
-floats (including number of significant figures) before comparing the
-strings.
+This module provides a custom ``OutputChecker``, a class used by
+``doctest`` to evaluate whether the expected and actual outputs match.
+This new checker, :class:`FltOutputChecker`, standardizes the formatting
+of the floats (including number of significant figures) before comparing
+the strings.
 
-This module can also be called as
+This module can also be called as::
 
     python testdoc.py [-v] modname
 
-which will run `doctest` on the module `modname`. The optional flag
-`-v` can be used to make the test runner verbose. If not verbose
-(default) then only failed tests are printed, or a short message if all
-tests were passed.
+which will run the docstring examples in the module ``modname``. The
+optional flag ``-v`` enables verbose output. If not verbose (default)
+then only results from failed tests are printed, or a short message if
+all tests were passed.
 """
 
 __all__ = ['FltOutputChecker','testmod_flt']
@@ -67,10 +67,10 @@ def _extractsigfmt(numstr):
 class FltOutputChecker(doctest.OutputChecker):
     """OutputChecker customized for floats.
     
-    This OutputChecker overrides the standard check_output function to
-    convert the expected and actual output to a common exponential
-    format with the number of significant figures given by the expected
-    output.
+    This ``OutputChecker`` overrides the standard ``check_output``
+    function to convert the expected and actual output to a common
+    exponential format with the number of significant figures given by
+    the expected output.
     """
     def check_output(self,want,got,optionflags):
         """Check that expected and actual output agree within sig figs.

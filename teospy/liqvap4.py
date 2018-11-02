@@ -2,7 +2,7 @@
 
 This module provides thermodynamic properties for pure liquid water and
 water vapour in equilibrium, e.g. the saturation vapour pressure. This
-module can also be called as a function,
+module can also be called as a function::
 
     python liqvap4.py
 

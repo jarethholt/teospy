@@ -5,29 +5,27 @@ A root-finding method is required for modules of level 3 and higher to
 calculate the values of primary variables at thermodynamic equilibrium
 from given secondary variables.
 
-For example, fluid water properties (flu_1) are constructed from the
-Helmholtz free energy, a function of temperature and density. The Gibbs
-free energy (flu_3a) is a function of temperature and pressure, so the
-equation
-
-    pres = dliq^2 * d(free(temp,dliq))/d(dliq)
-
-has to be inverted to find the liquid density dliq.
+For example, the primary fluid water properties (:mod:`flu_1`) are
+constructed from the Helmholtz free energy, a function of temperature
+and density. However, the Gibbs free energy (:mod:`flu_3a`) is a
+function of temperature and pressure, so the equation
+:math:`p = d^2 \cdot \partial f/\partial d` has to be inverted to find
+the liquid density :math:`d`.
 
 This module may be expanded in the future to provide more choices for
 the inversion method (e.g. Brent, secant). However, this would require
 modifying the high-level modules to allow a choice of solver, and Newton
 iteration should still be the recommended and default choice. It also
-currently uses numpy to solve the linearized equations at each step.
-This requirement may also be worked around in the future if there is
-demand for it.
+currently uses :mod:`numpy` to solve the linearized equations at each
+step. This requirement may also be worked around in the future if there
+is demand for it.
 
-Several constants are provided here as well. RYTOL is the recommended
-relative tolerance to use to decide when the iteration is accurate
-enough. RXTOL is the recommended relative tolerance to use to decide
-when the step sizes in the iteration are too small to continue. MAXITER
-is the recommended maximum number of iterations to allow before
-returning and raising a warning.
+Several constants are provided here as well. ``RYTOL`` is the
+recommended relative tolerance to use to decide when the iteration is
+accurate enough. ``RXTOL`` is the recommended relative tolerance to use
+to decide when the step sizes in the iteration are too small to
+continue. ``MAXITER`` is the recommended maximum number of iterations to
+allow before returning and raising a warning.
 
 :Functions:
 
@@ -103,7 +101,7 @@ def _fmttol(tols,n,stacklevel=2):
 
 
 ### Main iteration routine
-def newton(fun,x0,x0fun,fargs=None,fkwargs=None,maxiter=MAXITER,
+def newton(fun,x0,x0fun=None,fargs=None,fkwargs=None,maxiter=MAXITER,
     rxtol=RXTOL,axtol=None,rytol=RYTOL,aytol=None,gamma=0.,
     stacklevel=2):
     """Equate two functions using Newton iteration.
@@ -117,19 +115,21 @@ def newton(fun,x0,x0fun,fargs=None,fkwargs=None,maxiter=MAXITER,
     There are several ways to specify the tolerances as described below.
     For each one, different tolerances can be specified for each
     component of a multi-variable function. To bypass checking a
-    tolerance, use None or numpy.inf.
+    tolerance, use ``None`` or ``numpy.inf``.
     
     :arg function fun: A function with the format
-        `(lhs, rhs, dlhs, drhs) = fun(\\*(x+fargs),\\*\\*fkwargs)` where
-        (lhs,rhs) at the two quantities to be equated; x contains the
-        primary variables to be calculated; and (dlhs,drhs) are the
+        ``(lhs, rhs, dlhs, drhs) = fun(\\*(x+fargs),\\*\\*fkwargs)``
+        where (lhs,rhs) at the two quantities to be equated; x contains
+        the primary variables to be calculated; and (dlhs,drhs) are the
         Jacobians of the two quantities with respect to x.
     :arg x0: Initial guess for the values of the primary variables. If
         any are None, then x0fun will be used to calculate them.
     :type x0: float or None or iterable(float or None)
-    :arg function x0fun: Function used to calculate initial values if
-        any are missing. Must accept fargs as input and return exactly
-        the number of primary variables in x0.
+    :arg x0fun: Function used to calculate initial values if any are
+        missing. Must accept fargs as input and return exactly the
+        number of primary variables in x0. It can be None (default), but
+        only if values are given for x0.
+    :type x0fun: function or None
     :arg fargs: Values of the secondary variables, which will be held
         constant while solving. If no secondary variables are present,
         use None (default).
@@ -138,16 +138,16 @@ def newton(fun,x0,x0fun,fargs=None,fkwargs=None,maxiter=MAXITER,
         (default) for no keyword arguments.
     :type fkwargs: None or dict
     :arg int maxiter: Maximum number of iterations to allow before
-        stopping (default MAXITER).
+        stopping (default ``MAXITER``).
     :arg rxtol: Relative tolerance between successive values of x for
-        halting the iteration (default RXTOL).
+        halting the iteration (default ``RXTOL``).
     :type rxtol: None or float or iterable(float or None)
     :arg axtol: Absolute tolerance between successive values of x for
         halting the iteration (default None). These values have implied
         units and thus should be different for each component.
     :type axtol: None or float or iterable(float or None)
     :arg rytol: Relative tolerance to use when comparing (lhs,rhs) for
-        halting the iteration (default RYTOL).
+        halting the iteration (default ``RYTOL``).
     :type rytol: None or float or iterable(float or None)
     :arg aytol: Absolute tolerance to use when comparing (lhs,rhs) for
         halting the iteration (default None). These values have implied
@@ -162,6 +162,8 @@ def newton(fun,x0,x0fun,fargs=None,fkwargs=None,maxiter=MAXITER,
         returned for single-variable functions and an array for multi-
         variable functions.
     :rtype: float or array(float)
+    :raises ValueError: If x0fun is not provided and there are values
+        missing from x0.
     :raises RuntimeWarning: If maxiter is non-positive. In this case, no
         iteration is done and the initial value x0 is returned.
     :raises RuntimeWarning: If any of (rxtol,axtol,rytol,aytol) are
@@ -175,13 +177,13 @@ def newton(fun,x0,x0fun,fargs=None,fkwargs=None,maxiter=MAXITER,
     
     :Examples:
     
-    >>> # Equate w - z^2 = z e^z for w = 0.2
+    >>> # Equate w = z e^z + z^2 for w = 0.2
     >>> import math
     >>> def fun(z,w):
-    ...     lhs = w - z**2
-    ...     rhs = z*math.exp(z)
-    ...     dlhs = -2*z  # d(lhs)/dz
-    ...     drhs = (z+1)*math.exp(z)  # d(rhs)/dz
+    ...     lhs = w
+    ...     rhs = z*math.exp(z) + z**2
+    ...     dlhs = 0.  # d(lhs)/dz
+    ...     drhs = (z+1)*math.exp(z) + 2*z  # d(rhs)/dz
     ...     return (lhs,rhs,dlhs,drhs)
     >>> w = 0.2
     >>> z0 = 0.0
@@ -199,6 +201,9 @@ def newton(fun,x0,x0fun,fargs=None,fkwargs=None,maxiter=MAXITER,
         vals1 = copy.copy(x0)
     vals2 = tuple(None for val1 in vals1)
     if any(val1 is None for val1 in vals1):
+        if x0fun is None:
+            errmsg = 'If values for x0 are missing, x0fun must be provided'
+            raise ValueError(errmsg)
         vals2 = x0fun(*fargs)
         if isinstance(vals2,(float,numpy.ndarray)):
             vals2 = (vals2,)

@@ -1,13 +1,14 @@
 """Compare results from a library to reference values.
 
-This module provides the class Tester for evaluating the numerical
-results from this library to reference values. A Tester instance has as
-attributes the functions to be tested; the values of the arguments to
-run the tests on; a table of reference values; and several other
-quantities related to printing out information. The `run` method
-evaluates the functions and calculates relative errors. Afterwards, the
-`printresults` method can be used to display the results (if any) that
-are outside of a given tolerance.
+This module provides the class :class:`Tester` for evaluating the
+numerical results from this library to reference values. A
+:class:`Tester` instance has as attributes the functions to be tested;
+the values of the arguments to run the tests on; a table of reference
+values; and several other quantities related to printing out
+information. The :meth:`~Tester.run` method evaluates the functions and
+calculates relative errors. Afterwards, the :meth:`~Tester.printresults`
+method can be used to display the results (if any) that are outside of a
+given tolerance.
 """
 
 __all__ = ['Tester']
@@ -52,7 +53,7 @@ def _geterr(ref,result,zerotol=_ZEROTOL):
 class Tester(object):
     """Class to aid automated testing.
     
-    Class designed to aid automated testing of this library. Its
+    Class designed to aid automated testing of ``teospy``. Its
     attributes specify the names of the functions to test and the module
     they come from; the values of regular and keyword arguments to use;
     the reference values to compare to; and eventually the function
@@ -116,15 +117,6 @@ class Tester(object):
         Created after using the `run` method.
     * nstr (int): Length of strings used to print function names.
     * nfmt (int): Length of strings used to print argument values.
-    
-    :Methods:
-    
-    * run: Run all the functions in the Tester, record results, and
-        calculate error values.
-    * printresults: Print a summary with the function names, arguments,
-        result, reference value, and error for all results outside of a
-        given tolerance.
-    
     """
     
     def __init__(self,funs,fargs,refs,fnames,argfmt,header=None,
@@ -204,7 +196,14 @@ class Tester(object):
                 eqkwargs = self.eqkwargs
             else:
                 eqkwargs = dict()
-            eqvals = self.eqfun(*self.eqargs,**eqkwargs)
+            
+            with warnings.catch_warnings():
+                warnings.filterwarnings('ignore','Step sizes are smaller',
+                    RuntimeWarning)
+                warnings.filterwarnings('ignore','Maximum number of iterations',
+                    RuntimeWarning)
+                eqvals = self.eqfun(*self.eqargs,**eqkwargs)
+            
             if isinstance(eqvals,float):
                 eqvals = (eqvals,)
             if self.keepkeys is None:
@@ -217,12 +216,17 @@ class Tester(object):
         kwargs.update(eqdict)
         
         results = numpy.zeros((self.nfun,self.narg),dtype=float)
-        for ifun in range(self.nfun):
-            fun = self.funs[ifun]
-            for iarg in range(self.narg):
-                farg = self.fargs[iarg]
-                res = fun(*farg,**kwargs)
-                results[ifun,iarg] = res
+        with warnings.catch_warnings():
+            warnings.filterwarnings('ignore','Step sizes are smaller',
+                RuntimeWarning)
+            warnings.filterwarnings('ignore','Maximum number of iterations',
+                RuntimeWarning)
+            for ifun in range(self.nfun):
+                fun = self.funs[ifun]
+                for iarg in range(self.narg):
+                    farg = self.fargs[iarg]
+                    res = fun(*farg,**kwargs)
+                    results[ifun,iarg] = res
         self.results = results
         self.errs = _geterr(self.refs,results,zerotol=zerotol)
         return None

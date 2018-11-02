@@ -3,12 +3,12 @@
 This module implements the coefficients of the power expansion of the
 Gibbs free energy of salt in seawater and its derivatives with respect
 to salinity, temperature, and pressure. The number of terms in the
-expansion is provided by this module as `NSALTERMS`.
+expansion is provided by this module as ``NSALTERMS``.
 
-There are two sets of coefficients used in this module, `_GSCOEFFS` and
-`_GSCOEFFS_EXT`. The `_EXT` version is an extension to the high-
+There are two sets of coefficients used in this module, ``_GSCOEFFS``
+and ``_GSCOEFFS_EXT``. The ``_EXT`` version is an extension to the high-
 temperature, high-salinity regime. Any function involving sea salt
-supports the `useext` keyword. If True, the coefficients for the
+supports the ``useext`` keyword. If True, the coefficients for the
 extension are used. The default is False.
 
 :Functions:

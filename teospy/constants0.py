@@ -4,18 +4,19 @@ This module defines constants and parameters that are common across all
 modules, including physical constants. It also contains functions that
 produce errors for invalid inputs and warnings for out-of-range inputs.
 
-The recommended bounds are the constants [SUB]_[V][LIM], where SUB is
-the substance it applies to; V is the variable (T for temperature, D for
-density); and LIM is either MIN or MAX. CHKTOL is included here as a
-recommended tolerance for iteration and error checking. All other
-constants are physical constants. Those with the SO prefix involve the
-standard seawater values; the CP prefix is for the vapour-liquid
-critical point of water; and the TP prefix is for the vapour-liquid-ice
-triple point of water.
+The recommended bounds are the constants ``[SUB]_[V][LIM]``, where
+``SUB`` is the substance it applies to; ``V`` is the variable (``T`` for
+temperature, ``D`` for density); and ``LIM`` is either ``MIN`` or
+``MAX``. ``CHKTOL`` is included here as a recommended tolerance for
+iteration and error checking. All other constants are physical
+constants. Those with the ``SO`` prefix involve the standard seawater
+values; the ``CP`` prefix is for the vapour-liquid critical point of
+water; and the ``TP`` prefix is for the vapour-liquid-ice triple point
+of water.
 
-In addition, there are several heat capacity values C[SUB] which are not
-in the original TEOS routines. They are used in various approximations
-that are used to initialize iterative routines.
+In addition, there are several heat capacity values ``C[SUB]`` which are
+not in the original TEOS routines. They are used in various
+approximations that are used to initialize iterative routines.
 
 :Functions:
 

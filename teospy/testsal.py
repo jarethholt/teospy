@@ -2,21 +2,21 @@
 
 This module provides tests of the accuracy of the thermodynamic
 functions for salt in seawater. This module can be called from the
-command line as
+command line as::
 
     python testsal.py useext mod1 mod2 ...
 
-which will run all tests on modules mod1, mod2, etc. If no arguments
-are given, all available tests are run. The first argument can also be
-'ext' or 'noext' to check only values with or without the high-
-temperature, high-salinity extension, or 'all' to check both (the
-default behavior).
+which will run all tests on modules ``mod1``, ``mod2``, etc. If no
+arguments are given, all available tests are run. The first argument can
+also be either ``ext`` or ``noext`` to check only values with or without
+the high- temperature, high-salinity extension, or ``all`` to check both
+(the default behavior).
 
-The functions provided by this module generate the tests for the `sal`
+The functions provided by this module generate the tests for the ``sal``
 module of the same name. Each function returns a tuple of
 :class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the `run`
-method of a Tester to run the test, and `printresults` to print a
+values of the arguments, and tables of reference values. Use the ``run``
+method of a Tester to run the test, and ``printresults`` to print a
 summary.
 
 :Available modules to test:

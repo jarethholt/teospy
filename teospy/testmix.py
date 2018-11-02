@@ -1,18 +1,27 @@
 """Test accuracy of the level 4 mixture modules.
 
-This module provides tests of the accuracy of the level 4 mixture modules. The prefixes of these modules list the substances in equilibrium; `liqvap4` is for pure liquid water and pure water vapour, whereas `iceair4b` is for ice and humid air. It also includes one level 5 module, `iceflu5`.
+This module provides tests of the accuracy of the level 4 mixture
+modules. The prefixes of these modules list the substances in
+equilibrium; ``liqvap4`` is for pure liquid water and pure water vapour,
+whereas ``iceair4b`` is for ice and humid air. It also includes one
+level 5 module, ``iceflu5``.
 
-This module can also be called from the command line as
+This module can also be called from the command line as::
 
     python testmix.py arg1 arg2 ...
 
-The arguments can be module names, parts of module names, or substance prefixes. This will run all available tests for modules that contain the arguments in their name. For example, 'iceair4' will test the three modules `iceair4a`, `iceair4b`, `iceair4c`; 'sea' will test all modules for which seawater is a component. If no arguments are given, all available tests are run.
+The arguments can be module names, parts of module names, or substance
+prefixes. This will run all available tests for modules that contain the
+arguments in their name. For example, ``iceair4`` will test the three
+modules ``iceair4a``, ``iceair4b``, ``iceair4c``; ``sea`` will test all
+modules for which seawater is a component. If no arguments are given,
+all available tests are run.
 
 The functions provided by this module generate the tests for the mixture
 module of the same name. Each function returns a tuple of
 :class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the `run`
-method of a Tester to run the test, and `printresults` to print a
+values of the arguments, and tables of reference values. Use the ``run``
+method of a Tester to run the test, and ``printresults`` to print a
 summary.
 
 :Available modules to test:

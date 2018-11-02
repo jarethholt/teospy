@@ -1,14 +1,14 @@
 .. teospy air modules documentation
 
-Air modules
-===========
+``air`` modules
+===============
 
-The `air` modules provide thermodynamic properties of both dry and humid air.
+The ``air`` modules provide thermodynamic properties of both dry and humid air.
 (It does not provide properties for saturated air; for those, see the level 4
 modules.) For pure dry air, the primary variables are the temperature and dry
 air density. For humid air, the primary variables are the dry air mass fraction,
 temperature, and humid air density. For converting between mass fraction and
-relative humidity, see `liqair4a` and `iceair4a`.
+relative humidity, see :mod:`liqair4a` and :mod:`iceair4a`.
 
 The basic contents of the modules are as follows:
 
@@ -21,19 +21,19 @@ The basic contents of the modules are as follows:
 * :mod:`air3c` provides properties calculated from dry air mass fraction,
   entropy, and pressure. It also provides dry adiabatic ascent functions (e.g.
   potential temperature).
-* :mod:`air5` provides a single function for calculating the moist adiabatic
-  lapse rate in the more conventional units of degrees C per 100 m.
+* :mod:`air5` provides a single function for calculating the adiabatic lapse
+  rate in the more conventional units of degrees C per 100 m.
 
 
-`air1`
-------
+``air1``
+--------
 
 .. automodule:: air1
     :members: dry_f, air_baw, air_caaw, air_caww
 
 
-`air2`
-------
+``air2``
+--------
 
 .. automodule:: air2
     :members: air_f, cp, cv, enthalpy, entropy, expansion, gibbsenergy,
@@ -42,15 +42,15 @@ The basic contents of the modules are as follows:
         chkiapws10table13, chkiapws10table14, chkiapws10table15
 
 
-`air3a`
--------
+``air3a``
+---------
 
 .. automodule:: air3a
-    :members: air_g
+    :members: eq_atp, air_g
 
 
-`air3b`
--------
+``air3b``
+---------
 
 .. automodule:: air3b
     :members: compressibility, compressibility_lemmon, contraction, cp, cv,
@@ -58,15 +58,15 @@ The basic contents of the modules are as follows:
         kappa_s, kappa_t, lapserate, soundspeed, vappot, chklemmon2000
 
 
-`air3c`
--------
+``air3c``
+---------
 
 .. automodule:: air3c
-    :members: air_h, pottemp, potdensity, potenthalpy
+    :members: eq_aep, air_h, eq_pot, pottemp, potdensity, potenthalpy
 
 
-`air5`
-------
+``air5``
+--------
 
 .. automodule:: air5
     :members: lapserate_c100m

@@ -1,7 +1,7 @@
 .. teospy flu modules documentation
 
-Flu modules
-===========
+``flu`` modules
+===============
 
 The `flu` modules provide thermodynamic properties of fluid water, both liquid
 water and water vapour. The primary variables are the temperature and fluid
@@ -22,15 +22,15 @@ The basic contents of the modules are as follows:
   liquid phase only.
 
 
-`flu1`
-------
+``flu1``
+--------
 
 .. automodule:: flu1
     :members: flu_f, chkiapws95table6
 
 
-`flu2`
-------
+``flu2``
+--------
 
 .. automodule:: flu2
     :members: cp, cv, enthalpy, entropy, expansion, gibbsenergy,
@@ -38,15 +38,15 @@ The basic contents of the modules are as follows:
         eq_chempot, eq_enthalpy, eq_entropy, eq_pressure, chkiapws95table7
 
 
-`flu3a`
--------
+``flu3a``
+---------
 
 .. automodule:: flu3a
     :members: eq_tp_liq, eq_tp_vap, liq_g, vap_g
 
 
-`flu3b`
--------
+``flu3b``
+---------
 
 .. automodule:: flu3b
     :members: liq_cp, liq_cv, liq_density, liq_enthalpy, liq_entropy,
@@ -58,8 +58,8 @@ The basic contents of the modules are as follows:
         vap_soundspeed
 
 
-`flu5_if97`
------------
+``flu5_if97``
+-------------
 
 .. automodule:: flu5_if97
     :members: liq_g, liq_cp, liq_density, liq_enthalpy, liq_entropy,
@@ -69,8 +69,8 @@ The basic contents of the modules are as follows:
         chkiapws97table15
 
 
-`liq5_f03`
-----------
+``liq5_f03``
+------------
 
 .. automodule:: liq5_f03
     :members: liq_g, cp, density, expansion, kappa_t, soundspeed, enthalpy,

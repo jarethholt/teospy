@@ -2,7 +2,7 @@
 
 This module provides the Gibbs free energies of both liquid water and
 water vapour as defined in IAPWS 1997. This module can also be called as
-a function,
+a function::
 
     python flu5_if97.py
 

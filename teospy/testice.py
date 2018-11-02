@@ -1,18 +1,18 @@
 """Test accuracy of the ice modules.
 
 This module provides tests of the accuracy of the thermodynamic
-functions of ice. This module can be called from the command line as
+functions of ice. This module can be called from the command line as::
 
     python testice.py mod1 mod2 ...
 
-which will run all tests on modules mod1, mod2, etc. If no arguments
-are given, all available tests are run.
+which will run all tests on modules ``mod1``, ``mod2``, etc. If no
+arguments are given, all available tests are run.
 
-The functions provided by this module generate the tests for the `ice`
+The functions provided by this module generate the tests for the ``ice``
 module of the same name. Each function returns a tuple of
 :class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the `run`
-method of a Tester to run the test, and `printresults` to print a
+values of the arguments, and tables of reference values. Use the ``run``
+method of a Tester to run the test, and ``printresults`` to print a
 summary.
 
 :Available modules to test:

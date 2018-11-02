@@ -3,7 +3,7 @@
 This module provides the specific enthalpy of liquid water-saturated
 (wet) air. It also provides the potential temperature and other
 adiabatic properties. The primary variables are the total dry air mass
-fraction, entropy, and pressure. As in `liqair4b`, the total dry
+fraction, entropy, and pressure. As in :mod:`liqair4b`, the total dry
 fraction here is the ratio of dry air mass to total parcel mass,
 including liquid.
 

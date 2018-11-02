@@ -3,7 +3,7 @@
 This module provides the Gibbs free energy of seawater (liquid water and
 salt) and its derivatives with respect to salinity, temperature, and
 pressure. It also provides properties (e.g. heat capacity) derived from
-the Gibbs energy. Finally, this module can be called as a function,
+the Gibbs energy. Finally, this module can be called as a function::
 
     python sea3a.py
 
@@ -686,7 +686,7 @@ def helmholtzenergy(salt,temp,pres,dliq=None,chkvals=False,
     g = sea_g(0,0,0,salt,temp,pres,dliq=dliq,useext=useext)
     g_p = sea_g(0,0,1,salt,temp,pres,dliq=dliq,useext=useext)
     f = g - pres*g_p
-    return g
+    return f
 
 def internalenergy(salt,temp,pres,dliq=None,chkvals=False,
     chktol=_CHKTOL,dliq0=None,chkbnd=False,useext=False,mathargs=None):

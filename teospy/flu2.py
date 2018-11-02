@@ -3,7 +3,7 @@
 This module provides thermodynamic properties of pure fluid water
 (liquid water or water vapour) derived from the Helmholtz free energy,
 with primary variables temperature and fluid density. This module can
-also be called as a function,
+also be called as a function::
 
     python flu_2.py
 

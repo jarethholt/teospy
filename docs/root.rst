@@ -12,18 +12,18 @@ and mass fractions and from practical salinity to absolute salinity.
 and higher. :mod:`maths4` contains a few functions that are commonly used for
 approximating phase equilibria in the level 4 (mixture) modules. For more
 details on these approximation functions, see the notes in
-`docs/latex/approximations.pdf`.
+:download:`/latex/approximations.pdf`.
 
 
-`constants0`
-------------
+``constants0``
+--------------
 
 .. automodule:: constants0
     :members: chkdrybnds, chkflubnds, chkhumbnds, chkicebnds, chksalbnds
 
 
-`convert0`
-----------
+``convert0``
+------------
 
 .. automodule:: convert0
     :members: air_molarmass, air_molfractionvap, air_molfractiondry,
@@ -31,22 +31,22 @@ details on these approximation functions, see the notes in
         gsw_spfromsa, sal_asalfrompsal, sal_psalfromasal
 
 
-`maths3`
---------
+``maths3``
+----------
 
 .. automodule:: maths3
     :members: newton
 
 
-`maths4`
---------
+``maths4``
+----------
 
 .. automodule:: maths4
-    :members: calalpha, lamb1, lamb2
+    :members: lamb1, lamb2, lamb0
 
 
-`convert5`
-----------
+``convert5``
+------------
 
 .. automodule:: convert5
     :members: swpres, swdepth, cnvpressure, cnvtemperature,

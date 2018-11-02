@@ -1,7 +1,7 @@
 """Test accuracy of the GSW module.
 
 This module provides tests of the accuracy of the Gibbs SeaWater (GSW)
-toolbox functions. This module can be called from the command line as
+toolbox functions. This module can be called from the command line as::
 
     python testgsw.py
 
@@ -9,8 +9,8 @@ which will run the tests and print a summary.
 
 This module provides one function to generate :class:`~tester.Tester`
 instances. Each instance includes the functions checked, values of the
-arguments, and tables of reference values. Use the `run` method of a
-Tester to run the test, and `printresults` to print a summary.
+arguments, and tables of reference values. Use the ``run`` method of a
+Tester to run the test, and ``printresults`` to print a summary.
 """
 
 __all__ = ['gengsw5']

@@ -3,8 +3,8 @@
 This module provides the specific enthalpy of ice-saturated (icy) air.
 It also provides the potential temperature and other adiabatic
 properties. The primary variables are the total dry air mass fraction,
-entropy, and pressure. As in `iceair4b`, the total dry fraction here is
-the ratio of dry air mass to total parcel mass, including ice.
+entropy, and pressure. As in :mod:`iceair4b`, the total dry fraction
+here is the ratio of dry air mass to total parcel mass, including ice.
 
 :Examples:
 
