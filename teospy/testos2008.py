@@ -335,7 +335,6 @@ def gentablea5():
     temp = _TCELS
     pres = _PATM
     args1 = (salt,temp,pres)
-    sal_g = sal2.sal_g
     
     funs = flu3a.liq_g
     fargs = [(der + args1[1:]) for der in _DERS2]
@@ -364,7 +363,7 @@ def gentablea5():
     test_lp = Tester(funs,fargs,refs,fnames,argfmt,header=header,
         eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys,refs_alt=refs_alt)
     
-    funs = sal_g
+    funs = sal2.sal_g
     fargs = [(der + args1) for der in _DERS3]
     refs = [-101.34274172939,63997.4067312299,-1.47643376346e-1,
         -2.74957224268433e-5,-7.59615411515309e-4,0.85286115117592,
@@ -374,15 +373,8 @@ def gentablea5():
     header = 'OS2008 table A5 salt Gibbs energy'
     test_sg = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     
-    funs = [
-        lambda s,t,p: sal_g(0,0,0,s,t,p) - t*sal_g(0,1,0,s,t,p),
-        lambda s,t,p: sal_g(0,0,0,s,t,p) - p*sal_g(0,0,1,s,t,p),
-        lambda s,t,p: (sal_g(0,0,0,s,t,p) - t*sal_g(0,1,0,s,t,p)
-            - p*sal_g(0,0,1,s,t,p)),
-        lambda s,t,p: -sal_g(0,1,0,s,t,p),
-        lambda s,t,p: -t*sal_g(0,2,0,s,t,p),
-        sal2.liqpot
-    ]
+    funs = [sal2._auxenthalpy,sal2._auxhelmholtzenergy,sal2._auxinternalenergy,
+        sal2._auxentropy,sal2._auxcp,sal2.liqpot]
     fargs = args1
     refs = [-61.0139534804,-98.556737654491,-58.2279494055,0.147643376346,
         -232.95902344370,-2351.81410932936]
@@ -430,7 +422,6 @@ def gentablea6():
     temp = 353.
     pres = _PATM
     args1 = (salt,temp,pres)
-    sal_g = sal2.sal_g
     
     funs = flu3a.liq_g
     fargs = [(der + args1[1:]) for der in _DERS2]
@@ -458,7 +449,7 @@ def gentablea6():
     test_lp = Tester(funs,fargs,refs,fnames,argfmt,header=header,
         eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
-    funs = sal_g
+    funs = sal2.sal_g
     fargs = [(der + args1) for der in _DERS3]
     refs = [15087.174003705,251957.275851413,156.230907404291,
         -5.7922728577126e-5,-3.0595780244234e-4,1.27922649315507,
@@ -468,15 +459,8 @@ def gentablea6():
     header = 'OS2008 table A6 salt Gibbs energy'
     test_sg = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     
-    funs = [
-        lambda s,t,p: sal_g(0,0,0,s,t,p) - t*sal_g(0,1,0,s,t,p),
-        lambda s,t,p: sal_g(0,0,0,s,t,p) - p*sal_g(0,0,1,s,t,p),
-        lambda s,t,p: (sal_g(0,0,0,s,t,p) - t*sal_g(0,1,0,s,t,p)
-            - p*sal_g(0,0,1,s,t,p)),
-        lambda s,t,p: -sal_g(0,1,0,s,t,p),
-        lambda s,t,p: -t*sal_g(0,2,0,s,t,p),
-        sal2.liqpot
-    ]
+    funs = [sal2._auxenthalpy,sal2._auxhelmholtzenergy,sal2._auxinternalenergy,
+        sal2._auxentropy,sal2._auxcp,sal2.liqpot]
     fargs = args1
     refs = [-40062.33631001,15093.043024178,-40056.467289536,-156.230907404291,
         -451.566952083741,-10108.5535814360]
@@ -524,7 +508,6 @@ def gentablea7():
     temp = _TCELS
     pres = 1e8
     args1 = (salt,temp,pres)
-    sal_g = sal2.sal_g
     
     funs = flu3a.liq_g
     fargs = [(der + args1[1:]) for der in _DERS2]
@@ -552,7 +535,7 @@ def gentablea7():
     test_lp = Tester(funs,fargs,refs,fnames,argfmt,header=header,
         eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
-    funs = sal_g
+    funs = sal2.sal_g
     fargs = [(der + args1) for der in _DERS3]
     refs = [-2600.93050730637,-5458.6158064880,7.5404568488117,
         -2.2912384179113e-5,-6.4075761854575e-4,0.488076973942251,
@@ -562,15 +545,8 @@ def gentablea7():
     header = 'OS2008 table A7 salt Gibbs energy'
     test_sg = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     
-    funs = [
-        lambda s,t,p: sal_g(0,0,0,s,t,p) - t*sal_g(0,1,0,s,t,p),
-        lambda s,t,p: sal_g(0,0,0,s,t,p) - p*sal_g(0,0,1,s,t,p),
-        lambda s,t,p: (sal_g(0,0,0,s,t,p) - t*sal_g(0,1,0,s,t,p)
-            - p*sal_g(0,0,1,s,t,p)),
-        lambda s,t,p: -sal_g(0,1,0,s,t,p),
-        lambda s,t,p: -t*sal_g(0,2,0,s,t,p),
-        sal2.liqpot
-    ]
+    funs = [sal2._auxenthalpy,sal2._auxhelmholtzenergy,sal2._auxinternalenergy,
+        sal2._auxentropy,sal2._auxcp,sal2.liqpot]
     fargs = args1
     refs = [-4660.6062955593,-309.69208939506,-2369.3678776480,-7.5404568488117,
         -133.318225432326,-2408.9780641266]

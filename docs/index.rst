@@ -11,9 +11,8 @@ Seawater (2010) <http://www.teos-10.org>`_, other implementations of which can
 be found at `https://github.com/TEOS-10 <https://github.com/TEOS-10>`_. The
 library provides thermodynamic functions of mixtures of dry air, water vapour,
 liquid water, ice, and sea salt. Examples uses include calculating the density
-of air from its temperature and pressure, or the vapour pressure of water above
-seawater from its temperature, pressure, and salinity.
-
+of air from its temperature and pressure, or the vapour pressure above seawater
+with a given salinity, temperature, and pressure.
 
 The purpose of this pure-Python implementation is to open up the library to
 interactive calculations and scripting without needing to compile other
@@ -73,6 +72,7 @@ Table of Contents
    sea
    mix
    tester
+   issues
 
 
 Indices and tables

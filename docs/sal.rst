@@ -25,6 +25,11 @@ The basic contents of the modules are as follows:
   :math:`g_i` in the salinity expansion.
 * :mod:`sal2` provides thermodynamic properties of seawater that depend only on
   the salinity, such as dilution and osmotic coefficients.
+* :mod:`calsalcoeffs` is a script that is used to calculate the coefficients of
+  the above formula from the original coefficients, which use the square root of
+  salinity. It is provided only to document how the coefficients were generated
+  and is not intended to use unless the original coefficients are revised by
+  IAPWS.
 
 
 `sal1`
@@ -42,4 +47,10 @@ The basic contents of the modules are as follows:
         liqpot, osmcoeff, salpot, saltenthalpy, saltentropy, saltvolume,
         mixenthalpy, mixentropy, mixvolume, eq_liqpot, eq_enthalpy,
         eq_entropy
+
+
+`calsalcoeffs`
+--------------
+
+.. automodule:: calsalcoeffs
 

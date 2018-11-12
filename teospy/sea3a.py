@@ -1223,9 +1223,9 @@ def chkiapws08table8a(printresult=True,chktol=_CHKTOL):
     header = 'Liquid Gibbs derivatives'
     eqfun = _eq_tp_liq
     eqargs = args1[1:]
-    eqkws = ['dliq']
+    eqkeys = ['dliq']
     testliqder = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     funs = _sal_g
     fargs = [(der+args1) for der in DERS3]
@@ -1247,25 +1247,26 @@ def chkiapws08table8a(printresult=True,chktol=_CHKTOL):
     header = 'Sea Gibbs derivatives'
     eqfun = _eq_tp_liq
     eqargs = args1[1:]
-    eqkws = ['dliq']
+    eqkeys = ['dliq']
     testseader = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     funs = [flu3b.liq_enthalpy,flu3b.liq_helmholtzenergy,
         flu3b.liq_internalenergy,flu3b.liq_entropy,flu3b.liq_density,
         flu3b.liq_cp,flu3b.liq_soundspeed,flu3b.liq_gibbsenergy]
     fargs = args1[1:]
-    refs = [6.10139535e1,1.8399e-3,-4.03269484e1,-1.47643376e-1,
+    refs = [6.10139535e1,1.83989364064e-3,-4.03269484e1,-1.47643376e-1,
         9.9984308550433e2,4.21944480846e3,1.40238253109e3,1.01342742e2]
+    refs_alt = [None,1.8399e-3,None,None,None,None,None,None]
     fnames = ['enthalpy','helmholtzenergy','internalenergy','entropy','density',
         'cp','soundspeed','gibbsenergy']
     argfmt = '({0:6.2f},{1:6g})'
     header = 'Liquid functions'
     eqfun = _eq_tp_liq
     eqargs = args1[1:]
-    eqkws = ['dliq']
+    eqkeys = ['dliq']
     testliqfun = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     funs = [sal2._auxenthalpy,sal2._auxhelmholtzenergy,sal2._auxinternalenergy,
         sal2._auxentropy,sal2._auxcp,sal2.liqpot]
@@ -1289,9 +1290,9 @@ def chkiapws08table8a(printresult=True,chktol=_CHKTOL):
     header = 'Sea functions'
     eqfun = _eq_tp_liq
     eqargs = args1[1:]
-    eqkws = ['dliq']
+    eqkeys = ['dliq']
     testseafun = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     tests = (testliqder,testsalder,testseader,testliqfun,testsalfun,
         testseafun)
@@ -1337,9 +1338,9 @@ def chkiapws08table8b(printresult=True,chktol=_CHKTOL):
     header = 'Liquid Gibbs derivatives'
     eqfun = _eq_tp_liq
     eqargs = args1[1:]
-    eqkws = ['dliq']
+    eqkeys = ['dliq']
     testliqder = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     funs = _sal_g
     fargs = [(der+args1) for der in DERS3]
@@ -1361,9 +1362,9 @@ def chkiapws08table8b(printresult=True,chktol=_CHKTOL):
     header = 'Sea Gibbs derivatives'
     eqfun = _eq_tp_liq
     eqargs = args1[1:]
-    eqkws = ['dliq']
+    eqkeys = ['dliq']
     testseader = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     funs = [flu3b.liq_enthalpy,flu3b.liq_helmholtzenergy,
         flu3b.liq_internalenergy,flu3b.liq_entropy,flu3b.liq_density,
@@ -1378,9 +1379,9 @@ def chkiapws08table8b(printresult=True,chktol=_CHKTOL):
     header = 'Liquid functions'
     eqfun = _eq_tp_liq
     eqargs = args1[1:]
-    eqkws = ['dliq']
+    eqkeys = ['dliq']
     testliqfun = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     funs = [sal2._auxenthalpy,sal2._auxhelmholtzenergy,sal2._auxinternalenergy,
         sal2._auxentropy,sal2._auxcp,sal2.liqpot]
@@ -1405,9 +1406,9 @@ def chkiapws08table8b(printresult=True,chktol=_CHKTOL):
     header = 'Sea functions'
     eqfun = _eq_tp_liq
     eqargs = args1[1:]
-    eqkws = ['dliq']
+    eqkeys = ['dliq']
     testseafun = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     tests = (testliqder,testsalder,testseader,testliqfun,testsalfun,
         testseafun)
@@ -1453,9 +1454,9 @@ def chkiapws08table8c(printresult=True,chktol=_CHKTOL):
     header = 'Liquid Gibbs derivatives'
     eqfun = _eq_tp_liq
     eqargs = args1[1:]
-    eqkws = ['dliq']
+    eqkeys = ['dliq']
     testliqder = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     funs = _sal_g
     fargs = [(der+args1) for der in DERS3]
@@ -1477,9 +1478,9 @@ def chkiapws08table8c(printresult=True,chktol=_CHKTOL):
     header = 'Sea Gibbs derivatives'
     eqfun = _eq_tp_liq
     eqargs = args1[1:]
-    eqkws = ['dliq']
+    eqkeys = ['dliq']
     testseader = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     funs = [flu3b.liq_enthalpy,flu3b.liq_helmholtzenergy,
         flu3b.liq_internalenergy,flu3b.liq_entropy,flu3b.liq_density,
@@ -1493,9 +1494,9 @@ def chkiapws08table8c(printresult=True,chktol=_CHKTOL):
     header = 'Liquid functions'
     eqfun = _eq_tp_liq
     eqargs = args1[1:]
-    eqkws = ['dliq']
+    eqkeys = ['dliq']
     testliqfun = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     funs = [sal2._auxenthalpy,sal2._auxhelmholtzenergy,sal2._auxinternalenergy,
         sal2._auxentropy,sal2._auxcp,sal2.liqpot]
@@ -1519,9 +1520,9 @@ def chkiapws08table8c(printresult=True,chktol=_CHKTOL):
     header = 'Sea functions'
     eqfun = _eq_tp_liq
     eqargs = args1[1:]
-    eqkws = ['dliq']
+    eqkeys = ['dliq']
     testseafun = Tester(funs,fargs,refs,fnames,argfmt,header=header,
-        eqfun=eqfun,eqargs=eqargs,eqkws=eqkws)
+        eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     tests = (testliqder,testsalder,testseader,testliqfun,testsalfun,
         testseafun)

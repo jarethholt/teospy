@@ -212,7 +212,7 @@ def geniceair4a():
         iceair4a.densityice]
     fargs = tuple()
     fkwargs = {'temp': 270., 'pres': 1e5}
-    refs = [2833397.471581049,1.28880078014,3.79055033080e-3,917.181167192]
+    refs = [2833397.47158,1.28880078014,3.79055033080e-3,917.181167192]
     refs_alt = [2833359.27614,None,None,None]
     fnames = ['enthalpysubl','densityair','densityvap','densityice']
     argfmt = '({0:s}={1:3g},{2:s}={3:6g})'
@@ -228,7 +228,7 @@ def geniceair4a():
     funs = [iceair4a.pressure,iceair4a.enthalpysubl,iceair4a.densityair,
         iceair4a.densityvap,iceair4a.densityice]
     fkwargs = {'airf': 0.997, 'temp': 270.}
-    refs = [98034.4511233,2833421.4055958856,1.26340801028,3.79022403085e-3,
+    refs = [98034.4511233,2833421.40560,1.26340801028,3.79022403085e-3,
         917.180955861]
     refs_alt = [None,2833386.54980,None,None,None]
     fnames = ['pressure','enthalpysubl','densityair','densityvap','densityice']
@@ -242,7 +242,7 @@ def geniceair4a():
     funs = [iceair4a.temperature,iceair4a.enthalpysubl,iceair4a.densityair,
         iceair4a.densityvap,iceair4a.densityice]
     fkwargs = {'airf': 0.997, 'pres': 1e5}
-    refs = [270.23481612550177,2833334.552629217,1.28763121402,3.86289364206e-3,
+    refs = [270.234816126,2833334.55263,1.28763121402,3.86289364206e-3,
         917.147060527]
     refs_alt = [270.232024746,2833296.51317,None,None,None]
     fnames = ['temperature','enthalpysubl','densityair','densityvap',
@@ -257,7 +257,7 @@ def geniceair4a():
     funs = [iceair4a.enthalpysubl,iceair4a.densityair,iceair4a.densityvap,
         iceair4a.pressure,iceair4a.temperature,iceair4a.densityice]
     fkwargs = {'airf': 0.997, 'entr': 100.}
-    refs = [2834605.615243472,0.949325026119,2.84797507836e-3,72721.4579415,
+    refs = [2834605.61524,0.949325026119,2.84797507836e-3,72721.4579415,
         266.514349350,917.681749114]
     refs_alt = [2834612.42351,None,None,None,None,None]
     fnames = ['enthalpysubl','densityair','densityvap','pressure','temperature',
@@ -338,9 +338,9 @@ def geniceair4b():
     funs = iceair4b.iceair_g
     args1 = (0.5,270.,1e5)
     fargs = [(der+args1) for der in _DERS3]
-    refs = [-2595.5716663375033,2382.35592988,610.2645167188605,
-        0.389645501224,0.0,-1269.4176766911055,0.777110408175,
-        -7.011965016178234,0.0016014153056509374,-3.911839886579897e-6]
+    refs = [-2595.57166634,2382.35592988,610.264516719,0.389645501224,0.0,
+        -1269.41767669,0.777110408175,-7.01196501618,1.60141530565e-3,
+        -3.91183988658e-6]
     refs_alt = [-2595.57166634,None,610.264515318,None,None,-1269.41767949,None,
         -7.00810930740,1.60095965101e-3,-3.91178603885e-6]
     fnames = 'iceair_g'
@@ -359,9 +359,9 @@ def geniceair4b():
         iceair4b.density,iceair4b.enthalpy,iceair4b.entropy,iceair4b.expansion,
         iceair4b.kappa_t,iceair4b.lapserate]
     fargs = args1
-    refs = [0.498525089434,1.47491056602e-3,1893.2305543681232,2.5664353800,
-        -167366.990802,-610.264515318,4.109928900246964e-3,1.003948429009079e-5,
-        2.2838324589545076e-4]
+    refs = [0.498525089434,1.47491056602e-3,1893.23055437,2.5664353800,
+        -167366.990802,-610.264515318,4.10992890025e-3,1.00394842901e-5,
+        2.28383245895e-4]
     refs_alt = [None,None,1892.18951300,None,None,None,4.10875949031e-3,
         1.00393460891e-5,2.28443875629e-4]
     fnames = ['solidfraction','vapourfraction','cp','density','enthalpy',
@@ -381,9 +381,9 @@ def geniceair4c():
     args1 = (0.5,1e5)
     fargs = [(der+args1) for der in _DERS3]
     fkwargs = {'entr': -600.}
-    refs = [-164588.106002,543.0166476377772,271.449994437,0.391981878510,
-        224806.0619232994,-177.336808300561,0.4942223281964142,
-        0.13989099452736128,0.00022684010853205218,-3.5698228708362018e-6]
+    refs = [-164588.106002,543.016647638,271.449994437,0.391981878510,
+        224806.061923,-177.336808301,0.494222328196,0.139890994527,
+        2.26840108532e-4,-3.56982287084e-6]
     refs_alt = [None,543.016638396,None,None,224958.525864,-177.457078495,
         0.781782661019,0.139985868894,2.26912930199e-4,-3.56976697603e-6]
     fnames = 'iceair_h'
@@ -401,8 +401,8 @@ def geniceair4c():
         iceair4c.kappa_s,iceair4c.density]
     fargs = (0.9,1e5)
     fkwargs = {'entr': -100.}
-    refs = [270.3836801325995,0.00044209256818978005,1768.514396747884,
-        8.23141751514431e-6,1.4253189598569878]
+    refs = [270.383680133,4.42092568190e-4,1768.51439675,8.23141751514e-6,
+        1.42531895986]
     refs_alt = [270.383680119,4.42457786755e-4,1766.52051488,8.23031581047e-6,
         1.42531895993]
     fnames = ['temperature','lapserate','cp','kappa_s','density']
@@ -435,7 +435,7 @@ def genliqair4a():
         liqair4a.densityvap,liqair4a.densityliq]
     fargs = tuple()
     fkwargs = {'temp': 300., 'pres': 1e5}
-    refs = [2434606.2895444683,296.711483507,1.14614215827,2.56669393257e-2,
+    refs = [2434606.28954,296.711483507,1.14614215827,2.56669393257e-2,
         996.556340389]
     refs_alt = [2434585.53919,None,None,None,None]
     fnames = ['enthalpyevap','entropy','densityair','densityvap','densityliq']
@@ -452,7 +452,7 @@ def genliqair4a():
     funs = [liqair4a.enthalpyevap,liqair4a.entropy,liqair4a.temperature,
         liqair4a.densityair,liqair4a.densityvap,liqair4a.densityliq]
     fkwargs = {'airf': 0.99, 'pres': 1e5}
-    refs = [2465683.4351508557,145.863545194,287.078299795,1.20675806022,
+    refs = [2465683.43515,145.863545194,287.078299795,1.20675806022,
         0.0120675806022,999.256685197]
     refs_alt = [2465656.38630,None,None,None,None,None]
     fnames = ['enthalpyevap','entropy','temperature','densityair','densityvap',
@@ -466,7 +466,7 @@ def genliqair4a():
     funs = [liqair4a.enthalpyevap,liqair4a.entropy,liqair4a.pressure,
         liqair4a.densityair,liqair4a.densityvap,liqair4a.densityliq]
     fkwargs = {'airf': 0.99, 'temp': 300.}
-    refs = [2433303.9209508635,-41.9991507402,223057.741750,2.57657653270,
+    refs = [2433303.92095,-41.9991507402,223057.741750,2.57657653270,
         2.57657653270e-2,996.611581662]
     refs_alt = [2433111.29696,None,None,None,None,None]
     fnames = ['enthalpyevap','entropy','pressure','densityair','densityvap'
@@ -480,7 +480,7 @@ def genliqair4a():
     funs = [liqair4a.enthalpyevap,liqair4a.temperature,liqair4a.pressure,
         liqair4a.densityair,liqair4a.densityvap,liqair4a.densityliq]
     fkwargs = {'airf': 0.99, 'entr': 100.}
-    refs = [2458179.898368215,290.107386673,121546.373652,1.45154665083,
+    refs = [2458179.89837,290.107386673,121546.373652,1.45154665083,
         1.45154665083e-2,998.794738784]
     refs_alt = [2458121.74961,None,None,None,None,None]
     fnames = ['enthalpyevap','temperature','pressure','densityair','densityvap',
@@ -551,9 +551,9 @@ def genliqair4b():
     funs = liqair4b.liqair_g
     args1 = (0.5,300.,1e5)
     fargs = [(der+args1) for der in _DERS3]
-    refs = [-5396.77820137,-263.455491203,-343.783393872,0.446729465555,
-        0.,98.5580798842,0.891452019991,-14.226522368319394,
-        0.0024533597286680994,-4.627251558752521e-6]
+    refs = [-5396.77820137,-263.455491203,-343.783393872,0.446729465555,0.,
+        98.5580798842,0.891452019991,-14.2265223683,2.45335972867e-3,
+        -4.62725155875e-6]
     refs_alt = [None,None,None,None,None,None,None,-14.0995955397,
         2.43183979422e-3,-4.62360294023e-6]
     fnames = 'liqair_g'
@@ -572,9 +572,9 @@ def genliqair4b():
         liqair4b.expansion,liqair4b.kappa_t,liqair4b.lapserate,
         liqair4b.liquidfraction,liqair4b.vapourfraction]
     fargs = args1
-    refs = [4267.956710495818,2.23849125053,97738.2399604,343.783393872,
-        5.491824287032767e-3,1.0358062128281218e-5,1.7244971505695663e-4,
-        0.488546404734,1.14535952655e-2]
+    refs = [4267.95671050,2.23849125053,97738.2399604,343.783393872,
+        5.49182428703e-3,1.03580621283e-5,1.72449715057e-4,0.488546404734,
+        1.14535952655e-2]
     refs_alt = [4229.87866191,None,None,None,5.44365210207e-3,1.03498947276e-5,
         1.72475854884e-4,None,None]
     fnames = ['cp','density','enthalpy','entropy','expansion','kappa_t',
@@ -595,8 +595,8 @@ def genliqair4c():
     fargs = [der+args1 for der in _DERS3]
     fkwargs = {'entr': 100.}
     refs = [26898.5215492,-1681.79366113,280.393544899,0.406872930019,
-        35.72888824975039,1.7839978645440038,0.814851029626437,
-        0.08907773335823847,0.00015505664070260158,-3.837702338594866e-6]
+        35.7288882498,1.78399786454,0.814851029626,0.0890777333582,
+        1.550566407026e-4,-3.83770233859e-6]
     refs_alt = [None,None,None,None,35.7689708915,1.78599925196,0.811745643965,
         8.91776656830e-2,1.55067379031e-4,-3.83770118470e-6]
     fnames = 'liqair_h'
@@ -613,8 +613,8 @@ def genliqair4c():
     funs = [liqair4c.temperature,liqair4c.lapserate,liqair4c.cp,
         liqair4c.kappa_s,liqair4c.density]
     fargs = args1
-    refs = [280.393544899,0.00015505664070260158,3147.7400055847493,
-        9.432188910707534e-6,2.45776980040]
+    refs = [280.393544899,1.55056640703e-4,3147.74000558,9.43218891071e-6,
+        2.45776980040]
     refs_alt = [None,1.55067379031e-4,3144.21265404,9.43218607469e-6,None]
     fnames = ['temperature','lapserate','cp','kappa_s','density']
     argfmt = '({0:3g},{1:6g},{2:s}={3:3g})'

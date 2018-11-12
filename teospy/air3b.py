@@ -803,35 +803,55 @@ def chklemmon2000(mode,printresult=True,chktol=_LEMMONTOL):
             '(for Gibbs functions)').format(mode)
         raise ValueError(errmsg)
     from tester import Tester
+    
+    # Need to add offsets from Lemmon et al. (2000)
     MDRY = constants0.MDRY
+    RUNIV_L2000 = constants0.GAS_CONSTANT_MOLAR_L2000
+    RDRY_L2000 = constants0.GAS_CONSTANT_AIR_L2000
+    TRED = air1._TRED_DRY
+    N4_CURR, N5_CURR = air1._C_DRYF0[0]
+    N4_L2000 = -13.841928076
+    N5_L2000 = 17.275266575
+    DENTR = -RUNIV_L2000 * (N4_L2000 - N4_CURR)
+    DNRG = RUNIV_L2000*TRED * (N5_L2000 - N5_CURR)
     
     if mode==1:
-        fargs_scaled = [
-            (1., 140., 0.087718), (1., 270., 0.045164), (1., 400., 0.030461),
-            (1.,2000., 0.006092), (1., 140.,19.810   ), (1., 270., 4.6064  ),
-            (1., 400., 2.9202  ), (1.,2000., 0.59094 ), (1., 270.,47.327   ),
-            (1., 400.,45.208   ), (1.,2000.,32.893   )
+        fargs = [
+            ( 140., 0.087718), ( 270., 0.045164), ( 400., 0.030461),
+            (2000., 0.006092), ( 140.,19.810   ), ( 270., 4.6064  ),
+            ( 400., 2.9202  ), (2000., 0.59094 ), ( 270.,47.327   ),
+            ( 400.,45.208   ), (2000.,32.893   )
         ]
-        fargscales = [1.,1.,1e3*MDRY]
-        fargs = [tuple(a*scl for (a,scl) in zip(args,fargscales))
-            for args in fargs_scaled]
-        argfmt = '({1:4g},{2:10.4e})'
-        funs = [air2.internalenergy,air2.enthalpy,air2.entropy,air2.cv,air2.cp,
-            air2.soundspeed]
+        argfmt = '({0:4g},{1:9.6e})'
+        funs = [
+            lambda t,n: MDRY*air2.internalenergy(1.,t,n*1e3*MDRY) + DNRG,
+            lambda t,n: MDRY*air2.enthalpy(1.,t,n*1e3*MDRY) + DNRG,
+            lambda t,n: MDRY*air2.entropy(1.,t,n*1e3*MDRY) + DENTR,
+            lambda t,n: MDRY*air2.cv(1.,t,n*1e3*MDRY),
+            lambda t,n: MDRY*air2.cp(1.,t,n*1e3*MDRY),
+            lambda t,n: air2.soundspeed(1.,t,n*1e3*MDRY)
+        ]
         header = 'Dry air Helmholtz functions'
     else:
         fargs = [
-            (1., 140.,101325.), (1., 270.,101325.), (1., 400.,101325.),
-            (1.,2000.,101325.), (1., 140.,    1e7), (1., 270.,    1e7),
-            (1., 400.,    1e7), (1.,2000.,    1e7), (1., 270.,    2e9),
-            (1., 400.,    2e9), (1.,2000.,    2e9)
+            ( 140.,101325.), ( 270.,101325.), ( 400.,101325.),
+            (2000.,101325.), ( 140.,    1e7), ( 270.,    1e7),
+            ( 400.,    1e7), (2000.,    1e7), ( 270.,    2e9),
+            ( 400.,    2e9), (2000.,    2e9)
         ]
-        argfmt = '({1:4g},{2:6g})'
-        funs = [internalenergy,enthalpy,entropy,cv,cp,soundspeed]
+        argfmt = '({0:4g},{1:6g})'
+        funs = [
+            lambda t,p: MDRY*internalenergy(1.,t,p) + DNRG,
+            lambda t,p: MDRY*enthalpy(1.,t,p) + DNRG,
+            lambda t,p: MDRY*entropy(1.,t,p) + DENTR,
+            lambda t,p: MDRY*cv(1.,t,p),
+            lambda t,p: MDRY*cp(1.,t,p),
+            lambda t,p: soundspeed(1.,t,p)
+        ]
         header = 'Dry air Gibbs functions'
-    fnames = ['internalenergy','enthalpy','entropy','cv','cp','soundspeed']
     
-    refs_scaled = [
+    fnames = ['internalenergy','enthalpy','entropy','cv','cp','soundspeed']
+    refs = [
         [2873.2,5578.9,8294.3,48610.0,-329.46,4911.3,7923.0,48600.0,4354.8,
             8076.2,53433.0],
         [4028.3,7822.4,11621.0,65242.0,175.34,7082.2,11347.0,65522.0,46614.0,
@@ -842,19 +862,6 @@ def chklemmon2000(mode,printresult=True,chktol=_LEMMONTOL):
         [29.38,29.13,29.38,36.21,72.88,35.28,31.50,36.25,45.74,42.27,38.21],
         [236.4,329.6,400.5,863.5,418.1,349.7,425.6,878.6,2899.8,2822.9,2472.1]
     ]
-    refscales = [MDRY**(-1)]*5 + [1.]
-    
-    # Need to add offsets from Lemmon et al. (2000)
-    TRED = air1._TRED_DRY
-    RDRY_L2000 = constants0.GAS_CONSTANT_AIR_L2000
-    N4_CURR, N5_CURR = air1._C_DRYF0[0]
-    N4_L2000 = -13.841928076
-    N5_L2000 = 17.275266575
-    S0 = RDRY_L2000 * (N4_CURR - N4_L2000)
-    F0 = RDRY_L2000*TRED * (N5_L2000 - N5_CURR)
-    refoffsets = [F0,F0,S0,0.,0.,0.]
-    refs = [[(r*scl-off) for r in ref]
-        for (ref,scl,off) in zip(refs_scaled,refscales,refoffsets)]
     
     test = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     test.run()
