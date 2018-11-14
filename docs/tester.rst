@@ -33,7 +33,13 @@ The modules with such ``chk`` functions are:
     * :mod:`liqvap4`
     * :mod:`sea3a`
 
-For some of the tests, there are two tables of reference values, given by the ``refs`` and ``refs_alt`` attributes of the :class:`~tester.Tester`. The ``refs`` attribute always contains the recommended reference values. When ``refs_alt`` exists, any non-``None`` values represent values contained in the original documentation or Fortran version of TEOS-10 that disagree with ``teospy``. The reasons for diverging from the previous values are summarized in the section :ref:`issues-section`.
+For some of the tests, there are two tables of reference values, given by the
+``refs`` and ``refs_alt`` attributes of the :class:`~tester.Tester`. The
+``refs`` attribute always contains the recommended reference values. When
+``refs_alt`` exists, any non-``None`` values represent values contained in the
+original documentation or Fortran version of TEOS-10 that disagree with
+``teospy``. The reasons for diverging from the previous values are summarized in
+the section :ref:`issues-section`.
 
 Finally, the module :mod:`testdoc` provides a way to run a modified version of
 ``doctest``. The standard ``doctest`` finds and runs example code in the

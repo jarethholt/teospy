@@ -32,15 +32,15 @@ The basic contents of the modules are as follows:
   IAPWS.
 
 
-`sal1`
-------
+``sal1``
+--------
 
 .. automodule:: sal1
     :members: sal_g_term
 
 
-`sal2`
-------
+``sal2``
+--------
 
 .. automodule:: sal2
     :members: sal_g, actcoeff, activityw, actpotential, chemcoeff, dilution,
@@ -49,8 +49,8 @@ The basic contents of the modules are as follows:
         eq_entropy
 
 
-`calsalcoeffs`
---------------
+``calsalcoeffs``
+----------------
 
 .. automodule:: calsalcoeffs
 
