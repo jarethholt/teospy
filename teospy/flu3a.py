@@ -547,7 +547,7 @@ def eq_tp_liq(temp,pres,dliq=None,chkvals=False,chktol=_CHKTOL,
     996.556340389
     """
     if dliq is None:
-        if dliq0 is None:
+        if dliq0 is None or isinstance(dliq0,float):
             dliq0fun = _dliq_default
         elif isinstance(dliq0,str):
             if dliq0 in _LIQMETHODS.keys():
@@ -633,7 +633,7 @@ def eq_tp_vap(temp,pres,dvap=None,chkvals=False,chktol=_CHKTOL,
     7.22603510025e-03
     """
     if dvap is None:
-        if dvap0 is None:
+        if dvap0 is None or isinstance(dvap0,float):
             dvap0fun = _dvap_default
         elif isinstance(dvap0,str):
             if dvap0 in _VAPMETHODS.keys():
