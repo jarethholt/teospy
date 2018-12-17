@@ -327,12 +327,12 @@ def _dliqvap_crit(temp,pres):
     if numpy.all(numpy.imag(roots) == 0):
         # 3 real, positive roots
         roots.sort()
-        dvap = (roots[0] + 1)*_DCP
-        dliq = (roots[2] + 1)*_DCP
+        dvap = numpy.real(roots[0] + 1)*_DCP
+        dliq = numpy.real(roots[2] + 1)*_DCP
     else:
         # 1 real root
         ind = numpy.nonzero(numpy.imag(roots) == 0)[0][0]
-        x0 = roots[ind]
+        x0 = numpy.real(roots[ind])
         dflu = (x0 + 1)*_DCP
         if pr >= p1:
             dvap = dflu
