@@ -355,6 +355,8 @@ def _dliq_crit(temp,pres):
     :returns: Liquid water density in kg/m3.
     """
     dliq, dvap = _dliqvap_crit(temp,pres)
+    if dliq == 0:
+        dliq = dvap
     return dliq
 
 def _dvap_crit(temp,pres):
@@ -367,7 +369,9 @@ def _dvap_crit(temp,pres):
     :arg float pres: Pressure in Pa.
     :returns: Water vapour density in kg/m3.
     """
-    dliq, dvap = approx_densities_crit(temp,pres)
+    dliq, dvap = _dliqvap_crit(temp,pres)
+    if dvap == 0:
+        dvap = dliq
     return dvap
 
 def _dliq_const(temp,pres):
