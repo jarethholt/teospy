@@ -15,7 +15,7 @@ setuptools.setup(
     long_description = long_description,
     url = 'https://github.com/teospy',
     packages = setuptools.find_packages(),
-    classifiers = (
+    classifiers = [
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
@@ -25,6 +25,6 @@ setuptools.setup(
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Atmospheric Science',
         'Topic :: Scientific/Engineering :: Physics'
-    ),
+    ],
     data_files = [('teospy',['GSW_Data_v3_0.dat'])]
 )
