@@ -53,7 +53,7 @@ In addition, the modules are split into several levels as follows:
   SeaWater (GSW) toolbox inputs.
 * The various `test` modules provide tests of this library, comparing its
   results to the original Fortran. All of these modules make use of the
-  :class:`~tester.Tester` class. This class is just a container to keep track
+  :class:`tester.Tester` class. This class is just a container to keep track
   of the functions to test, their inputs, reference results, and formatting.
   It also provides methods to run the functions and print summaries.
 
