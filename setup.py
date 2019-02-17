@@ -15,6 +15,8 @@ setuptools.setup(
     long_description = long_description,
     url = 'https://github.com/teospy',
     packages = setuptools.find_packages(),
+    data_files = [('teospy',['GSW_Data_v3_0.dat'])],
+    include_package_data = True,
     classifiers = [
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Science/Research',
@@ -26,5 +28,4 @@ setuptools.setup(
         'Topic :: Scientific/Engineering :: Atmospheric Science',
         'Topic :: Scientific/Engineering :: Physics'
     ],
-    data_files = [('teospy',['GSW_Data_v3_0.dat'])]
 )
