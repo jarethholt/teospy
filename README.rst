@@ -15,7 +15,7 @@ Credits
 
 * `teospy` author: Jareth Holt
 * David Jackett, Paul Barker, Glenn Hyland, and more for development of the GSW and SIA toolboxes
-* R. Feistel, T. McDougall, J. Reissmann, and more for creating and maintaining the TEOS scientific standards
+* Rainer Feistel, Trevor McDougall, Dan Wright, and many others for creating and maintaining the TEOS scientific standards
 * The Joint Committee on the Properties of Seawater and its parent organizations IAPWS, SCOR, and IAPSO
 
 
