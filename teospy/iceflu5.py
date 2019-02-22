@@ -27,7 +27,7 @@ and sublimation curves of ice.
 __all__ = ['liqpressure','liqtemperature','vappressure']
 
 import numpy
-import constants0
+from teospy import constants0
 
 _TTP = constants0.TTP
 _PTPE = constants0.PTPE

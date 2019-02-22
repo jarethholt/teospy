@@ -48,20 +48,20 @@ equilibrium with seawater (sea-air).
 __all__ = ['eq_satp','densityair','densityvap','entropyair','enthalpyevap',
     'massfractionair','vapourpressure','condensetemp','chempotevap']
 
-import numpy
 import warnings
-import constants0
-import convert0
-import flu1
-import air2
-import flu2
-import sal2
-import maths3
-import air3a
-import air3b
-import flu3a
-import sea3a
-import maths4
+import numpy
+from teospy import constants0
+from teospy import convert0
+from teospy import flu1
+from teospy import air2
+from teospy import flu2
+from teospy import sal2
+from teospy import maths3
+from teospy import air3a
+from teospy import air3b
+from teospy import flu3a
+from teospy import sea3a
+from teospy import maths4
 
 _CHKTOL = constants0.CHKTOL
 _MWAT = constants0.MWAT

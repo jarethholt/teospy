@@ -5,7 +5,7 @@ mole fractions for both air and seawater, and from practical salinity
 units to the IAPWS-recommended absolute salinity.
 
 Practical salinity is calculated in part from a lookup table. The
-datafile name of this table is GSW_FNAME. When practical salinity cannot
+datafile name of this table is GSW_FPATH. When practical salinity cannot
 be calculated from the table, the value GSW_ERRVAL is returned.
 
 Functions:
@@ -29,13 +29,14 @@ Functions:
 
 """
 
-__all__ = ['GSW_FNAME','GSW_ERRVAL',
+__all__ = ['GSW_FPATH','GSW_ERRVAL',
     'air_molarmass','air_molfractionvap','air_molfractiondry',
     'air_massfractionvap','air_massfractiondry','sal_molality',
     'gsw_safromsp','gsw_spfromsa','sal_asalfrompsal','sal_psalfromasal']
 
+import os
 import warnings
-import constants0
+from teospy import constants0
 
 # Physical constants
 _MWAT = constants0.MWAT
@@ -49,7 +50,8 @@ _DBAR2PA = 1e4
 
 # Constants related to practical salinity functions
 GSW_ERRVAL = 9e15
-GSW_FNAME = 'GSW_Data_v3_0.dat'
+GSW_FPATH = os.path.abspath(os.path.join(
+    os.path.dirname(__file__),'GSW_Data_v3_0.dat'))
 _ERRVAL = 1e10
 _GSW_NS = (91,45,45)
 _DTAS = ((0,0), (0,1), (1,1), (1,0))
@@ -220,7 +222,7 @@ def _xinterp1(x,y,x0):
 def _read_saar():
     """Read the SAAR datafile.
     
-    Read the data file GSW_FNAME of gridded Salinity Absolute Anomaly
+    Read the data file GSW_FPATH of gridded Salinity Absolute Anomaly
     Ratio (SAAR) reference values. The data are saved to the tuple of
     arrays _GSW_GRID.
     """
@@ -239,7 +241,7 @@ def _read_saar():
         for iZ in range(GSW_NZ)]
     
     ## Read data file
-    with open(GSW_FNAME,'r') as gswdatafile:
+    with open(GSW_FPATH,'r') as gswdatafile:
         # Coordinate arrays
         for iX in range(GSW_NX):
             GSW_LONS[iX] = float(gswdatafile.readline())
@@ -447,7 +449,7 @@ def _gsw_saar(pdbar,lon0,lat0):
     """Calculate SAAR for a location.
     
     Calculate the Salinity Absolute Anomaly Ratio (SAAR) for a location
-    by interpolating the reference table in GSW_FNAME. The units here
+    by interpolating the reference table in GSW_FPATH. The units here
     are those used by the GSW toolbox, i.e. with pressure as gauge
     pressure in decibars.
     
@@ -456,7 +458,7 @@ def _gsw_saar(pdbar,lon0,lat0):
     :arg float lat0: Reference latitude in degrees North.
     :returns: Interpolated SAAR value for this location.
     :raises RuntimeWarning: If the reference point is not over the
-        ocean, as determined by the GSW_FNAME gridded data file.
+        ocean, as determined by the GSW_FPATH gridded data file.
         GSW_ERRVAL is returned.
     """
     # Check input values
@@ -535,7 +537,7 @@ def gsw_safromsp(spsu,pdbar,lon0,lat0):
     :arg float lat0: Reference latitude in degrees North.
     :returns: Absolute salinity in g/kg.
     :raises RuntimeWarning: If the reference point is not over the
-        ocean, as determined by the GSW_FNAME gridded data file.
+        ocean, as determined by the GSW_FPATH gridded data file.
         GSW_ERRVAL is returned.
     """
     # Handle Baltic sea locations first
@@ -564,7 +566,7 @@ def gsw_spfromsa(sgkg,pdbar,lon0,lat0):
     :arg float lat0: Reference latitude in degrees North.
     :returns: Salinity in practical salinity units (psu).
     :raises RuntimeWarning: If the reference point is not over the
-        ocean, as determined by the GSW_FNAME gridded data file.
+        ocean, as determined by the GSW_FPATH gridded data file.
         GSW_ERRVAL is returned.
     """
     # Handle Baltic sea locations first
@@ -593,7 +595,7 @@ def sal_asalfrompsal(spsu,lon0,lat0,pres):
     :arg float pres: Absolute pressure (including atmosphere) in Pa.
     :returns: Absolute salinity in kg/kg.
     :raises RuntimeWarning: If the reference point is not over the
-        ocean, as determined by the GSW_FNAME gridded data file.
+        ocean, as determined by the GSW_FPATH gridded data file.
         GSW_ERRVAL is returned.
     
     :Examples:
@@ -625,7 +627,7 @@ def sal_psalfromasal(salt,lon0,lat0,pres):
     :arg float pres: Absolute pressure (including atmosphere) in Pa.
     :returns: Salinity in practical salinity units (psu).
     :raises RuntimeWarning: If the reference point is not over the
-        ocean, as determined by the GSW_FNAME gridded data file.
+        ocean, as determined by the GSW_FPATH gridded data file.
         GSW_ERRVAL is returned.
     
     :Examples:

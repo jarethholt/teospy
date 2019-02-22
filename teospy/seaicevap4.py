@@ -37,15 +37,15 @@ water vapour (sea-ice-vapour).
 
 __all__ = ['eq_stp','densityvap','pressure','salinity','temperature']
 
-import numpy
 import warnings
-import constants0
-import flu1
-import ice1
-import flu2
-import sal2
-import maths3
-import flu3a
+import numpy
+from teospy import constants0
+from teospy import flu1
+from teospy import ice1
+from teospy import flu2
+from teospy import sal2
+from teospy import maths3
+from teospy import flu3a
 
 _CHKTOL = constants0.CHKTOL
 _RWAT = constants0.RWAT

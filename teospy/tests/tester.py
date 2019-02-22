@@ -1,27 +1,32 @@
 """Compare results from a library to reference values.
 
-This module provides the class :class:`Tester` for evaluating the
-numerical results from this library to reference values. A
-:class:`Tester` instance has as attributes the functions to be tested;
-the values of the arguments to run the tests on; a table of reference
-values; and several other quantities related to printing out
-information. The :meth:`~Tester.run` method evaluates the functions and
-calculates relative errors. Afterwards, the :meth:`~Tester.printresults`
-method can be used to display the results (if any) that are outside of a
-given tolerance.
+This module provides the class :class:`~teospy.tests.tester.Tester` for
+evaluating the numerical results from this library to reference values.
+A :class:`~teospy.tests.tester.Tester` instance has as attributes the
+functions to be tested; the values of the arguments to run the tests on;
+a table of reference values; and several other quantities related to
+printing out information. The :meth:`~teospy.tests.tester.Tester.run`
+method evaluates the functions and calculates relative errors.
+Afterwards, the :meth:`~teospy.tests.tester.Tester.printresults` method
+can be used to display the results (if any) that are outside of a given
+tolerance.
 """
 
 __all__ = ['Tester']
 
+import os
+import sys
 import warnings
 import numpy
-import constants0
 
-_CHKTOL = constants0.CHKTOL
+_CHKTOL = 1e-8
 _NOPRINT = ('chkbnd','useext','chkvals')
 _ZEROTOL = 1e-20
 _RESFMT = '{:+9.2e}'
 _NFMT = 9
+_DERS2 = ((0,0),(1,0),(0,1),(2,0),(1,1),(0,2))
+_DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
+    (0,2,0),(0,1,1),(0,0,2))
 
 
 ## Auxiliary function

@@ -37,12 +37,12 @@ __all__ = ['eq_aep','air_h','eq_pot','pottemp','potdensity','potenthalpy']
 
 import warnings
 import numpy
-import constants0
-import convert0
-import air2
-import maths3
-import air3a
-import air3b
+from teospy import constants0
+from teospy import convert0
+from teospy import air2
+from teospy import maths3
+from teospy import air3a
+from teospy import air3b
 
 _CHKTOL = constants0.CHKTOL
 _RUNIV = constants0.RUNIV

@@ -72,14 +72,14 @@ __all__ = ['eq_atpe',
 
 import warnings
 import numpy
-import constants0
-import convert0
-import ice1
-import air2
-import ice2
-import maths3
-import air3a
-import maths4
+from teospy import constants0
+from teospy import convert0
+from teospy import ice1
+from teospy import air2
+from teospy import ice2
+from teospy import maths3
+from teospy import air3a
+from teospy import maths4
 
 _CHKTOL = constants0.CHKTOL
 _MDRY = constants0.MDRY

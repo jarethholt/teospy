@@ -82,14 +82,14 @@ __all__ = ['eq_stp','pressure','salinity','temperature','densitysea',
 
 import warnings
 import numpy
-import constants0
-import flu1
-import flu2
-import sal2
-import maths3
-import flu3a
-import sea3a
-import maths4
+from teospy import constants0
+from teospy import flu1
+from teospy import flu2
+from teospy import sal2
+from teospy import maths3
+from teospy import flu3a
+from teospy import sea3a
+from teospy import maths4
 
 _CHKTOL = constants0.CHKTOL
 _RWAT = constants0.RWAT

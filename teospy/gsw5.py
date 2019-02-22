@@ -106,11 +106,11 @@ __all__ = ['asalfrompsal','psalfromasal',
 
 import warnings
 import numpy
-import constants0
-import convert0
-import sal2
-import maths3
-import liq5_f03
+from teospy import constants0
+from teospy import convert0
+from teospy import sal2
+from teospy import maths3
+from teospy import liq5_f03
 
 _G2KG = 1e-3  # Conversion factor from g/kg to kg/kg
 _DBAR2PA = 1e4  # Conversion factor from dbar to Pa

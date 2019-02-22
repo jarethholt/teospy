@@ -13,36 +13,34 @@ all available tests are run.
 
 The functions provided by this module generate the tests for the ``air``
 module of the same name. Each function returns a tuple of
-:class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the ``run``
-method of a Tester to run the test, and ``printresults`` to print a
-summary.
+:class:`~teospy.tests.tester.Tester` instances which include the
+functions checked, values of the arguments, and tables of reference
+values. Use the ``run`` method of a Tester to run the test, and
+``printresults`` to print a summary.
 
 :Available modules to test:
 
-* :mod:`convert0`
-* :mod:`air1`
-* :mod:`air2`
-* :mod:`air3a`
-* :mod:`air3b`
-* :mod:`air3c`
-* :mod:`air5`
+* :mod:`~teospy.convert0`
+* :mod:`~teospy.air1`
+* :mod:`~teospy.air2`
+* :mod:`~teospy.air3a`
+* :mod:`~teospy.air3b`
+* :mod:`~teospy.air3c`
+* :mod:`~teospy.air5`
 
 """
 
 __all__ = ['gencnv0','genair1','genair2','genair3a','genair3b','genair3c',
     'genair5']
-from tester import Tester
-_DERS2 = ((0,0),(1,0),(0,1),(2,0),(1,1),(0,2))
-_DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
-    (0,2,0),(0,1,1),(0,0,2))
+
+from teospy.tests.tester import Tester, _DERS2, _DERS3
 
 
 ## Generating Tester instances
 def gencnv0():
     """Generate convert0 Testers.
     """
-    import convert0
+    from teospy import convert0
     funs = [convert0.air_molarmass,convert0.air_molfractiondry,
         convert0.air_molfractionvap,convert0.air_massfractiondry,
         convert0.air_massfractionvap]
@@ -58,7 +56,7 @@ def gencnv0():
 def genair1():
     """Generate air1 Testers.
     """
-    import air1
+    from teospy import air1
     funs = air1.dry_f
     args1 = (300.,1e-3)
     fargs = [(der+args1) for der in _DERS2]
@@ -73,7 +71,7 @@ def genair1():
 def genair2():
     """Generate air2 Testers.
     """
-    import air2
+    from teospy import air2
     funs = air2._air_f_mix
     args1 = (0.9,300.,1.)
     fargs = [(der+args1) for der in _DERS3]
@@ -114,7 +112,7 @@ def genair2():
 def genair3a():
     """Generate air3a Testers.
     """
-    import air3a
+    from teospy import air3a
     funs = air3a.eq_atp
     fargs = (0.9,300.,1e5)
     refs = 1.09708772444
@@ -142,7 +140,7 @@ def genair3a():
 def genair3b():
     """Generate air3b Testers.
     """
-    import air3b
+    from teospy import air3b
     funs = [air3b.contraction,air3b.compressibility_lemmon,air3b.cp,air3b.cv,
         air3b.density,air3b.enthalpy,air3b.entropy,air3b.expansion,
         air3b.gibbsenergy,air3b.internalenergy,air3b.kappa_s,air3b.kappa_t,
@@ -167,7 +165,7 @@ def genair3b():
 def genair3c():
     """Generate air3c Testers.
     """
-    import air3c
+    from teospy import air3c
     funs = air3c.air_h
     args1 = (0.9,900.,1e5)
     fargs = [(der+args1) for der in _DERS3]
@@ -199,7 +197,7 @@ def genair3c():
 def genair5():
     """Generate air5 Testers.
     """
-    import air5
+    from teospy import air5
     funs = air5.lapserate_c100m
     fargs = (50.,20.,1e3)
     refs = 0.971588085046

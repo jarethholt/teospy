@@ -10,28 +10,28 @@ arguments are given, all available tests are run.
 
 The functions provided by this module generate the tests for the ``ice``
 module of the same name. Each function returns a tuple of
-:class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the ``run``
-method of a Tester to run the test, and ``printresults`` to print a
-summary.
+:class:`~teospy.tests.tester.Tester` instances which include the
+functions checked, values of the arguments, and tables of reference
+values. Use the ``run`` method of a Tester to run the test, and
+``printresults`` to print a summary.
 
 :Available modules to test:
 
-* :mod:`ice1`
-* :mod:`ice2`
+* :mod:`~teospy.ice1`
+* :mod:`~teospy.ice2`
 
 """
 
 __all__ = ['genice1','genice2']
-from tester import Tester
-_DERS2 = ((0,0),(1,0),(0,1),(2,0),(1,1),(0,2))
+
+from teospy.tests.tester import Tester, _DERS2
 
 
 ## Generating Tester instances
 def genice1():
     """Generate ice1 Testers.
     """
-    import ice1
+    from teospy import ice1
     funs = ice1.ice_g
     args1 = (270.,1e5)
     fargs = [(der+args1) for der in _DERS2]
@@ -46,7 +46,7 @@ def genice1():
 def genice2():
     """Generate ice2 Testers.
     """
-    import ice2
+    from teospy import ice2
     funs = [ice2.chempot,ice2.cp,ice2.density,ice2.enthalpy,ice2.entropy,
         ice2.expansion,ice2.helmholtzenergy,ice2.internalenergy,ice2.kappa_s,
         ice2.kappa_t,ice2.lapserate,ice2.pcoefficient,ice2.specificvolume]

@@ -47,8 +47,8 @@ __all__ = ['cp','cv','enthalpy','entropy','expansion','gibbsenergy',
     'eq_chempot','eq_enthalpy','eq_entropy','eq_pressure',
     'chkiapws95table7']
 
-import constants0
-import flu1
+from teospy import constants0
+from teospy import flu1
 
 _CHKTOL = constants0.CHKTOL
 _chkflubnds = constants0.chkflubnds
@@ -557,11 +557,11 @@ def chkiapws95table7(printresult=True,chktol=_CHKTOL):
         result value, and relative error are printed.
     :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
-    :returns: :class:`~tester.Tester` instance containing the functions,
-        arguments, reference values, results, and relative errors from
-        the tests.
+    :returns: :class:`~teospy.tests.tester.Tester` instance containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests.
     """
-    from tester import Tester
+    from teospy.tests.tester import Tester
     funs = [pressure,cv,soundspeed,entropy]
     fnames = ['pressure','cv','soundspeed','entropy']
     fargs = [

@@ -44,8 +44,8 @@ __all__ = ['chempot','cp','density','enthalpy','entropy','expansion',
     'pcoefficient','specificvolume',
     'chkiapws06table6']
 
-import constants0
-import ice1
+from teospy import constants0
+from teospy import ice1
 
 _CHKTOL = constants0.CHKTOL
 _chkicebnds = constants0.chkicebnds
@@ -413,14 +413,13 @@ def chkiapws06table6(printresult=True,chktol=_CHKTOL):
         result value, and relative error are printed.
     :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
-    :returns: :class:`~tester.Tester` instances containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests. The first instance involves derivatives
-        of ice_g whereas the second tests the other thermodynamic
-        functions.
-    :rtype: (Tester,Tester)
+    :returns: :class:`~teospy.tests.tester.Tester` instances containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests. The first instance involves
+        derivatives of ice_g whereas the second tests the other
+        thermodynamic functions.
     """
-    from tester import Tester
+    from teospy.tests.tester import Tester
     fargs0 = (273.16,611.657)
     fargs1 = (273.152519,101325.)
     fargs2 = (100.,1e8)

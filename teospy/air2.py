@@ -61,9 +61,9 @@ __all__ = ['air_f','cp','cv','enthalpy','entropy','expansion','gibbsenergy',
     'chkiapws10table','chkiapws10table13','chkiapws10table14',
     'chkiapws10table15']
 
-import constants0
-import air1
-import flu1
+from teospy import constants0
+from teospy import air1
+from teospy import flu1
 
 # Single constants
 _MDRY = constants0.MDRY
@@ -813,10 +813,10 @@ def chkiapws10table(number,printresult=True,chktol=_CHKTOL):
         result value, and relative error are printed.
     :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
-    :returns: :class:`~tester.Tester` instances containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests. See the individual functions to find what
-        each instance corresponds to.
+    :returns: :class:`~teospy.tests.tester.Tester` instances containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests. See the individual functions to
+        find what each instance corresponds to.
     :raises ValueError: If `number` is not 13, 14, or 15.
     """
     if number == 13:
@@ -844,14 +844,13 @@ def chkiapws10table13(printresult=True,chktol=_CHKTOL):
         result value, and relative error are printed.
     :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
-    :returns: :class:`~tester.Tester` instances containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests. The first instance deals with derivatives
-        of air_f; the second instance with other thermodynamic
-        functions.
-    :rtype: (Tester,Tester)
+    :returns: :class:`~teospy.tests.tester.Tester` instances containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests. The first instance deals with
+        derivatives of air_f; the second instance with other
+        thermodynamic functions.
     """
-    from tester import Tester
+    from teospy.tests.tester import Tester
     ders = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
         (0,2,0),(0,1,1),(0,0,2))
     fargs0 = (0.892247719,200.,0.163479657e-4)
@@ -915,13 +914,12 @@ def chkiapws10table14(printresult=True,chktol=_CHKTOL):
         result value, and relative error are printed.
     :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
-    :returns: :class:`~tester.Tester` instances containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests. The first instance deals with dry air and
-        the second instance with water vapour.
-    :rtype: (Tester,Tester)
+    :returns: :class:`~teospy.tests.tester.Tester` instances containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests. The first instance deals with
+        dry air and the second instance with water vapour.
     """
-    from tester import Tester
+    from teospy.tests.tester import Tester
     ders = ((0,0),(1,0),(0,1),(2,0),(1,1),(0,2))
     temps = (200.,300.,400.)
     dhums = (0.163479657e-4,0.114614216e+1,0.793354063e+1)
@@ -975,14 +973,13 @@ def chkiapws10table15(printresult=True,chktol=_CHKTOL):
         result value, and relative error are printed.
     :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
-    :returns: :class:`~tester.Tester` instances containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests. The first instance involves each virial
-        coefficient separately; the second involves the entire excess
-        energy of mixing.
-    :rtype: (Tester,Tester)
+    :returns: :class:`~teospy.tests.tester.Tester` instances containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests. The first instance involves each
+        virial coefficient separately; the second involves the entire
+        excess energy of mixing.
     """
-    from tester import Tester
+    from teospy.tests.tester import Tester
     
     # Test virial coefficients
     virfuns = [_air_baw, _air_caaw, _air_caww]

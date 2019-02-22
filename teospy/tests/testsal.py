@@ -14,31 +14,29 @@ the high- temperature, high-salinity extension, or ``all`` to check both
 
 The functions provided by this module generate the tests for the ``sal``
 module of the same name. Each function returns a tuple of
-:class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the ``run``
-method of a Tester to run the test, and ``printresults`` to print a
-summary.
+:class:`~teospy.tests.tester.Tester` instances which include the
+functions checked, values of the arguments, and tables of reference
+values. Use the ``run`` method of a Tester to run the test, and
+``printresults`` to print a summary.
 
 :Available modules to test:
 
-* :mod:`convert0`
-* :mod:`sal1`
-* :mod:`sal2`
+* :mod:`~teospy.convert0`
+* :mod:`~teospy.sal1`
+* :mod:`~teospy.sal2`
 
 """
 
 __all__ = ['gencnv0','gensal1','gensal1e','gensal2']
-from tester import Tester
-_DERS2 = ((0,0),(1,0),(0,1),(2,0),(1,1),(0,2))
-_DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
-    (0,2,0),(0,1,1),(0,0,2))
+
+from teospy.tests.tester import Tester, _DERS2, _DERS3
 
 
 ## Generating Tester instances
 def gencnv0():
     """Generate convert0 Testers.
     """
-    import convert0
+    from teospy import convert0
     funs = convert0.sal_molality
     fargs = (0.035,)
     refs = 1.15493681893
@@ -51,7 +49,7 @@ def gencnv0():
 def gensal1():
     """Generate sal1 Testers without extension.
     """
-    import sal1
+    from teospy import sal1
     NSALTERMS = sal1.NSALTERMS
     funs = sal1.sal_g_term
     args1 = (300.,1e6)
@@ -73,7 +71,7 @@ def gensal1():
 def gensal1e():
     """Generate sal1 Testers with extension.
     """
-    import sal1
+    from teospy import sal1
     NSALTERMS = sal1.NSALTERMS
     funs = sal1.sal_g_term
     args1 = (300.,1e6)
@@ -99,7 +97,7 @@ def gensal1e():
 def gensal2():
     """Generate sal2 Testers.
     """
-    import sal2
+    from teospy import sal2
     funs = sal2.sal_g
     args1 = (0.035,300.,1e6)
     fargs = [(der+args1) for der in _DERS3]

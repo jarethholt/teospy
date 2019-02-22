@@ -16,10 +16,10 @@ degrees Celsius per 100 m.
 
 __all__ = ['lapserate_c100m']
 
-import constants0
-import air3a
-import air3b
-import liqair4a
+from teospy import constants0
+from teospy import air3a
+from teospy import air3b
+from teospy import liqair4a
 
 _CHKTOL = constants0.CHKTOL
 _TCELS = constants0.TCELS

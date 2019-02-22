@@ -21,28 +21,28 @@ default (False) is recommended for most applications.
 
 The basic contents of the modules are as follows:
 
-* :mod:`sal1` provides a function that calculates each of the coefficients
-  :math:`g_i` in the salinity expansion.
-* :mod:`sal2` provides thermodynamic properties of seawater that depend only on
-  the salinity, such as dilution and osmotic coefficients.
-* :mod:`calsalcoeffs` is a script that is used to calculate the coefficients of
-  the above formula from the original coefficients, which use the square root of
-  salinity. It is provided only to document how the coefficients were generated
-  and is not intended to use unless the original coefficients are revised by
-  IAPWS.
+* :mod:`~teospy.sal1` provides a function that calculates each of the
+  coefficients :math:`g_i` in the salinity expansion.
+* :mod:`~teospy.sal2` provides thermodynamic properties of seawater that depend
+  only on the salinity, such as dilution and osmotic coefficients.
+* :mod:`~teospy.calsalcoeffs` is a script that is used to calculate the
+  coefficients of the above formula from the original coefficients, which use
+  the square root of salinity. It is provided only to document how the
+  coefficients were generated and is not intended to use unless the original
+  coefficients are revised by IAPWS.
 
 
 ``sal1``
 --------
 
-.. automodule:: sal1
+.. automodule:: teospy.sal1
     :members: sal_g_term
 
 
 ``sal2``
 --------
 
-.. automodule:: sal2
+.. automodule:: teospy.sal2
     :members: sal_g, actcoeff, activityw, actpotential, chemcoeff, dilution,
         liqpot, osmcoeff, salpot, saltenthalpy, saltentropy, saltvolume,
         mixenthalpy, mixentropy, mixvolume, eq_liqpot, eq_enthalpy,
@@ -52,5 +52,5 @@ The basic contents of the modules are as follows:
 ``calsalcoeffs``
 ----------------
 
-.. automodule:: calsalcoeffs
+.. automodule:: teospy.calsalcoeffs
 

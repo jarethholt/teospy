@@ -46,13 +46,13 @@ __all__ = ['iceair_g','cp','density','enthalpy','entropy','expansion','kappa_t',
     'lapserate','solidfraction','vapourfraction']
 
 import numpy
-import constants0
-import ice1
-import air2
-import ice2
-import maths3
-import air3a
-import iceair4a
+from teospy import constants0
+from teospy import ice1
+from teospy import air2
+from teospy import ice2
+from teospy import maths3
+from teospy import air3a
+from teospy import iceair4a
 
 _CHKTOL = constants0.CHKTOL
 _chkhumbnds = constants0.chkhumbnds

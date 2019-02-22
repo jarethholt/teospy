@@ -56,9 +56,9 @@ __all__ = ['liq_cp','liq_cv','liq_density','liq_enthalpy','liq_entropy',
     'vap_internalenergy','vap_kappa_s','vap_kappa_t','vap_lapserate',
     'vap_soundspeed']
 
-import constants0
-import flu2
-import flu3a
+from teospy import constants0
+from teospy import flu2
+from teospy import flu3a
 
 _CHKTOL = constants0.CHKTOL
 _eq_tp_liq = flu3a.eq_tp_liq

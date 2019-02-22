@@ -14,7 +14,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../teospy'))
+sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
@@ -40,8 +40,6 @@ release = '0.0.1'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
     'sphinx.ext.intersphinx',
     'sphinx.ext.imgmath'
 ]
@@ -139,10 +137,10 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'teospy.tex', 'teospy Documentation',
-     'Jareth Holt', 'manual'),
-]
+#latex_documents = [
+#    (master_doc, 'teospy.tex', 'teospy Documentation',
+#     'Jareth Holt', 'manual'),
+#]
 
 
 # -- Options for manual page output ------------------------------------------
@@ -160,16 +158,9 @@ man_pages = [
 # Grouping the document tree into Texinfo files. List of tuples
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
-texinfo_documents = [
-    (master_doc, 'teospy', 'teospy Documentation',
-     author, 'teospy', 'One line description of project.',
-     'Miscellaneous'),
-]
+#texinfo_documents = [
+#    (master_doc, 'teospy', 'teospy Documentation',
+#     author, 'teospy', 'One line description of project.',
+#     'Miscellaneous'),
+#]
 
-
-# -- Extension configuration -------------------------------------------------
-
-# -- Options for todo extension ----------------------------------------------
-
-# If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = True

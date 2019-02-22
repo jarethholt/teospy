@@ -7,24 +7,23 @@ toolbox functions. This module can be called from the command line as::
 
 which will run the tests and print a summary.
 
-This module provides one function to generate :class:`~tester.Tester`
-instances. Each instance includes the functions checked, values of the
-arguments, and tables of reference values. Use the ``run`` method of a
-Tester to run the test, and ``printresults`` to print a summary.
+This module provides one function to generate
+:class:`~teospy.tests.tester.Tester` instances. Each instance includes
+the functions checked, values of the arguments, and tables of reference
+values. Use the ``run`` method of a Tester to run the test, and
+``printresults`` to print a summary.
 """
 
 __all__ = ['gengsw5']
 
-from tester import Tester
-_DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
-    (0,2,0),(0,1,1),(0,0,2))
+from teospy.tests.tester import Tester, _DERS3
 
 
 ## Generating Tester instances
 def gengsw5():
     """Generate gsw5 Testers.
     """
-    import gsw5
+    from teospy import gsw5
     funs = gsw5.asalfrompsal
     fargs = [(35.527515065427778,201.,-21.,1023.), (35.,180.,40.,2e3),
         (8.,20.,57.,0.)]

@@ -9,14 +9,15 @@ with open('README.rst','r') as readme:
 setuptools.setup(
     name = 'teospy',
     version = '0.0.1',
+    packages = setuptools.find_packages(),
+    install_requires = ['numpy'],
+    include_package_data = True,
     author = 'Jareth Holt',
     author_email = 'jareth.holt@gmail.com',
     description = 'Thermodynamic library for air, ice, and seawater',
     long_description = long_description,
+    license = 'MIT',
     url = 'https://github.com/teospy',
-    packages = setuptools.find_packages(),
-    data_files = [('teospy',['GSW_Data_v3_0.dat'])],
-    include_package_data = True,
     classifiers = [
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Science/Research',
@@ -29,3 +30,4 @@ setuptools.setup(
         'Topic :: Scientific/Engineering :: Physics'
     ],
 )
+

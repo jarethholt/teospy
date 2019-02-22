@@ -25,8 +25,9 @@ __all__ = ['gentable2','gentable3','gentablea1','gentablea2','gentablea3',
     'gentablea4','gentablea5','gentablea6','gentablea7','gentablea8']
 
 import warnings
-from tester import Tester
-import constants0
+from teospy.tests.tester import Tester, _DERS2
+from teospy import constants0
+
 _TTP = constants0.TTP
 _PTPI = constants0.PTPI
 _PTPE = constants0.PTPE
@@ -35,8 +36,7 @@ _DCP = constants0.DCP
 _TCELS = constants0.TCELS
 _PATM = constants0.PATM
 _SAL1 = constants0.SAL1
-_DERS2 = ((0,0),(1,0),(0,1),(2,0),(1,1),(0,2))
-_DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(1,0,1),(0,2,0),(0,1,1),(0,0,2))
+_DERS3S = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(1,0,1),(0,2,0),(0,1,1),(0,0,2))
 
 
 def gentable2():
@@ -45,10 +45,10 @@ def gentable2():
     Generate Tester instances for OS2008 table 2: liquid water and water
     vapour at the triple point temperature.
     """
-    import flu1
-    import flu2
-    import flu3b
-    import liqvap4
+    from teospy import flu1
+    from teospy import flu2
+    from teospy import flu3b
+    from teospy import liqvap4
     temp = _TTP
     with warnings.catch_warnings():
         warnings.filterwarnings('ignore','Step sizes are smaller',
@@ -92,10 +92,10 @@ def gentable3():
     Generate Tester instances for OS2008 table 3: liquid, vapour, and
     ice at the triple point.
     """
-    import ice1
-    import ice2
-    import flu3a
-    import flu3b
+    from teospy import ice1
+    from teospy import ice2
+    from teospy import flu3a
+    from teospy import flu3b
     temp = _TTP
     pres = _PTPI
     
@@ -184,7 +184,7 @@ def gentablea1():
     Generate Tester instances for OS2008 table A1: Ideal and residual
     components of the fluid water Helmholtz potential.
     """
-    import flu1
+    from teospy import flu1
     temp = 500.
     dliq = 838.025
     tau = _TCP/temp
@@ -209,7 +209,7 @@ def gentablea2():
     Generate Tester instances for OS2008 table A2: Fluid water
     properties for several single-phase temperatures and densities.
     """
-    import flu2
+    from teospy import flu2
     temps = (300.,)*3 + (500.,)*4 + (647.,) + (900.,)*3
     denss = (996.5560,1005.308,1188.202,0.435,4.532,838.025,1084.564,358.,0.241,
         52.615,870.769)
@@ -238,8 +238,8 @@ def gentablea3():
     Generate Tester instances for OS2008 table A3: Fluid water
     properties for several two-phase temperatures.
     """
-    import flu2
-    import liqvap4
+    from teospy import flu2
+    from teospy import liqvap4
     temps = (275.,450.,625.)
     dliqs, dvaps = list(), list()
     for temp in temps:
@@ -279,8 +279,8 @@ def gentablea4():
     Generate Tester instances for OS2008 table A4: Ice properties at the
     triple point, at atmospheric pressure, and at low temperature.
     """
-    import ice1
-    import ice2
+    from teospy import ice1
+    from teospy import ice2
     temps = (_TTP,273.152519,100.)
     press = (_PTPE,_PATM,1e8)
     args1 = list(zip(temps,press))
@@ -327,10 +327,10 @@ def gentablea5():
     Generate Tester instances for OS2008 table A5: Seawater component
     properties under standard conditions.
     """
-    import sal2
-    import flu3a
-    import flu3b
-    import sea3a
+    from teospy import sal2
+    from teospy import flu3a
+    from teospy import flu3b
+    from teospy import sea3a
     salt = _SAL1
     temp = _TCELS
     pres = _PATM
@@ -364,7 +364,7 @@ def gentablea5():
         eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys,refs_alt=refs_alt)
     
     funs = sal2.sal_g
-    fargs = [(der + args1) for der in _DERS3]
+    fargs = [(der + args1) for der in _DERS3S]
     refs = [-101.34274172939,63997.4067312299,-1.47643376346e-1,
         -2.74957224268433e-5,-7.59615411515309e-4,0.85286115117592,
         1.1928678741396e-7,5.8153517233288e-14]
@@ -385,7 +385,7 @@ def gentablea5():
     test_sp = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     
     funs = sea3a.sea_g
-    fargs = [(der + args1) for der in _DERS3]
+    fargs = [(der + args1) for der in _DERS3S]
     refs = [-1.990440523514e-8,63997.4067312299,3.748848453888e-11,
         9.7266121669485e-4,-7.59615411515309e-4,-14.59449308080,5.1516755627e-8,
         -4.507753774102e-13]
@@ -414,10 +414,10 @@ def gentablea6():
     Generate Tester instances for OS2008 table A6: Seawater component
     properties at high salinity and temperature.
     """
-    import sal2
-    import flu3a
-    import flu3b
-    import sea3a
+    from teospy import sal2
+    from teospy import flu3a
+    from teospy import flu3b
+    from teospy import sea3a
     salt = 0.1
     temp = 353.
     pres = _PATM
@@ -450,7 +450,7 @@ def gentablea6():
         eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     funs = sal2.sal_g
-    fargs = [(der + args1) for der in _DERS3]
+    fargs = [(der + args1) for der in _DERS3S]
     refs = [15087.174003705,251957.275851413,156.230907404291,
         -5.7922728577126e-5,-3.0595780244234e-4,1.27922649315507,
         8.0306159575153e-7,2.1308615424374e-13]
@@ -471,7 +471,7 @@ def gentablea6():
     test_sp = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     
     funs = sea3a.sea_g
-    fargs = [(der + args1) for der in _DERS3]
+    fargs = [(der + args1) for der in _DERS3S]
     refs = [-29524.3228959,251957.275851413,-917.5290244832,9.7100682777898e-4,
         -3.0595780244234e-4,-10.609273511600,1.462113148091e-6,
         -2.61586665117e-13]
@@ -500,10 +500,10 @@ def gentablea7():
     Generate Tester instances for OS2008 table A7: Seawater component
     properties at high pressure.
     """
-    import sal2
-    import flu3a
-    import flu3b
-    import sea3a
+    from teospy import sal2
+    from teospy import flu3a
+    from teospy import flu3b
+    from teospy import sea3a
     salt = _SAL1
     temp = _TCELS
     pres = 1e8
@@ -536,7 +536,7 @@ def gentablea7():
         eqfun=eqfun,eqargs=eqargs,eqkeys=eqkeys)
     
     funs = sal2.sal_g
-    fargs = [(der + args1) for der in _DERS3]
+    fargs = [(der + args1) for der in _DERS3S]
     refs = [-2600.93050730637,-5458.6158064880,7.5404568488117,
         -2.2912384179113e-5,-6.4075761854575e-4,0.488076973942251,
         4.6628441224121e-8,3.57345735845327e-14]
@@ -557,7 +557,7 @@ def gentablea7():
     test_sp = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     
     funs = sea3a.sea_g
-    fargs = [(der + args1) for der in _DERS3]
+    fargs = [(der + args1) for der in _DERS3S]
     refs = [95129.45571223,-5458.6158064880,16.0551218694,9.3377094497440e-4,
         -6.40757618545748e-4,-13.80891036482,2.45708012027e-7,
         -3.35796315839e-13]
@@ -586,11 +586,11 @@ def gentablea8():
     Generate Tester instances for OS2008 table A8: Properties of liquid
     water, ice, and seawater under standard conditions.
     """
-    import ice1
-    import ice2
-    import flu3a
-    import flu3b
-    import sea3a
+    from teospy import ice1
+    from teospy import ice2
+    from teospy import flu3a
+    from teospy import flu3b
+    from teospy import sea3a
     salt = _SAL1
     temp = _TCELS
     pres = _PATM
@@ -647,7 +647,7 @@ def gentablea8():
     test_ip = Tester(funs,fargs,refs,fnames,argfmt,header=header)
     
     funs = sea3a.sea_g
-    fargs = [(der+args1) for der in _DERS3]
+    fargs = [(der+args1) for der in _DERS3S]
     refs = [4e-9,63997.4067312299,-6e-11,9.7266121669485e-4,
         -7.59615411515309e-4,-14.59449308080,5.15167556274e-8,
         -4.507753774102e-13]

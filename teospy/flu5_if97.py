@@ -57,7 +57,7 @@ __all__ = ['liq_g','vap_g',
     'chkiapws97table','chkiapws97table5','chkiapws97table15']
 
 import numpy
-import constants0
+from teospy import constants0
 
 _CHKTOL = constants0.CHKTOL
 _C_LIQ = ((1386., 1.653e7, 461.526, 1.222, 7.1),
@@ -596,10 +596,10 @@ def chkiapws97table(number,printresult=True,chktol=_CHKTOL):
         result value, and relative error are printed.
     :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
-    :returns: :class:`~tester.Tester` instances containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests. See the individual functions to find what
-        each instance corresponds to.
+    :returns: :class:`~teospy.tests.tester.Tester` instances containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests. See the individual functions to
+        find what each instance corresponds to.
     :raises ValueError: If `number` is not 5 or 15.
     """
     
@@ -624,11 +624,11 @@ def chkiapws97table5(printresult=True,chktol=_CHKTOL):
         result value, and relative error are printed.
     :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
-    :returns: :class:`~tester.Tester` instance containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests.
+    :returns: :class:`~teospy.tests.tester.Tester` instance containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests.
     """
-    from tester import Tester
+    from teospy.tests.tester import Tester
     funs = [liq_cp,liq_enthalpy,liq_entropy,liq_internalenergy,liq_soundspeed,
         liq_volume]
     fargs = [(300.,3e6), (300.,80e6), (500.,3e6)]
@@ -664,11 +664,11 @@ def chkiapws97table15(printresult=True,chktol=_CHKTOL):
         result value, and relative error are printed.
     :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
-    :returns: :class:`~tester.Tester` instance containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests.
+    :returns: :class:`~teospy.tests.tester.Tester` instance containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests.
     """
-    from tester import Tester
+    from teospy.tests.tester import Tester
     funs = [vap_cp,vap_enthalpy,vap_entropy,vap_internalenergy,vap_soundspeed,
         vap_volume]
     fargs = [(300.,3.5e3), (700.,3.5e3), (700.,30e6)]

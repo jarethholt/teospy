@@ -59,11 +59,11 @@ __all__ = ['sea_g','liqpot','salpot','contraction_t','cp','density','enthalpy',
     'chkiapws08table8a','chkiapws08table8b','chkiapws08table8c']
 
 import warnings
-import constants0
-import flu2
-import sal2
-import maths3
-import flu3a
+from teospy import constants0
+from teospy import flu2
+from teospy import sal2
+from teospy import maths3
+from teospy import flu3a
 
 _CHKTOL = constants0.CHKTOL
 _chkflubnds = constants0.chkflubnds
@@ -1201,15 +1201,15 @@ def chkiapws08table8a(printresult=True,chktol=_CHKTOL):
     :arg float chktol: Tolerance to use when choosing to print results
         (default _LEMMONTOL). The default tolerance is lowered due to
         the low number of significant figures for the reference values.
-    :returns: :class:`~tester.Tester` instances containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests. The first three instances are for the
-        Gibbs energy functions of liquid water, salt, and seawater; the
-        other three instances are for other thermodynamic functions for
-        liquid water, salt, and seawater.
+    :returns: :class:`~teospy.tests.tester.Tester` instances containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests. The first three instances are
+        for the Gibbs energy functions of liquid water, salt, and
+        seawater; the other three instances are for other thermodynamic
+        functions for liquid water, salt, and seawater.
     """
-    from tester import Tester
-    import flu3b
+    from teospy.tests.tester import Tester
+    from teospy import flu3b
     args1 = (0.03516504, 273.15, 101325.)
     DERS2 = [(0,0),(1,0),(0,1),(2,0),(1,1),(0,2)]
     DERS3 = [(0,0,0),(1,0,0),(0,1,0),(0,0,1),(1,0,1),(0,2,0),(0,1,1),(0,0,2)]
@@ -1316,15 +1316,15 @@ def chkiapws08table8b(printresult=True,chktol=_CHKTOL):
     :arg float chktol: Tolerance to use when choosing to print results
         (default _LEMMONTOL). The default tolerance is lowered due to
         the low number of significant figures for the reference values.
-    :returns: :class:`~tester.Tester` instances containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests. The first three instances are for the
-        Gibbs energy functions of liquid water, salt, and seawater; the
-        other three instances are for other thermodynamic functions for
-        liquid water, salt, and seawater.
+    :returns: :class:`~teospy.tests.tester.Tester` instances containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests. The first three instances are
+        for the Gibbs energy functions of liquid water, salt, and
+        seawater; the other three instances are for other thermodynamic
+        functions for liquid water, salt, and seawater.
     """
-    from tester import Tester
-    import flu3b
+    from teospy.tests.tester import Tester
+    from teospy import flu3b
     args1 = (0.1, 353., 101325.)
     DERS2 = [(0,0),(1,0),(0,1),(2,0),(1,1),(0,2)]
     DERS3 = [(0,0,0),(1,0,0),(0,1,0),(0,0,1),(1,0,1),(0,2,0),(0,1,1),(0,0,2)]
@@ -1432,15 +1432,15 @@ def chkiapws08table8c(printresult=True,chktol=_CHKTOL):
     :arg float chktol: Tolerance to use when choosing to print results
         (default _LEMMONTOL). The default tolerance is lowered due to
         the low number of significant figures for the reference values.
-    :returns: :class:`~tester.Tester` instances containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests. The first three instances are for the
-        Gibbs energy functions of liquid water, salt, and seawater; the
-        other three instances are for other thermodynamic functions for
-        liquid water, salt, and seawater.
+    :returns: :class:`~teospy.tests.tester.Tester` instances containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests. The first three instances are
+        for the Gibbs energy functions of liquid water, salt, and
+        seawater; the other three instances are for other thermodynamic
+        functions for liquid water, salt, and seawater.
     """
-    from tester import Tester
-    import flu3b
+    from teospy.tests.tester import Tester
+    from teospy import flu3b
     args1 = (0.03516504, 273.15, 1e8)
     DERS2 = [(0,0),(1,0),(0,1),(2,0),(1,1),(0,2)]
     DERS3 = [(0,0,0),(1,0,0),(0,1,0),(0,0,1),(1,0,1),(0,2,0),(0,1,1),(0,0,2)]

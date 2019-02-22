@@ -64,9 +64,9 @@ __all__ = ['eq_tp','temperature','pressure','densityvap','densityliq','chempot',
 
 import warnings
 import numpy
-import constants0
-import flu2
-import maths3
+from teospy import constants0
+from teospy import flu2
+from teospy import maths3
 
 _CHKTOL = constants0.CHKTOL
 _RWAT = constants0.RWAT
@@ -1040,11 +1040,11 @@ def chkiapws95table8(printresult=True,chktol=_CHKTOL):
     :arg float chktol: Tolerance to use when choosing to print results
         (default _LEMMONTOL). The default tolerance is lowered due to
         the low number of significant figures for the reference values.
-    :returns: :class:`~tester.Tester` instance containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests.
+    :returns: :class:`~teospy.tests.tester.Tester` instance containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests.
     """
-    from tester import Tester
+    from teospy.tests.tester import Tester
     funs = [pressure,densityvap,densityliq,enthalpyvap,enthalpyliq,entropyvap,
         entropyliq]
     fargs = [(275.,), (450.,), (625.,)]

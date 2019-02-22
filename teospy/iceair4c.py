@@ -49,17 +49,17 @@ __all__ = ['eq_wpte','liqair_h',
     'cp','density','kappa_s','lapserate','temperature',
     'eq_pot','potdensity','potenthalpy','pottemp']
 
-import numpy
 import warnings
-import constants0
-import ice1
-import air2
-import ice2
-import maths3
-import air3c
-import maths4
-import iceair4a
-import iceair4b
+import numpy
+from teospy import constants0
+from teospy import ice1
+from teospy import air2
+from teospy import ice2
+from teospy import maths3
+from teospy import air3c
+from teospy import maths4
+from teospy import iceair4a
+from teospy import iceair4b
 
 _CHKTOL = constants0.CHKTOL
 _RWAT = constants0.RWAT

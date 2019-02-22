@@ -35,7 +35,6 @@ allow before returning and raising a warning.
 
 __all__ = ['RTOL','MAXITER','newton']
 
-import copy
 import warnings
 import numpy
 
@@ -198,7 +197,7 @@ def newton(fun,x0,x0fun=None,fargs=None,fkwargs=None,maxiter=MAXITER,
     if x0 is None or isinstance(x0,float):
         vals1 = (x0,)
     else:
-        vals1 = copy.copy(x0)
+        vals1 = x0
     vals2 = tuple(None for val1 in vals1)
     if any(val1 is None for val1 in vals1):
         if x0fun is None:

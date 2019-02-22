@@ -71,11 +71,11 @@ __all__ = ['tconfromtpot','tpotfromtcon',
     'contraction_tpot','contraction_t',
     'cabb_tcon','cabb_tpot','thrmb_tcon','thrmb_tpot']
 
-import constants0
-import maths3
-import flu3a
-import sea3a
-import sea3c
+from teospy import constants0
+from teospy import maths3
+from teospy import flu3a
+from teospy import sea3a
+from teospy import sea3c
 
 _CHKTOL = constants0.CHKTOL
 _PATM = constants0.PATM

@@ -58,14 +58,14 @@ __all__ = ['eq_sep','sea_h','temperature','contraction_t','expansion_t',
     'contraction_theta','expansion_h','expansion_theta']
 
 import numpy
-import constants0
-import flu1
-import sal1
-import flu2
-import sal2
-import maths3
-import flu3a
-import sea3a
+from teospy import constants0
+from teospy import flu1
+from teospy import sal1
+from teospy import flu2
+from teospy import sal2
+from teospy import maths3
+from teospy import flu3a
+from teospy import sea3a
 
 _CHKTOL = constants0.CHKTOL
 _RUNIV = constants0.RUNIV

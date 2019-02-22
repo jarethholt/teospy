@@ -72,13 +72,13 @@ __all__ = ['eq_shp','eq_pot','temperature','density','entropy','contraction_t',
 
 import warnings
 import numpy
-import constants0
-import flu2
-import sal2
-import maths3
-import flu3a
-import sea3a
-import sea3b
+from teospy import constants0
+from teospy import flu2
+from teospy import sal2
+from teospy import maths3
+from teospy import flu3a
+from teospy import sea3a
+from teospy import sea3b
 
 _TTP = constants0.TTP
 _PTP = constants0.PTPE

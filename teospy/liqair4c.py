@@ -50,18 +50,18 @@ __all__ = ['eq_wpte','liqair_h',
     'cp','density','kappa_s','lapserate','temperature',
     'eq_pot','potdensity','potenthalpy','pottemp']
 
-import numpy
 import warnings
-import constants0
-import flu1
-import air2
-import flu2
-import maths3
-import air3c
-import flu3a
-import maths4
-import liqair4a
-import liqair4b
+import numpy
+from teospy import constants0
+from teospy import flu1
+from teospy import air2
+from teospy import flu2
+from teospy import maths3
+from teospy import air3c
+from teospy import flu3a
+from teospy import maths4
+from teospy import liqair4a
+from teospy import liqair4b
 
 _CHKTOL = constants0.CHKTOL
 _RDRY = constants0.RDRY

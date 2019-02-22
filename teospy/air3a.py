@@ -28,9 +28,9 @@ temperature, and pressure.
 __all__ = ['eq_atp','air_g']
 
 import warnings
-import constants0
-import air2
-import maths3
+from teospy import constants0
+from teospy import air2
+from teospy import maths3
 
 _RUNIV = constants0.RUNIV
 _MDRY = constants0.MDRY

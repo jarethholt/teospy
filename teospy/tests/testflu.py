@@ -12,31 +12,31 @@ tests are run.
 
 The functions provided by this module generate the tests for the ``flu``
 module of the same name. Each function returns a tuple of
-:class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the ``run``
-method of a Tester to run the test, and ``printresults`` to print a
-summary.
+:class:`~teospy.tests.tester.Tester` instances which include the
+functions checked, values of the arguments, and tables of reference
+values. Use the ``run`` method of a Tester to run the test, and
+``printresults`` to print a summary.
 
 :Available modules to test:
 
-* :mod:`flu1`
-* :mod:`flu2`
-* :mod:`flu3a`
-* :mod:`flu3b`
-* :mod:`liq5_f03`
+* :mod:`~teospy.flu1`
+* :mod:`~teospy.flu2`
+* :mod:`~teospy.flu3a`
+* :mod:`~teospy.flu3b`
+* :mod:`~teospy.liq5_f03`
 
 """
 
 __all__ = ['genflu1','genflu2','genflu3a','genflu3b','genliq5']
-from tester import Tester
-_DERS2 = ((0,0),(1,0),(0,1),(2,0),(1,1),(0,2))
+
+from teospy.tests.tester import Tester, _DERS2
 
 
 ## Generating Tester instances
 def genflu1():
     """Generate flu1 Testers.
     """
-    import flu1
+    from teospy import flu1
     funs = flu1.flu_f
     args1 = (300.,1e3)
     fargs = [(der+args1) for der in _DERS2]
@@ -51,7 +51,7 @@ def genflu1():
 def genflu2():
     """Generate flu2 Testers.
     """
-    import flu2
+    from teospy import flu2
     funs = [flu2.cp,flu2.cv,flu2.enthalpy,flu2.entropy,flu2.expansion,
         flu2.gibbsenergy,flu2.internalenergy,flu2.kappa_s,flu2.kappa_t,
         flu2.lapserate,flu2.pressure,flu2.soundspeed]
@@ -70,7 +70,7 @@ def genflu2():
 def genflu3a():
     """Generate flu3a Testers.
     """
-    import flu3a
+    from teospy import flu3a
     funs = flu3a.eq_tp_liq
     argsliq = (300.,1e5)
     fargs = argsliq
@@ -119,7 +119,7 @@ def genflu3a():
 def genflu3b():
     """Generate flu3b Testers.
     """
-    import flu3b
+    from teospy import flu3b
     funs = [flu3b.liq_cp,flu3b.liq_cv,flu3b.liq_enthalpy,flu3b.liq_entropy,
         flu3b.liq_expansion,flu3b.liq_gibbsenergy,flu3b.liq_internalenergy,
         flu3b.liq_kappa_s,flu3b.liq_kappa_t,flu3b.liq_lapserate,
@@ -160,7 +160,7 @@ def genflu3b():
 def genliq5():
     """Generate liq5_f03 Testers.
     """
-    import liq5_f03
+    from teospy import liq5_f03
     funs = liq5_f03.liq_g
     args1 = (300.,1e5)
     fargs = [(der+args1) for der in _DERS2]

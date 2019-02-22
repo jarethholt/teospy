@@ -47,11 +47,11 @@ __all__ = ['compressibility','compressibility_lemmon','contraction','cp','cv',
     'kappa_s','kappa_t','lapserate','soundspeed','vappot',
     'chklemmon2000']
 
-import constants0
-import convert0
-import air1
-import air2
-import air3a
+from teospy import constants0
+from teospy import convert0
+from teospy import air1
+from teospy import air2
+from teospy import air3a
 
 _CHKTOL = constants0.CHKTOL
 _eq_atp = air3a.eq_atp
@@ -792,17 +792,16 @@ def chklemmon2000(mode,printresult=True,chktol=_LEMMONTOL):
     :arg float chktol: Tolerance to use when choosing to print results
         (default _LEMMONTOL). The default tolerance is lowered due to
         the low number of significant figures for the reference values.
-    :returns: :class:`~tester.Tester` instance containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests.
-    :rtype: Tester
+    :returns: :class:`~teospy.tests.tester.Tester` instance containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests.
     :raises ValueError: If `mode` is not 1 or 2.
     """
     if mode not in (1,2):
         errmsg = ('Mode {0} must be either 1 (for Helmholtz functions) or 2 '
             '(for Gibbs functions)').format(mode)
         raise ValueError(errmsg)
-    from tester import Tester
+    from teospy.tests.tester import Tester
     
     # Need to add offsets from Lemmon et al. (2000)
     MDRY = constants0.MDRY

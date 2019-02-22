@@ -11,7 +11,7 @@ This module implements the Gibbs free energy of ice and its derivatives with res
 __all__ = ['ice_g']
 
 import numpy
-import constants0
+from teospy import constants0
 
 # Single constants
 _TTP = constants0.TTP

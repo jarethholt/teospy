@@ -54,12 +54,12 @@ __all__ = ['eq_tp','temperature','pressure','densityvap','chempot','densityice',
 
 import warnings
 import numpy
-import constants0
-import ice1
-import flu2
-import ice2
-import maths3
-import maths4
+from teospy import constants0
+from teospy import ice1
+from teospy import flu2
+from teospy import ice2
+from teospy import maths3
+from teospy import maths4
 
 _CHKTOL = constants0.CHKTOL
 _RWAT = constants0.RWAT

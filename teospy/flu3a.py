@@ -34,12 +34,12 @@ This module implements the Gibbs free energies of both liquid water and water va
 
 __all__ = ['eq_tp_liq','eq_tp_vap','liq_g','vap_g']
 
-import numpy
 import warnings
-import constants0
-import flu1
-import flu2
-import maths3
+import numpy
+from teospy import constants0
+from teospy import flu1
+from teospy import flu2
+from teospy import maths3
 
 _CHKTOL = constants0.CHKTOL
 _RWAT = constants0.RWAT

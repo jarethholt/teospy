@@ -62,10 +62,10 @@ used throughout this library, and other common measurement scales.
 __all__ = ['swpres','swdepth','cnvpressure','cnvtemperature',
     'sal78fromcnd','cndfromsal78','cnvsalinity']
 
-import numpy
 import warnings
-import constants0
-import convert0
+import numpy
+from teospy import constants0
+from teospy import convert0
 
 _PATM = constants0.SEALEVEL_PRESSURE_SI
 _TCELS = constants0.CELSIUS_TEMPERATURE_SI

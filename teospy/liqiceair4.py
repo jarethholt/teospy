@@ -82,17 +82,17 @@ __all__ = ['eq_atp','eq_wefli','eq_all',
     'solidfraction','vapourfraction',
     'iml','ifl']
 
-import numpy
 import warnings
-import constants0
-import flu1
-import ice1
-import air2
-import flu2
-import ice2
-import maths3
-import flu3a
-import iceliq4
+import numpy
+from teospy import constants0
+from teospy import flu1
+from teospy import ice1
+from teospy import air2
+from teospy import flu2
+from teospy import ice2
+from teospy import maths3
+from teospy import flu3a
+from teospy import iceliq4
 
 _CHKTOL = constants0.CHKTOL
 _RWAT = constants0.RWAT

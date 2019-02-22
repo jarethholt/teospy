@@ -19,7 +19,7 @@ extension are used. The default is False.
 
 __all__ = ['NSALTERMS','sal_g_term']
 
-import constants0
+from teospy import constants0
 
 # Single constants
 _TCELS = constants0.TCELS

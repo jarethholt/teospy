@@ -19,29 +19,29 @@ all available tests are run.
 
 The functions provided by this module generate the tests for the mixture
 module of the same name. Each function returns a tuple of
-:class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the ``run``
-method of a Tester to run the test, and ``printresults`` to print a
-summary.
+:class:`~teospy.tests.tester.Tester` instances which include the
+functions checked, values of the arguments, and tables of reference
+values. Use the ``run`` method of a Tester to run the test, and
+``printresults`` to print a summary.
 
 :Available modules to test:
 
-* :mod:`liqvap4`
-* :mod:`iceliq4`
-* :mod:`icevap4`
-* :mod:`iceair4a`
-* :mod:`iceair4b`
-* :mod:`iceair4c`
-* :mod:`liqair4a`
-* :mod:`liqair4b`
-* :mod:`liqair4c`
-* :mod:`liqiceair4`
-* :mod:`sealiq4`
-* :mod:`seavap4`
-* :mod:`seaice4`
-* :mod:`seaicevap4`
-* :mod:`seaair4`
-* :mod:`iceflu5`
+* :mod:`~teospy.liqvap4`
+* :mod:`~teospy.iceliq4`
+* :mod:`~teospy.icevap4`
+* :mod:`~teospy.iceair4a`
+* :mod:`~teospy.iceair4b`
+* :mod:`~teospy.iceair4c`
+* :mod:`~teospy.liqair4a`
+* :mod:`~teospy.liqair4b`
+* :mod:`~teospy.liqair4c`
+* :mod:`~teospy.liqiceair4`
+* :mod:`~teospy.sealiq4`
+* :mod:`~teospy.seavap4`
+* :mod:`~teospy.seaice4`
+* :mod:`~teospy.seaicevap4`
+* :mod:`~teospy.seaair4`
+* :mod:`~teospy.iceflu5`
 
 """
 
@@ -51,16 +51,14 @@ __all__ = ['genliqvap4','geniceliq4','genicevap4','geniceair4a','geniceair4b',
     'geniceflu5']
 
 import warnings
-from tester import Tester
-_DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
-    (0,2,0),(0,1,1),(0,0,2))
+from teospy.tests.tester import Tester, _DERS3
 
 
 ## Generating Tester instances
 def genliqvap4():
     """Generate liqvap4 Testers.
     """
-    import liqvap4
+    from teospy import liqvap4
     funs = [liqvap4.pressure,liqvap4.densityvap,liqvap4.densityliq,
         liqvap4.chempot,liqvap4.entropyliq,liqvap4.entropyvap,
         liqvap4.enthalpyliq,liqvap4.enthalpyvap,liqvap4.volumeevap,
@@ -109,7 +107,7 @@ def genliqvap4():
 def geniceliq4():
     """Generate iceliq4 Testers.
     """
-    import iceliq4
+    from teospy import iceliq4
     funs = [iceliq4.pressure,iceliq4.densityliq,iceliq4.chempot,
         iceliq4.densityice,iceliq4.enthalpyice,iceliq4.enthalpyliq,
         iceliq4.enthalpymelt,iceliq4.entropyice,iceliq4.entropyliq,
@@ -158,7 +156,7 @@ def geniceliq4():
 def genicevap4():
     """Generate icevap4 Testers.
     """
-    import icevap4
+    from teospy import icevap4
     funs = [icevap4.pressure,icevap4.densityvap,icevap4.chempot,
         icevap4.densityice,icevap4.enthalpyice,icevap4.enthalpyvap,
         icevap4.entropyice,icevap4.entropyvap,icevap4.volumesubl,
@@ -207,7 +205,7 @@ def genicevap4():
 def geniceair4a():
     """Generate iceair4a Testers.
     """
-    import iceair4a
+    from teospy import iceair4a
     funs = [iceair4a.enthalpysubl,iceair4a.densityair,iceair4a.densityvap,
         iceair4a.densityice]
     fargs = tuple()
@@ -334,7 +332,7 @@ def geniceair4a():
 def geniceair4b():
     """Generate iceair4b Testers.
     """
-    import iceair4b
+    from teospy import iceair4b
     funs = iceair4b.iceair_g
     args1 = (0.5,270.,1e5)
     fargs = [(der+args1) for der in _DERS3]
@@ -376,7 +374,7 @@ def geniceair4b():
 def geniceair4c():
     """Generate iceair4c Testers.
     """
-    import iceair4c
+    from teospy import iceair4c
     funs = iceair4c.iceair_h
     args1 = (0.5,1e5)
     fargs = [(der+args1) for der in _DERS3]
@@ -430,7 +428,7 @@ def geniceair4c():
 def genliqair4a():
     """Generate liqair4a Testers.
     """
-    import liqair4a
+    from teospy import liqair4a
     funs = [liqair4a.enthalpyevap,liqair4a.entropy,liqair4a.densityair,
         liqair4a.densityvap,liqair4a.densityliq]
     fargs = tuple()
@@ -547,7 +545,7 @@ def genliqair4a():
 def genliqair4b():
     """Generate liqair4b Testers.
     """
-    import liqair4b
+    from teospy import liqair4b
     funs = liqair4b.liqair_g
     args1 = (0.5,300.,1e5)
     fargs = [(der+args1) for der in _DERS3]
@@ -589,7 +587,7 @@ def genliqair4b():
 def genliqair4c():
     """Generate liqair4c Testers.
     """
-    import liqair4c
+    from teospy import liqair4c
     funs = liqair4c.liqair_h
     args1 = (0.5,1e5)
     fargs = [der+args1 for der in _DERS3]
@@ -639,7 +637,7 @@ def genliqair4c():
 def genliqiceair4():
     """Generate liqiceair4 Testers.
     """
-    import liqiceair4
+    from teospy import liqiceair4
     funs = [liqiceair4.pressure,liqiceair4.temperature]
     fargs = tuple()
     fkwargs = {'airf': 0.99}
@@ -712,7 +710,7 @@ def genliqiceair4():
 def gensealiq4():
     """Generate sealiq4 Testers.
     """
-    import sealiq4
+    from teospy import sealiq4
     funs = sealiq4.osmoticpressure
     fargs = (0.035,300.,1e5)
     refs = 2594603.20968
@@ -725,7 +723,7 @@ def gensealiq4():
 def genseavap4():
     """Generate seavap4 Testers.
     """
-    import seavap4
+    from teospy import seavap4
     funs = seavap4.boilingtemperature
     fargs = (0.035,640.)
     refs = 274.042416829
@@ -837,7 +835,7 @@ def genseavap4():
 def genseaice4():
     """Generate seaice4 Testers.
     """
-    import seaice4
+    from teospy import seaice4
     funs = seaice4.brinesalinity
     fargs = (270.,1e5)
     refs = 0.0560264150322
@@ -926,7 +924,7 @@ def genseaice4():
 def genseaicevap4():
     """Generate seaicevap4 Testers.
     """
-    import seaicevap4
+    from teospy import seaicevap4
     funs = [seaicevap4.densityvap,seaicevap4.temperature,seaicevap4.pressure]
     fargs = tuple()
     fkwargs = {'salt': 0.035}
@@ -963,7 +961,7 @@ def genseaicevap4():
 def genseaair4():
     """Generate seaair4 Testers.
     """
-    import seaair4
+    from teospy import seaair4
     funs = [seaair4.massfractionair,seaair4.vapourpressure]
     fargs = (0.035,300.,1e5)
     refs = [0.978029483888,3485.92986681]
@@ -1020,7 +1018,7 @@ def genseaair4():
 def geniceflu5():
     """Generate iceflu5 Testers.
     """
-    import iceflu5
+    from teospy import iceflu5
     funs = iceflu5.liqpressure
     fargs = (272.4,)
     refs = 1.00213724736e7

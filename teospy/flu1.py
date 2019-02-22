@@ -27,7 +27,7 @@ IAPWS 1995, table 6.
 __all__ = ['flu_f','chkiapws95table6']
 
 import numpy
-import constants0
+from teospy import constants0
 
 # Constants
 _CHKTOL = constants0.CHKTOL
@@ -900,13 +900,12 @@ def chkiapws95table6(printresult=True,chktol=_CHKTOL):
         result value, and relative error are printed.
     :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
-    :returns: Tester instances containing the functions, arguments,
-        reference values, results, and relative errors from the tests.
-        The first instance is for the ideal gas functions and the second
-        for residual functions.
-    :rtype: (Tester,Tester)
+    :returns: :class:`~teospy.tests.tester.Tester` instances containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests. The first instance is for the
+        ideal gas functions and the second for residual functions.
     """
-    from tester import Tester
+    from teospy.tests.tester import Tester
     TCHK = 500.
     DCHK = 838.025
     TAUCHK = _TCP/TCHK

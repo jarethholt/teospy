@@ -1,1 +1,5 @@
-recursive-include docs *.html *.css *.png
+include LICENSE
+include README.rst
+include docs/*.rst
+include docs/latex/*.pdf
+include teospy/*.dat

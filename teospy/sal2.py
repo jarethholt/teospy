@@ -48,8 +48,8 @@ __all__ = ['sal_g',
     'eq_liqpot','eq_enthalpy','eq_entropy']
 
 import numpy
-import constants0
-import sal1
+from teospy import constants0
+from teospy import sal1
 
 _chksalbnds = constants0.chksalbnds
 _MWAT = constants0.MWAT

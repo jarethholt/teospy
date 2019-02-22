@@ -45,7 +45,7 @@ __all__ = ['liq_g',
     'entropy','enthalpy','helmholtzenergy','internalenergy',
     'chkiapws09table6']
 
-import constants0
+from teospy import constants0
 
 _CHKTOL = constants0.CHKTOL
 _PATM = constants0.PATM
@@ -314,12 +314,12 @@ def chkiapws09table6(printresult=True,chktol=_CHKTOL):
         result value, and relative error are printed.
     :arg float chktol: Tolerance to use when choosing to print results
         (default _CHKTOL).
-    :returns: :class:`~tester.Tester` instances containing the
-        functions, arguments, reference values, results, and relative
-        errors from the tests. The first instance tests liq_g and the
-        second instance tests thermodynamic properties.
+    :returns: :class:`~teospy.tests.tester.Tester` instances containing
+        the functions, arguments, reference values, results, and
+        relative errors from the tests. The first instance tests liq_g
+        and the second instance tests thermodynamic properties.
     """
-    from tester import Tester
+    from teospy.tests.tester import Tester
     args1 = [(273.15,101325.), (273.15,1e8), (313.15,101325.)]
     DERS2 = ((0,0),(1,0),(0,1),(2,0),(1,1),(0,2))
     

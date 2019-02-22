@@ -27,7 +27,7 @@ includes the virial coefficients for dry air-water vapour mixtures.
 __all__ = ['dry_f','air_baw','air_caaw','air_caww']
 
 import numpy
-import constants0
+from teospy import constants0
 
 # Single constants
 _RDRY = constants0.RDRY_L2000

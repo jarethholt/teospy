@@ -29,33 +29,34 @@ air.
 
 In addition, the modules are split into several levels as follows:
 
-* The level 0 modules (:mod:`constants0` and :mod:`convert0`) are used by many
-  different higher-level modules and across substances.
+* The level 0 modules (:mod:`~teospy.constants0` and :mod:`~teospy.convert0`)
+  are used by many different higher-level modules and across substances.
 * Level 1 modules implement the primary thermodynamic quantities for each
   substance: the Helmholtz energy for dry air and fluid water and the Gibbs
   energy for ice and sea salt.
 * Level 2 modules provide thermodynamic quantities that can be calculated
   directly from the primary quantities using the same primary variables.
 * Level 3 modules allow properties to be calculated from secondary variables.
-  They rely on the module :mod:`maths3` which provides a root-finding method.
-  The liquid water and water vapour phases are differentiated in these modules,
-  and liquid water and sea salt are combined to make seawater modules.
+  They rely on the module :mod:`~teospy.maths3` which provides a root-finding
+  method. The liquid water and water vapour phases are differentiated in these
+  modules, and liquid water and sea salt are combined to make seawater modules.
 * Level 4 modules are for mixtures of substances with the phase coexistence of
   water. Here you will find functions relating to saturation vapour pressure,
   condensation pressures of ice and water, sea ice melting temperature, etc.
-* Level 5 modules implement a few extra features. :mod:`convert5` provides
-  conversions between non-SI units. Some modules implement alternative
+* Level 5 modules implement a few extra features. :mod:`~teospy.convert5`
+  provides conversions between non-SI units. Some modules implement alternative
   approaches to calculating properties, such as a Gibbs energy formulation
-  (:mod:`liq5_f03`). Most importantly, :mod:`sea5` implements the recommended
-  routines for conservative temperature and the related thermobaric, cabelling,
-  thermal expansion, and haline contraction coefficients. :mod:`gsw5` provides
-  the same quantities, but using the :mod:`liq5_f03` formulation and the Gibbs
-  SeaWater (GSW) toolbox inputs.
-* The various `test` modules provide tests of this library, comparing its
-  results to the original Fortran. All of these modules make use of the
-  :class:`tester.Tester` class. This class is just a container to keep track
-  of the functions to test, their inputs, reference results, and formatting.
-  It also provides methods to run the functions and print summaries.
+  (:mod:`~teospy.liq5_f03`). Most importantly, :mod:`~teospy.sea5` implements
+  the recommended routines for conservative temperature and the related
+  thermobaric, cabelling, thermal expansion, and haline contraction
+  coefficients. :mod:`~teospy.gsw5` provides the same quantities, but using the
+  :mod:`~teospy.liq5_f03` formulation and the Gibbs SeaWater (GSW) toolbox
+  inputs.
+* Testing utilities are kept in the ``tests`` submodule. This includes several
+  modules for testing subgroups of ``teospy``; for example,
+  :mod:`~teospy.tests.testair` has functions for testing the ``air`` and
+  related modules. There is also the module :mod:`~teospy.tests.testdoc` that
+  implements docstring testing suitable for floating point outputs.
 
 
 Table of Contents
@@ -71,7 +72,7 @@ Table of Contents
    sal
    sea
    mix
-   tester
+   tests
    issues
 
 

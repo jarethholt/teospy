@@ -11,22 +11,22 @@ arguments, then both modules are checked.
 
 The functions provided by this module generate the tests for the
 ``convert`` module of the same name. Each function returns a tuple of
-:class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the ``run``
-method of a Tester to run the test, and ``printresults`` to print a
-summary.
+:class:`~teospy.tests.tester.Tester` instances which include the
+functions checked, values of the arguments, and tables of reference
+values. Use the ``run`` method of a Tester to run the test, and
+``printresults`` to print a summary.
 
 :Available modules to test:
 
-* :mod:`convert0`
-* :mod:`convert5`
+* :mod:`~teospy.convert0`
+* :mod:`~teospy.convert5`
 
 """
 
 __all__ = ['genconvert0','genconvert5']
 
-import constants0
-from tester import Tester
+from teospy.tests.tester import Tester
+from teospy import constants0
 
 _TCELS = constants0.CELSIUS_TEMPERATURE_SI
 _PATM = constants0.SEALEVEL_PRESSURE_SI
@@ -36,7 +36,7 @@ _PATM = constants0.SEALEVEL_PRESSURE_SI
 def genconvert0():
     """Generate convert0 Testers.
     """
-    import convert0
+    from teospy import convert0
     funs = convert0.sal_asalfrompsal
     fargs = [(35.52764437773386,201.,-21.,_PATM+1023e4),
         (35.,180.,40.,_PATM+2e7), (8.,20.,57.,_PATM)]
@@ -62,7 +62,7 @@ def genconvert0():
 def genconvert5():
     """Generate convert5 Testers.
     """
-    import convert5
+    from teospy import convert5
     _TSAL1 = convert5._TSAL1
     _LON0 = convert5._LON0
     _LAT0 = convert5._LAT0

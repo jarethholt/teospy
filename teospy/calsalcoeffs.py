@@ -28,14 +28,13 @@ This currently produces more inconsistencies with the Fortran library
 than it resolves.
 """
 
-import copy
-import math
-import constants0
+import numpy
+from teospy import constants0
 SAL1 = constants0.SAL1
 TCELS = constants0.TCELS
 PATM = constants0.PATM
 SU = SAL1 * 40./35.
-LSU = math.log(SU)
+LSU = numpy.log(SU)
 RSU = SU**.5
 
 # Standard coefficients
@@ -83,10 +82,14 @@ GSCEXT_ORIG = {
     (4,6,1):  2.05954716712622e0 
 }
 
-GSCTOT_ORIG = copy.copy(GSCEXT_ORIG)
-for ((i,j,k),gc) in GSC_ORIG.items():
-    ge = GSCEXT_ORIG.get((i,j,k),0.)
-    GSCTOT_ORIG[(i,j,k)] = gc + ge
+GCKEYS = GSC_ORIG.keys()
+GSCTOT_ORIG = dict()
+for (inds,gc) in GSC_ORIG.items():
+    ge = GSCEXT_ORIG.get(inds, 0.)
+    GSCTOT_ORIG[inds] = gc + ge
+for (inds,ge) in GSCEXT_ORIG.items():
+    if inds not in GCKEYS:
+        GSCTOT_ORIG[inds] = ge
 
 
 ## Calculate the modified coefficients
@@ -158,14 +161,14 @@ def _calcoeffs_shifted():
     In addition, the coefficients g200 and g210 are adjusted so that the
     enthalpy and entropy of seawater at the standard ocean conditions
     are exactly zero when the Feistel (2003) formulation for the Gibbs
-    energy of seawater is used. This choice currently produces more
-    inconsistencies with the Fortran library than it resolves.
+    energy of seawater is used. WARNING: This choice currently produces
+    more inconsistencies with the Fortran library than it resolves.
     
     :returns: Dictionaries of the modified coefficients with and without
         the high-temperature, high-salinity extension.
     """
-    import sal1
-    import liq5_f03
+    from . import sal1
+    from . import liq5_f03
     TTP = constants0.TTP
     PTPI = constants0.PTPI
     UWTP = liq5_f03.internalenergy(TTP,PTPI)
@@ -175,7 +178,7 @@ def _calcoeffs_shifted():
     FWTP = UWTP - TTP*SWTP
     GW0 = HW0 - TCELS*SW0
     TRED = sal1._TRED
-    LS1 = math.log(SAL1)
+    LS1 = numpy.log(SAL1)
     RS1 = SAL1**.5
     
     gsc_mod = dict()

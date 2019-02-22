@@ -12,33 +12,31 @@ given, all available tests are run.
 
 The functions provided by this module generate the tests for the ``sea``
 module of the same name. Each function returns a tuple of
-:class:`~tester.Tester` instances which include the functions checked,
-values of the arguments, and tables of reference values. Use the ``run``
-method of a Tester to run the test, and ``printresults`` to print a
-summary.
+:class:`~teospy.tests.tester.Tester` instances which include the
+functions checked, values of the arguments, and tables of reference
+values. Use the ``run`` method of a Tester to run the test, and
+``printresults`` to print a summary.
 
 :Available modules to test:
 
-* :mod:`sea3a`
-* :mod:`sea3b`
-* :mod:`sea3c`
-* :mod:`sea3d`
-* :mod:`sea5`
+* :mod:`~teospy.sea3a`
+* :mod:`~teospy.sea3b`
+* :mod:`~teospy.sea3c`
+* :mod:`~teospy.sea3d`
+* :mod:`~teospy.sea5`
 
 """
 
 __all__ = ['gensea3a','gensea3b','gensea3c','gensea3d','gensea5']
 
-from tester import Tester
-_DERS3 = ((0,0,0),(1,0,0),(0,1,0),(0,0,1),(2,0,0),(1,1,0),(1,0,1),
-    (0,2,0),(0,1,1),(0,0,2))
+from teospy.tests.tester import Tester, _DERS3
 
 
 ## Generating Tester instances
 def gensea3a():
     """Generate sea3a Testers.
     """
-    import sea3a
+    from teospy import sea3a
     funs = sea3a.sea_g
     args1 = (0.035,300.,1e5)
     fargs = [(der+args1) for der in _DERS3]
@@ -86,7 +84,7 @@ def gensea3a():
 def gensea3b():
     """Generate sea3b Testers.
     """
-    import sea3b
+    from teospy import sea3b
     funs = sea3b.sea_h
     args1 = (0.035,500.,1e5)
     fargs = [(der+args1) for der in _DERS3]
@@ -150,7 +148,7 @@ def gensea3b():
 def gensea3c():
     """Generate sea3c Testers.
     """
-    import sea3c
+    from teospy import sea3c
     funs = sea3c.entropy
     fargs = (0.035,1e5)
     fkwargs = {'enth': 1e5}
@@ -238,7 +236,7 @@ def gensea3c():
 def gensea3d():
     """Generate sea3d Testers.
     """
-    import sea3d
+    from teospy import sea3d
     funs = sea3d.salinity
     fargs = (273.15,101325.,1028.)
     refs = 3.50315257709e-2
@@ -251,7 +249,7 @@ def gensea3d():
 def gensea5():
     """Generate sea5 Testers.
     """
-    import sea5
+    from teospy import sea5
     funs = sea5.tconfromtpot
     fargs = (0.035,300.)
     refs = 300.010069445

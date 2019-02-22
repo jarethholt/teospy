@@ -105,11 +105,13 @@ if __name__ == '__main__':
     # Run a doctest on the named module
     import importlib
     import sys
+    from context import teospy
     
     verbose = False
     if sys.argv[1] == '-v':
         verbose = True
-    mod = importlib.import_module(sys.argv[-1])
+    modname = '.'.join(('teospy',sys.argv[-1]))
+    mod = importlib.import_module(modname)
     results = testmod_flt(mod,verbose=verbose)
     if results.failed == 0 and results.attempted > 0:
         okmsg = 'All {0:d} tests passed'.format(results.attempted)

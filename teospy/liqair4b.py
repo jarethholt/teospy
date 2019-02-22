@@ -42,15 +42,15 @@ humid air uses the variable ``airf``.
 __all__ = ['liqair_g','cp','density','enthalpy','entropy','expansion','kappa_t',
     'lapserate','liquidfraction','vapourfraction']
 
-import numpy
 import warnings
-import constants0
-import flu1
-import air2
-import flu2
-import maths3
-import air3a
-import liqair4a
+import numpy
+from teospy import constants0
+from teospy import flu1
+from teospy import air2
+from teospy import flu2
+from teospy import maths3
+from teospy import air3a
+from teospy import liqair4a
 
 _CHKTOL = constants0.CHKTOL
 _chkhumbnds = constants0.chkhumbnds
